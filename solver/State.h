@@ -10,8 +10,14 @@
 namespace TSP{
 
   struct State {
+
+  public:
+    State(World world);
+
     World world;
     Path path;
+
+    static Path Default(int size);
   };
 
   typedef shared_ptr<State> SharedState;

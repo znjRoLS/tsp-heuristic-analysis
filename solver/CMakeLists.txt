@@ -4,6 +4,7 @@ file(GLOB TSP_SOURCES
         WorldGenerator*
         Algorithm*
         Solver.*
+        SolverCallback.*
         State.*
         )
 

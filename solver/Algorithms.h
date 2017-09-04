@@ -16,6 +16,8 @@ namespace TSP{
 
     bool Iterate() override;
 
+  private:
+    Path current_path;
   };
 
 }

@@ -8,9 +8,9 @@
 #include "Util.h"
 #include "WorldGenerator.h"
 #include "Algorithm.h"
+#include "SolverCallback.h"
 
 #include <functional>
-#include <unordered_map>
 
 namespace TSP {
 
@@ -22,15 +22,8 @@ namespace TSP {
   class Solver {
   public:
 
-    enum HandlerType{
-      ON_START,
-      ON_ITERATION,
-      ON_FINISH
-    };
 
-    typedef function<void(const SharedState state)> StateHandler;
-
-    Solver(SolverOptions options, WorldGenerator* world_generator, Algorithm* algorithm);
+    Solver(SolverOptions options, WorldGenerator* world_generator, Algorithm* algorithm, shared_ptr<SolverCallbacks> solver_callbacks);
 
     // You can use to interfaces with this class
     // First one is to call Setup and Iterate until its done, and call GetState between
@@ -39,13 +32,12 @@ namespace TSP {
     bool Iterate();
     SharedState GetState();
 
-    void ClearHandlers();
-    void RegisterHandler(HandlerType handler_type, StateHandler func);
     void Solve();
 
   private:
-    unique_ptr<WorldGenerator> world_generator;
-    unique_ptr<Algorithm> algorithm;
+    shared_ptr<WorldGenerator> world_generator;
+    shared_ptr<Algorithm> algorithm;
+    shared_ptr<SolverCallbacks> solver_callbacks;
 
     int world_size;
     int max_iterations;
@@ -53,12 +45,6 @@ namespace TSP {
 
     SharedState state;
 
-    unordered_map<int, vector<StateHandler>> handlers;
-//    vector<StateHandler> handlers_start;
-//    vector<StateHandler> handlers_iteration;
-//    vector<StateHandler> handlers_finish;
-
-    void CallAllHandlers(HandlerType handler_type);
 
   };
 

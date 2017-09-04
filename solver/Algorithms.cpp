@@ -10,17 +10,16 @@ namespace TSP{
 
   void AlgorithmBruteForce::Setup(SharedState arg_state) {
     state = arg_state;
+    current_path = State::Default(arg_state->world->size());
+
   }
 
   bool AlgorithmBruteForce::Iterate() {
-    if (state->path == nullptr) {
-      state->path = Path(new vector<int>());
-      for (int i = 0; i < state->world->size(); i++) {
-        state->path->push_back(i);
-      }
-      return true;
+    if (!next_permutation(current_path->begin(), current_path->end())) {
+      return false;
     } else {
-      return next_permutation(state->path->begin(), state->path->end());
+      SetMin(state->world, state->path, current_path);
+      return true;
     }
   }
 }
