@@ -50,4 +50,5 @@ fabric.properties
 
 # Added by rols
 lib/
+bin/
 CMakeFiles/

@@ -3,11 +3,20 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/solver/GeneratorRandom.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/solver/Util.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/solver/Algorithms.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/solver/Algorithm.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/solver/State.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/solver/WorldGenerator.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/solver/WorldGenerators.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/solver/WorldGenerators.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/solver/CMakeLists.txt" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/solver/GeneratorRandom.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/solver/TSPState.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/solver/TSPState.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/solver/Algorithms.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/solver/Solver.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/solver/Solver.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/solver/Test.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/solver/Util.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/solver/State.h" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">

@@ -5,13 +5,16 @@
 #ifndef TSPHEURISTICANALYSIS_GENERATORRANDOM_H
 #define TSPHEURISTICANALYSIS_GENERATORRANDOM_H
 
-#include "TSPWorldGenerator.h"
+#include "WorldGenerator.h"
 
-class GeneratorRandom: public TSPWorldGenerator {
-public:
+namespace TSP {
 
-  unique_ptr<vector<pair<double,double>>> GenerateWorld(int size) override;
-};
+  class WorldGeneratorRandom : public WorldGenerator {
+  public:
+    World GenerateWorld(int size) override;
+  };
+
+}
 
 
 #endif //TSPHEURISTICANALYSIS_GENERATORRANDOM_H

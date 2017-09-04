@@ -5,16 +5,16 @@
 #ifndef TSPHEURISTICANALYSIS_TSPWORLDGENERATOR_H
 #define TSPHEURISTICANALYSIS_TSPWORLDGENERATOR_H
 
-#include <memory>
-#include <vector>
-#include <utility>
+#include "Util.h"
 
-using namespace std;
+namespace TSP {
 
-class TSPWorldGenerator {
-public:
-  virtual unique_ptr<vector<pair<double,double>>> GenerateWorld(int size) = 0;
-};
+  class WorldGenerator {
+  public:
+    virtual World GenerateWorld(int size) = 0;
+  };
+
+}
 
 
 #endif //TSPHEURISTICANALYSIS_TSPWORLDGENERATOR_H
