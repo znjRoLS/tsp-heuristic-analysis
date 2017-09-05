@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QWidget>
+#include <QPushButton>
+#include <QLabel>
 
 namespace Ui {
 class MainWindow;
@@ -17,6 +20,13 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    QPushButton* button;
+    QLabel* result_label;
+
+private slots:
+ void slotButtonClicked(bool checked);
+
+ void on_button_clicked();
 };
 
 #endif // MAINWINDOW_H

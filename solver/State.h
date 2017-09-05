@@ -17,6 +17,8 @@ namespace TSP{
     World world;
     Path path;
 
+    string ToString();
+
     static Path Default(int size);
   };
 
