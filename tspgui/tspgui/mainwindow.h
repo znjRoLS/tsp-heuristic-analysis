@@ -20,12 +20,8 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    QPushButton* button;
-    QLabel* result_label;
 
-private slots:
- void slotButtonClicked(bool checked);
-
+public slots:
  void on_button_clicked();
 };
 

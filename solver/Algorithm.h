@@ -8,6 +8,7 @@
 #include "State.h"
 
 #include <memory>
+#include <unordered_map>
 
 namespace TSP {
 
@@ -20,6 +21,8 @@ namespace TSP {
   protected:
     SharedState state;
   };
+
+  extern unordered_map<string, Algorithm*> algorithm_container;
 
 }
 

@@ -8,6 +8,8 @@
 
 namespace TSP{
 
+  unordered_map<string, Algorithm*> algorithm_container;
+
   void AlgorithmBruteForce::Setup(SharedState arg_state) {
     state = arg_state;
     current_path = State::Default(arg_state->world->size());
@@ -22,4 +24,7 @@ namespace TSP{
       return true;
     }
   }
+
+
+  REGISTER_ALGORITHM(AlgorithmBruteForce);
 }

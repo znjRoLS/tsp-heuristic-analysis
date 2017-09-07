@@ -6,6 +6,8 @@
 
 namespace TSP {
 
+  unordered_map<string, WorldGenerator*> world_generator_container;
+
   World WorldGeneratorRandom::GenerateWorld(int size) {
 
     shared_ptr<vector<pair<double, double>>> world(new vector<pair<double, double>>());
@@ -15,4 +17,5 @@ namespace TSP {
     return move(world);
   }
 
+  REGISTER_WORLD_GENERATOR(WorldGeneratorRandom);
 }

@@ -12,16 +12,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    button = new QPushButton("Hello world", this);
-    result_label = new QLabel(this);
 
-    connect(button, SIGNAL (clicked(bool)), this, SLOT (slotButtonClicked(bool)));
+    for (auto &key_pair : TSP::algorithm_container) {
+        ui->comboBoxAlgorithm->addItem(QString::fromStdString(key_pair.first));
+    }
+    for (auto &key_pair : TSP::world_generator_container) {
+        ui->comboBoxWorldGenerator->addItem(QString::fromStdString(key_pair.first));
+    }
 }
 
-void MainWindow::slotButtonClicked(bool checked) {
-
-
-}
 
 MainWindow::~MainWindow()
 {
@@ -30,13 +29,17 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_button_clicked()
 {
+
     shared_ptr<SolverCallbacks> callbacks (new SolverCallbacks);
 
       callbacks->RegisterHandler(SolverCallbacks::ON_FINISH, [this] (SharedState state) {
         ui->result_label->setText(QString::fromStdString("OPalaaa " + state->ToString()));
       });
 
-      unique_ptr<TSP::Solver> solver (new TSP::Solver({5, 10000}, new WorldGeneratorRandom(), new AlgorithmBruteForce(), callbacks));
+      WorldGenerator* world_generator = TSP::world_generator_container[ui->comboBoxWorldGenerator->currentText().toStdString()];
+      Algorithm* algorithm = TSP::algorithm_container[ui->comboBoxAlgorithm->currentText().toStdString()];
+
+      unique_ptr<TSP::Solver> solver (new TSP::Solver({5, 10000}, world_generator, algorithm, callbacks));
 
         solver->Solve();
 }
