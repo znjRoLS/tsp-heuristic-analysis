@@ -28,11 +28,15 @@ LIBS += ../../lib/libTSPState.a
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    node.cpp \
+    edge.cpp
 
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    node.h \
+    edge.h
 
 FORMS += \
         mainwindow.ui
