@@ -8,6 +8,7 @@
 #include "Algorithm.h"
 
 #include <unordered_map>
+#include <unordered_set>
 
 
 #define REGISTER_ALGORITHM(x) \
@@ -29,8 +30,18 @@ namespace TSP{
 
     bool Iterate() override;
 
+  };
+
+  class AlgorithmNearestNeighbour: public Algorithm {
+  public:
+
+    void Setup(SharedState state) override;
+
+    bool Iterate() override;
+
   private:
-    Path current_path;
+    unordered_set<int> unvisited;
+
   };
 
 }

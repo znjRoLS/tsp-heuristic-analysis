@@ -9,7 +9,7 @@ namespace TSP {
 
   State::State(World arg_world) :
       world(arg_world),
-      path(State::Default(arg_world->size())) {
+      optimal_path(State::Default(arg_world->size())) {
   }
 
   Path State::Default(int size) {
@@ -30,9 +30,16 @@ namespace TSP {
       }
       ss << endl;
     }
-    if (path != nullptr) {
-      ss << "Path: ";
-      for (auto node: (*path)){
+    if (optimal_path != nullptr) {
+      ss << "Current optimal path: ";
+      for (auto node: (*optimal_path)){
+        ss << node << " ";
+      }
+      ss << endl;
+    }
+    if (current_path != nullptr) {
+      ss << "Current path: ";
+      for (auto node: (*current_path)){
         ss << node << " ";
       }
       ss << endl;
@@ -49,9 +56,16 @@ ostream& operator<<(ostream& out, const TSP::SharedState& state) {
     }
     out << endl;
   }
-  if (state->path != nullptr) {
-    out << "Path: ";
-    for (auto node: (*state->path)){
+  if (state->optimal_path != nullptr) {
+    out << "Current optimal path: ";
+    for (auto node: (*state->optimal_path)){
+      out << node << " ";
+    }
+    out << endl;
+  }
+  if (state->current_path != nullptr) {
+    out << "Current path: ";
+    for (auto node: (*state->current_path)){
       out << node << " ";
     }
     out << endl;

@@ -14,7 +14,7 @@ namespace TSP {
     for (int i = 0; i < size; i++) {
       world->push_back(make_pair<double, double>(Random(), Random()));
     }
-    return move(world);
+    return world;
   }
 
   REGISTER_WORLD_GENERATOR(WorldGeneratorRandom);

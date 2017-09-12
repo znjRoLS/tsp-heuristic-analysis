@@ -15,7 +15,8 @@ namespace TSP{
     State(World world);
 
     World world;
-    Path path;
+    Path current_path;
+    Path optimal_path;
 
     string ToString();
 

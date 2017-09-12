@@ -6,11 +6,11 @@
 
 namespace TSP{
   Solver::Solver(SolverOptions options, WorldGenerator *arg_world_generator, Algorithm *arg_algorithm, shared_ptr<SolverCallbacks> arg_solver_callbacks):
-      world_size(options.world_size),
-      max_iterations(options.max_iterations),
       world_generator(arg_world_generator),
       algorithm(arg_algorithm),
       solver_callbacks(arg_solver_callbacks),
+      world_size(options.world_size),
+      max_iterations(options.max_iterations),
       state(nullptr){
 
   }
