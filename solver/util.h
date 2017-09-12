@@ -34,4 +34,7 @@ bool Greater(double x, double y);
 bool LessOrEqual(double x, double y);
 bool GreaterOrEqual(double x, double y);
 
+double WeightedRandom(const vector<double>& weights, const vector<double>& values);
+int WeightedRandom(const vector<double>& weights, const vector<int>& values);
+
 #endif //TSPHEURISTICANALYSIS_UTIL_H

@@ -17,6 +17,7 @@ namespace TSP{
     World world;
     Path current_path;
     Path optimal_path;
+    shared_ptr<vector<vector<double>>> current_path_ant_colony;
 
     string ToString();
 

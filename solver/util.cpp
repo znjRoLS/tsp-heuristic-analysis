@@ -6,6 +6,8 @@
 
 #include <exception>
 #include <cmath>
+#include <cassert>
+#include <random>
 
 #define EPS 1e-7
 
@@ -77,4 +79,48 @@ bool LessOrEqual(double x, double y) {
 
 bool GreaterOrEqual(double x, double y) {
   return !Less(x,y);
+}
+
+double WeightedRandom(const vector<double> &weights, const vector<double> &values) {
+  assert(weights.size() == values.size());
+
+  double sum = accumulate(weights.begin(), weights.end(), 0);
+
+  default_random_engine random_engine;
+  uniform_real_distribution<double> distribution(0.0, sum);
+
+  double random_value = distribution(random_engine);
+
+  int weight_ind = -1;
+  while(random_value > 0) {
+    if (weight_ind == weights.size() - 1){
+      return values[weight_ind];
+    }
+    random_value -= weights[++weight_ind];
+  }
+
+  return values[weight_ind];
+
+}
+
+int WeightedRandom(const vector<double> &weights, const vector<int> &values) {
+  assert(weights.size() == values.size());
+
+  double sum = accumulate(weights.begin(), weights.end(), 0);
+
+  default_random_engine random_engine;
+  uniform_real_distribution<double> distribution(0.0, sum);
+
+  double random_value = distribution(random_engine);
+
+  int weight_ind = -1;
+  while(random_value > 0) {
+    if (weight_ind == weights.size() - 1){
+      return values[weight_ind];
+    }
+    random_value -= weights[++weight_ind];
+  }
+
+  return values[weight_ind];
+
 }

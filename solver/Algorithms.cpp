@@ -13,12 +13,11 @@ namespace TSP{
 
   void AlgorithmBruteForce::Setup(SharedState arg_state) {
     state = arg_state;
+    state->current_path = State::Default(state->world->size());
   }
 
   bool AlgorithmBruteForce::Iterate() {
-    if (state->current_path == nullptr) {
-      state->current_path = State::Default(state->world->size());
-    }
+
     if (!next_permutation(state->current_path->begin(), state->current_path->end())) {
       return false;
     } else {
@@ -62,4 +61,91 @@ namespace TSP{
 
 
   REGISTER_ALGORITHM(AlgorithmNearestNeighbour);
+
+
+  AlgorithmAntColonyOptimization::AlgorithmAntColonyOptimization():
+      matrix(new vector<vector<double>>) {
+
+  }
+
+  void AlgorithmAntColonyOptimization::SetSettings(Settings arg_settings) {
+    settings = arg_settings;
+  }
+
+  void AlgorithmAntColonyOptimization::Setup(SharedState arg_state) {
+    state = arg_state;
+    for (int i = 0; i < state->world->size(); i ++) {
+      matrix->push_back({});
+      for (int j = 0; j < state->world->size(); j++) {
+        matrix->at(i).push_back(1);
+      }
+    }
+
+    state->current_path_ant_colony = matrix;
+  }
+
+  bool AlgorithmAntColonyOptimization::Iterate() {
+
+    ants.clear();
+    for (int ai = 0; ai < settings.num_ants; ai++) {
+      ants.push_back({});
+      ants[ai].path = make_shared<vector<int>>();
+      ants[ai].path->push_back(0);
+      for (int i = 0 ; i < state->world->size(); i++) {
+        ants[ai].unvisited.insert(i);
+      }
+    }
+
+    for (int i = 0 ; i < state->world->size(); i ++) {
+      SubIterate();
+    }
+
+    UpdateTrails();
+
+    return true;
+  }
+
+  void AlgorithmAntColonyOptimization::SubIterate() {
+    for (int ai = 0; ai < settings.num_ants; ai ++) {
+      AntIterate(ants[ai]);
+    }
+  }
+
+  void AlgorithmAntColonyOptimization::AntIterate(Ant& ant) {
+    vector<double> weights;
+    vector<int> nodes;
+
+    for (const int& node : ant.unvisited) {
+      nodes.push_back(node);
+      int curr_position = *ant.path->rbegin();
+      double weight = pow(1.0/GetCost(state->world, curr_position, node), settings.alpha);
+      weight += pow(matrix->at(curr_position)[node], settings.eta);
+      weights.push_back(weight);
+    }
+
+    int chosen_next = WeightedRandom(weights, nodes);
+
+    ant.path->push_back(chosen_next);
+    ant.unvisited.erase(chosen_next);
+  }
+
+  void AlgorithmAntColonyOptimization::UpdateTrails() {
+    for (int i = 0; i < matrix->size(); i ++) {
+      for (int j = 0; j < matrix->at(i).size(); j++) {
+        matrix->at(i)[j] += settings.ro;
+      }
+    }
+
+    for (int ai = 0; ai < ants.size(); ai ++) {
+
+      double cost = GetCost(state->world, ants[ai].path);
+
+      for (int i = 1; i < ants[ai].path->size(); i ++) {
+        matrix->at(ants[ai].path->at(i-1))[ants[ai].path->at(i)] += settings.Q/cost;
+      }
+    }
+  }
+
+
+  REGISTER_ALGORITHM(AlgorithmAntColonyOptimization);
 }
