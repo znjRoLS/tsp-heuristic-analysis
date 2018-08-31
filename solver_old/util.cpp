@@ -8,10 +8,11 @@
 #include <cmath>
 #include <cassert>
 #include <random>
+#include <ctime>
 
 #define EPS 1e-7
 
-double GetCost(const World& world, int i, int j) {
+double GetCost(const World& world, unsigned i, unsigned j) {
   if (i < 0 || i >= world->size() || j < 0 || j >= world->size()) {
     throw new range_error("Selected nodes out of range");
   }
@@ -21,7 +22,7 @@ double GetCost(const World& world, int i, int j) {
 
 double GetCost(const World& world, const Path& path) {
   double cost = GetCost(world, path->at(0), path->at(path->size()-1));
-  for (int i = 1; i < path->size(); i ++) {
+  for (unsigned i = 1; i < path->size(); i ++) {
     cost += GetCost(world, path->at(i-1), path->at(i));
   }
   return cost;
@@ -29,7 +30,7 @@ double GetCost(const World& world, const Path& path) {
 
 void SetMin(const World& world, Path& path1, Path& path2) {
   if (Less(world, path2, path1)) {
-    for (int i = 0; i < path1->size(); i++) {
+    for (unsigned i = 0; i < path1->size(); i++) {
       path1->at(i) = path2->at(i);
     }
   }
@@ -91,7 +92,7 @@ double WeightedRandom(const vector<double> &weights, const vector<double> &value
 
   double random_value = distribution(random_engine);
 
-  int weight_ind = -1;
+  unsigned weight_ind = -1;
   while(random_value > 0) {
     if (weight_ind == weights.size() - 1){
       return values[weight_ind];
@@ -113,7 +114,7 @@ int WeightedRandom(const vector<double> &weights, const vector<int> &values) {
 
   double random_value = distribution(random_engine);
 
-  int weight_ind = -1;
+    unsigned weight_ind = -1;
   while(random_value > 0) {
     if (weight_ind == weights.size() - 1){
       return values[weight_ind];

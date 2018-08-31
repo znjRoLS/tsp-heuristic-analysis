@@ -16,7 +16,7 @@ project (tspheuristicanalysis)
 #add_executable(fuzzer fuzzer.cpp binary_runner.cpp common.cpp config.cpp block.cpp block.h variable.cpp variable.h)
 #add_executable(test_bin test_bin.cpp)
 
-add_subdirectory(solver)
+add_subdirectory(solver_old)
 
 # test supporting
 if (false)

@@ -17,7 +17,7 @@ typedef pair<double, double> Point2;
 typedef shared_ptr<vector<Point2>> World;
 typedef shared_ptr<vector<int>> Path;
 
-double GetCost(const World& world, int i, int j);
+double GetCost(const World& world, unsigned i, unsigned j);
 double GetCost(const World& world, const Path& path);
 void SetMin(const World& world, Path& path1, Path& path2);
 bool Less(const World& world, Path& path1, Path& path2);

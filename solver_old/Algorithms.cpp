@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <limits>
+#include <cmath>
 
 namespace TSP{
 
@@ -32,7 +33,7 @@ namespace TSP{
   void AlgorithmNearestNeighbour::Setup(SharedState arg_state) {
     state = arg_state;
 
-    for (int i = 1; i < arg_state->world->size(); i++) {
+    for (unsigned i = 1; i < arg_state->world->size(); i++) {
       unvisited.insert(i);
     }
     state->current_path = {0};
@@ -74,9 +75,9 @@ namespace TSP{
 
   void AlgorithmAntColonyOptimization::Setup(SharedState arg_state) {
     state = arg_state;
-    for (int i = 0; i < state->world->size(); i ++) {
+    for (unsigned i = 0; i < state->world->size(); i ++) {
       matrix->push_back({});
-      for (int j = 0; j < state->world->size(); j++) {
+      for (unsigned j = 0; j < state->world->size(); j++) {
         matrix->at(i).push_back(1);
       }
     }
@@ -91,12 +92,12 @@ namespace TSP{
       ants.push_back({});
       ants[ai].path = make_shared<vector<int>>();
       ants[ai].path->push_back(0);
-      for (int i = 0 ; i < state->world->size(); i++) {
+      for (unsigned i = 0 ; i < state->world->size(); i++) {
         ants[ai].unvisited.insert(i);
       }
     }
 
-    for (int i = 0 ; i < state->world->size(); i ++) {
+    for (unsigned i = 0 ; i < state->world->size(); i ++) {
       SubIterate();
     }
 
@@ -130,17 +131,17 @@ namespace TSP{
   }
 
   void AlgorithmAntColonyOptimization::UpdateTrails() {
-    for (int i = 0; i < matrix->size(); i ++) {
-      for (int j = 0; j < matrix->at(i).size(); j++) {
+    for (unsigned i = 0; i < matrix->size(); i ++) {
+      for (unsigned j = 0; j < matrix->at(i).size(); j++) {
         matrix->at(i)[j] += settings.ro;
       }
     }
 
-    for (int ai = 0; ai < ants.size(); ai ++) {
+    for (unsigned ai = 0; ai < ants.size(); ai ++) {
 
       double cost = GetCost(state->world, ants[ai].path);
 
-      for (int i = 1; i < ants[ai].path->size(); i ++) {
+      for (unsigned i = 1; i < ants[ai].path->size(); i ++) {
         matrix->at(ants[ai].path->at(i-1))[ants[ai].path->at(i)] += settings.Q/cost;
       }
     }
