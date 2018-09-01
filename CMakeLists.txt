@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 2.6)
-add_definitions(-std=c++11)
+add_definitions(-std=c++17)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -Wall")
 
@@ -16,7 +16,7 @@ project (tspheuristicanalysis)
 #add_executable(fuzzer fuzzer.cpp binary_runner.cpp common.cpp config.cpp block.cpp block.h variable.cpp variable.h)
 #add_executable(test_bin test_bin.cpp)
 
-add_subdirectory(solver_old)
+add_subdirectory(solver)
 
 # test supporting
 if (false)
