@@ -14,6 +14,6 @@ private:
     vector<vector<T>> data_;
 };
 
-#include "matrix.cpp"
+#include "matrix.cc"
 
 #endif //TSPHEURISTICANALYSIS_MATRIX_H

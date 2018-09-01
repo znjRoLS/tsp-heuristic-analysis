@@ -1,5 +1,10 @@
 cmake_minimum_required (VERSION 2.6)
-add_definitions(-std=c++17)
+add_definitions(-std=gnu++11)
+
+project (tsp_heuristics_analysis)
+
+set(tsp_heuristics_analysis_VERSION_MAJOR 0)
+set(tsp_heuristics_analysis_VERSION_MINOR 1)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -Wall")
 
@@ -9,22 +14,20 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-#set(BIN_PREFIX ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+if (EXISTS googletest)
+    set(GTEST_USE TRUE)
+else()
+    set(GTEST_USE FALSE)
+endif()
 
-project (tspheuristicanalysis)
-
-#add_executable(fuzzer fuzzer.cpp binary_runner.cpp common.cpp config.cpp block.cpp block.h variable.cpp variable.h)
-#add_executable(test_bin test_bin.cpp)
-
-add_subdirectory(solver)
-
-# test supporting
-if (false)
+if (GTEST_USE)
     include_directories(googletest/googletest/include)
     add_subdirectory (googletest/googletest)
     enable_testing()
-
-    cxx_test(variable_test gtest_main variable.cpp)
-    cxx_test(block_test gtest_main block.cpp variable.cpp common.cpp)
-    cxx_test(config_test gtest_main config.cpp block.cpp variable.cpp common.cpp)
 endif()
+
+# Add util so it can be used by tsp_solver
+include_directories("util")
+add_subdirectory(util)
+
+add_subdirectory(solver)

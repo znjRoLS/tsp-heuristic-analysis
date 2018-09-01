@@ -3,8 +3,8 @@
 
 #include <memory>
 
-#include "../util/matrix.h"
-#include "../util/point2.h"
+#include "matrix.h"
+#include "point2.h"
 
 using std::shared_ptr;
 
