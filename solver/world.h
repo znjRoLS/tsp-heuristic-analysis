@@ -13,7 +13,7 @@ namespace TSP {
     enum WorldType {
         ASSYMETRIC,
         SYMMETRIZSAC,
-        EUCLIDIAN,
+        EUCLIDEAN,
     };
     
     struct World {
