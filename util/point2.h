@@ -2,6 +2,8 @@
 #define TSPHEURISTICANALYSIS_POINT2D_H
 
 struct Point2 {
+    double abs();
+
     double x_;
     double y_;
 };

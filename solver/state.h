@@ -9,8 +9,16 @@
 namespace TSP {
 
     /// Capturing current State (or current solution)
-    struct State {
-        double CurrentCost();
+    class State {
+    public:
+        explicit State(shared_ptr<World> world);
+        State(shared_ptr<World> world, Path path);
+
+        double CurrentPathCost();
+        void UpdateOptimalPath(State state);
+
+    private:
+        void SetDefaultPath();
 
         const shared_ptr<World> world_;
         Path current_path_;

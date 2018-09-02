@@ -2,6 +2,10 @@
 #define TSPHEURISTICANALYSIS_UTIL_H
 
 #include <vector>
+#include <cassert>
+
+#define ASSERT(x) assert(x);
+#define ASSERT_EQ(x,y) ASSERT(x == y)
 
 namespace TSP {
 

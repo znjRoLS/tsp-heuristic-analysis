@@ -5,3 +5,8 @@ Matrix<T>::Matrix(int n, int m):
 {
 
 }
+
+template<typename T>
+vector<T>& Matrix<T>::operator[](int i) {
+    return data_[i];
+}

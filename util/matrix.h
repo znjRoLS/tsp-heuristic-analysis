@@ -10,6 +10,8 @@ class Matrix {
 public:
     Matrix(int n, int m);
 
+    vector<T>& operator[](int i);
+
 private:
     vector<vector<T>> data_;
 };
