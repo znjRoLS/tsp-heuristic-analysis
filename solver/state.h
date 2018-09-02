@@ -7,6 +7,8 @@
 #include "world.h"
 
 namespace TSP {
+
+    /// Capturing current State (or current solution)
     struct State {
         double CurrentCost();
 
