@@ -26,15 +26,17 @@ namespace TSP {
     double State::CurrentPathCost() {
         double sum = 0;
         int curr_node = current_path_[0];
-        for (int i = 1; i < current_path_.size(); i ++) {
+        for (uint i = 1; i < current_path_.size(); i ++) {
             int next_node = current_path_[i];
-            sum += (world_[next_node] - world_[curr_node]).abs();
+            sum += (*world_->distances_)[curr_node][next_node];
+            curr_node = next_node;
         }
+        sum += (*world_->distances_)[curr_node][current_path_[0]];
         return sum;
     }
 
     void State::UpdateOptimalPath(TSP::State state) {
-        ASSERT_EQ(world_, state.world_);
+        TSP_ASSERT_EQ(world_, state.world_);
 
         if (state.CurrentPathCost() < CurrentPathCost()) {
             current_path_ = state.current_path_;

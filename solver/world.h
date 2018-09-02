@@ -19,7 +19,7 @@ namespace TSP {
     struct World {
         const int size;
         const WorldType world_type_;
-        const shared_ptr<Matrix<Point2>> distances_;
+        const shared_ptr<Matrix<double>> distances_;
     };
     
 } // namespace TSP

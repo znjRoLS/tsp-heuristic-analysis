@@ -4,6 +4,8 @@
 struct Point2 {
     double abs();
 
+    Point2 operator-(Point2 other);
+
     double x_;
     double y_;
 };

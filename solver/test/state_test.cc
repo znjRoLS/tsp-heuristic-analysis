@@ -1,11 +1,27 @@
 #include "gtest/gtest.h"
+#include <memory>
 
 #include "../state.h"
 
 using namespace TSP;
+using std::make_shared;
 
 TEST(MyTestTest, CurrentCost) {
-    State state;
-    ASSERT_EQ(0.0, state.CurrentCost());
+    State state(
+            make_shared<TSP::World>(
+                    World{
+                            3,
+                            WorldType::EUCLIDIAN,
+                            make_shared<Matrix<double>>(vector<vector<double>>{
+                                    {0, 1,   2},
+                                    {1, 0,   1.5},
+                                    {2, 1.5, 0},
+                            }),
+                    }
+            ),
+            vector<int> {0, 1, 2, 0}
+    );
+
+    ASSERT_EQ(4.5, state.CurrentPathCost());
 }
 

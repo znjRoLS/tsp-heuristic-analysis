@@ -1,7 +1,18 @@
 
 template<typename T>
 Matrix<T>::Matrix(int n, int m):
+    n_(n),
+    m_(m),
     data_(n, vector<T>(m))
+{
+
+}
+
+template<typename T>
+Matrix<T>::Matrix(vector<vector<T>> data):
+    n_(data.size()),
+    m_(data[0].size()),
+    data_(data)
 {
 
 }
