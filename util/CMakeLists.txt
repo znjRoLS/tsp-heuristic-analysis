@@ -1,2 +1,2 @@
-file( GLOB SOURCES *.cc)
+file(GLOB SOURCES *.cc)
 add_library(util ${SOURCES})

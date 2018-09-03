@@ -1,9 +1,4 @@
-//
-// Created by rols on 9/2/2018.
-//
-
-#ifndef TSP_HEURISTICS_ANALYSIS_WORLD_GENERATOR_H
-#define TSP_HEURISTICS_ANALYSIS_WORLD_GENERATOR_H
+#pragma once
 
 #include <memory>
 
@@ -17,5 +12,3 @@ namespace TSP {
         virtual shared_ptr<World> GenerateWorld(int n) = 0;
     };
 };
-
-#endif //TSP_HEURISTICS_ANALYSIS_WORLD_GENERATOR_H

@@ -1,6 +1,3 @@
-//
-// Created by rols on 9/3/2018.
-//
 #include "gtest/gtest.h"
 #include <memory>
 

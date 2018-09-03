@@ -1,7 +1,3 @@
-//
-// Created by rols on 9/2/2018.
-//
-
 #include <memory>
 
 using std::make_shared;

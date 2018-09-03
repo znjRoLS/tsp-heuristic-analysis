@@ -19,9 +19,8 @@ TEST(StateTest, CurrentCost) {
                             }),
                     }
             ),
-            vector<int> {0, 1, 2, 0}
+            vector<int>{0, 1, 2, 0}
     );
 
     ASSERT_EQ(4.5, state.CurrentPathCost());
 }
-

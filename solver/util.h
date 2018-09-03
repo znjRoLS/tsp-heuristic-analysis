@@ -1,12 +1,11 @@
-#ifndef TSPHEURISTICANALYSIS_UTIL_H
-#define TSPHEURISTICANALYSIS_UTIL_H
+#pragma once
 
 #include <vector>
 #include <cassert>
 
 #define uint unsigned int
 #define TSP_ASSERT(x) assert(x);
-#define TSP_ASSERT_EQ(x,y) TSP_ASSERT(x == y)
+#define TSP_ASSERT_EQ(x, y) TSP_ASSERT(x == y)
 
 namespace TSP {
 
@@ -14,5 +13,3 @@ namespace TSP {
     typedef std::vector<int> Path;
 
 } // namespace TSP
-
-#endif //TSPHEURISTICANALYSIS_UTIL_H

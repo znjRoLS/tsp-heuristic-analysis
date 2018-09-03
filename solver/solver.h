@@ -1,9 +1,4 @@
-//
-// Created by rols on 9/2/2018.
-//
-
-#ifndef TSP_HEURISTICS_ANALYSIS_SOLVER_H
-#define TSP_HEURISTICS_ANALYSIS_SOLVER_H
+#pragma once
 
 #include <memory>
 
@@ -14,25 +9,22 @@ using std::shared_ptr;
 
 namespace TSP {
 
-struct SolverOptions {
-    int world_size;
-};
+    struct SolverOptions {
+        int world_size;
+    };
 
-class Solver {
-public:
+    class Solver {
+    public:
 
-    Solver(SolverOptions options, shared_ptr<WorldGenerator> world_generator);
+        Solver(SolverOptions options, shared_ptr<WorldGenerator> world_generator);
 
-    void Reset();
+        void Reset();
 
-private:
-    shared_ptr<SolverOptions> options_;
-    shared_ptr<WorldGenerator> world_generator_;
+    private:
+        shared_ptr<SolverOptions> options_;
+        shared_ptr<WorldGenerator> world_generator_;
 
-    shared_ptr<State> state_;
-};
+        shared_ptr<State> state_;
+    };
 
 } // namespace TSP
-
-
-#endif //TSP_HEURISTICS_ANALYSIS_SOLVER_H

@@ -1,5 +1,4 @@
-#ifndef TSPHEURISTICANALYSIS_STATE_H
-#define TSPHEURISTICANALYSIS_STATE_H
+#pragma once
 
 #include <memory>
 
@@ -12,9 +11,11 @@ namespace TSP {
     class State {
     public:
         explicit State(shared_ptr<World> world);
+
         State(shared_ptr<World> world, Path path);
 
         double CurrentPathCost();
+
         void UpdateOptimalPath(State state);
 
     private:
@@ -24,5 +25,3 @@ namespace TSP {
         Path current_path_;
     };
 }
-
-#endif //TSPHEURISTICANALYSIS_STATE_H
