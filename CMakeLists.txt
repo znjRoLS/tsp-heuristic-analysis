@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 2.6)
-add_definitions(-std=gnu++11)
+add_definitions(-std=gnu++17)
 
 project (tsp_heuristics_analysis)
 

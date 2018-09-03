@@ -6,7 +6,7 @@
 using namespace TSP;
 using std::make_shared;
 
-TEST(MyTestTest, CurrentCost) {
+TEST(StateTest, CurrentCost) {
     State state(
             make_shared<TSP::World>(
                     World{
