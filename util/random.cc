@@ -1,6 +1,9 @@
 #include <ctime>
 #include <random>
 #include <climits>
+#include <algorithm>
+
+using std::shuffle;
 
 #include "random.h"
 
@@ -33,6 +36,10 @@ namespace Random {
 
     double GetDouble() {
         return GetDouble(1.0);
+    }
+
+    void Randomize(vector<int>* data) {
+        shuffle(data->begin(), data->end(), mt);
     }
 
 } // namespace Random

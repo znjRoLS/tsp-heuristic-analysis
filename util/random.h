@@ -1,5 +1,9 @@
 #pragma once
 
+#include <vector>
+
+using std::vector;
+
 namespace Random {
 
     int GetInt();
@@ -13,5 +17,7 @@ namespace Random {
     double GetDouble(double max);
 
     double GetDouble(double min, double max);
+
+    void Randomize(vector<int>* data);
 
 } // namespace Random
