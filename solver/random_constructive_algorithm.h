@@ -12,16 +12,16 @@ using std::unordered_set;
 
 namespace TSP {
 
-    class RandomConstructiveAlgorithm : public ConstructiveAlgorithm {
-    public:
-      explicit RandomConstructiveAlgorithm(shared_ptr<World> world);
-        void Reset() override;
-        bool Iterate(int granularity) override;
-        int GetMaxGranularity() override;
+class RandomConstructiveAlgorithm : public ConstructiveAlgorithm {
+ public:
+  explicit RandomConstructiveAlgorithm(shared_ptr<World> world);
+  void Reset() override;
+  bool Iterate(int granularity) override;
+  int GetMaxGranularity() override;
 
-    private:
-        unordered_set<int> unvisited_;
-        Path random_path_;
-    };
+ private:
+  unordered_set<int> unvisited_;
+  Path random_path_;
+};
 
 } // namespace TSP

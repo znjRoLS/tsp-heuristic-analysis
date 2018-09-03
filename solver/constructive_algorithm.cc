@@ -2,13 +2,13 @@
 
 namespace TSP {
 
-    ConstructiveAlgorithm::ConstructiveAlgorithm(shared_ptr<TSP::World> world) :
-            world_(world) {
+ConstructiveAlgorithm::ConstructiveAlgorithm(shared_ptr<TSP::World> world) :
+    world_(world) {
 
-    }
+}
 
-    Path ConstructiveAlgorithm::GetFinalPath() {
-        return current_path_;
-    }
+Path ConstructiveAlgorithm::GetFinalPath() {
+  return current_path_;
+}
 
 } // namespace TSP

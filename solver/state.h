@@ -7,21 +7,21 @@
 
 namespace TSP {
 
-    /// Capturing current State (or current solution)
-    class State {
-    public:
-        explicit State(shared_ptr<World> world);
+/// Capturing current State (or current solution)
+class State {
+ public:
+  explicit State(shared_ptr<World> world);
 
-        State(shared_ptr<World> world, Path path);
+  State(shared_ptr<World> world, Path path);
 
-        double CurrentPathCost();
+  double CurrentPathCost();
 
-        void UpdateOptimalPath(State state);
+  void UpdateOptimalPath(State state);
 
-    private:
-        void SetDefaultPath();
+ private:
+  void SetDefaultPath();
 
-        const shared_ptr<World> world_;
-        Path current_path_;
-    };
+  const shared_ptr<World> world_;
+  Path current_path_;
+};
 }

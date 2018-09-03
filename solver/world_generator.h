@@ -7,8 +7,8 @@
 using std::shared_ptr;
 
 namespace TSP {
-    class WorldGenerator {
-    public:
-        virtual shared_ptr<World> GenerateWorld(int n) = 0;
-    };
+class WorldGenerator {
+ public:
+  virtual shared_ptr<World> GenerateWorld(int n) = 0;
+};
 };

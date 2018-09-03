@@ -9,7 +9,7 @@
 
 namespace TSP {
 
-    /// Path type representing a solution Path in TSP
-    typedef std::vector<int> Path;
+/// Path type representing a solution Path in TSP
+typedef std::vector<int> Path;
 
 } // namespace TSP

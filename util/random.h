@@ -6,18 +6,18 @@ using std::vector;
 
 namespace Random {
 
-    int GetInt();
+int GetInt();
 
-    int GetInt(int max);
+int GetInt(int max);
 
-    int GetInt(int min, int max);
+int GetInt(int min, int max);
 
-    double GetDouble();
+double GetDouble();
 
-    double GetDouble(double max);
+double GetDouble(double max);
 
-    double GetDouble(double min, double max);
+double GetDouble(double min, double max);
 
-    void Randomize(vector<int>* data);
+void Randomize(vector<int> *data);
 
 } // namespace Random
