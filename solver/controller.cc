@@ -22,8 +22,18 @@ void Controller::SetConstructiveAlgorithm(shared_ptr<ConstructiveAlgorithm> algo
 }
 
 void Controller::IterateConstructiveAlgorithm(int granularity) {
-  constructive_algorithm_->Iterate(0); // TODO fix this
+  constructive_algorithm_->Iterate(granularity);
   state_->current_path_ = constructive_algorithm_->GetFinalPath();
+}
+
+void Controller::SetImprovementAlgorithm(shared_ptr<ImprovementAlgorithm> algorithm) {
+  improvement_algorithm_ = algorithm;
+  improvement_algorithm_->SetState(state_);
+  improvement_algorithm_->Reset();
+}
+
+void Controller::IterateImprovementAlgorithm(int granularity) {
+  improvement_algorithm_->Iterate(granularity);
 }
 
 shared_ptr<State> Controller::GetCurrentState() {

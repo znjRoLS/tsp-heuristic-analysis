@@ -17,7 +17,7 @@ shared_ptr<World> EuclideanWorldGenerator::GenerateWorld(int n) {
     }
   }
 
-  return make_shared<World>(World{n, WorldType::EUCLIDEAN, world});
+  return make_shared<World>(World{n, WorldType::EUCLIDEAN2D, world});
 }
 
 } // namespace TSP

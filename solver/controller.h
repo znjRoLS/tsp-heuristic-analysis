@@ -7,6 +7,7 @@ using std::shared_ptr;
 #include "state.h"
 #include "world_generator.h"
 #include "constructive_algorithm.h"
+#include "improvement_algorithm.h"
 
 namespace TSP {
 
@@ -19,6 +20,9 @@ class Controller {
   void SetConstructiveAlgorithm(shared_ptr<ConstructiveAlgorithm> algorithm);
   void IterateConstructiveAlgorithm(int granularity);
 
+  void SetImprovementAlgorithm(shared_ptr<ImprovementAlgorithm> algorithm);
+  void IterateImprovementAlgorithm(int granularity);
+
   shared_ptr<State> GetCurrentState();
 
  private:
@@ -28,6 +32,7 @@ class Controller {
   shared_ptr<State> state_;
 
   shared_ptr<ConstructiveAlgorithm> constructive_algorithm_;
+  shared_ptr<ImprovementAlgorithm> improvement_algorithm_;
 };
 
 } // namespace TSP

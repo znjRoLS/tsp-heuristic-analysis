@@ -11,7 +11,7 @@ TEST(StateTest, CurrentCost) {
       make_shared<TSP::World>(
           World{
               3,
-              WorldType::EUCLIDEAN,
+              WorldType::EUCLIDEAN2D,
               make_shared<Matrix<double>>(vector<vector<double>>{
                   {0, 1, 2},
                   {1, 0, 1.5},
