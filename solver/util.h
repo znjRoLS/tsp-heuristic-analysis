@@ -3,7 +3,6 @@
 #include <vector>
 #include <cassert>
 
-#define uint unsigned int
 #define TSP_ASSERT(x) assert(x);
 #define TSP_ASSERT_EQ(x, y) TSP_ASSERT(x == y)
 

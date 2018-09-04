@@ -18,6 +18,6 @@ double GetDouble(double max);
 
 double GetDouble(double min, double max);
 
-void Randomize(vector<int> *data);
+void RandomShuffle(std::vector<int>::iterator begin, std::vector<int>::iterator end);
 
 } // namespace Random

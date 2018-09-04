@@ -2,9 +2,8 @@
 
 namespace TSP {
 
-ConstructiveAlgorithm::ConstructiveAlgorithm(shared_ptr<TSP::World> world) :
-    world_(world) {
-
+void ConstructiveAlgorithm::SetWorld(shared_ptr<TSP::World> world) {
+  world_ = world;
 }
 
 Path ConstructiveAlgorithm::GetFinalPath() {

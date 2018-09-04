@@ -7,7 +7,9 @@ namespace TSP {
 
 class ConstructiveAlgorithm : public Algorithm {
  public:
-  explicit ConstructiveAlgorithm(shared_ptr<World> world);
+
+  void SetWorld(shared_ptr<World> world);
+
   Path GetFinalPath();
  protected:
   Path current_path_;

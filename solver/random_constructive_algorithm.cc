@@ -4,9 +4,6 @@
 
 namespace TSP {
 
-RandomConstructiveAlgorithm::RandomConstructiveAlgorithm(shared_ptr<World> world) :
-    ConstructiveAlgorithm(world) {}
-
 int RandomConstructiveAlgorithm::GetMaxGranularity() {
   return 2;
 }
@@ -23,7 +20,7 @@ void RandomConstructiveAlgorithm::Reset() {
   random_path_.resize(n + 1);
   for (int i = 0; i < n; i++) random_path_[i] = i;
   random_path_[n] = 0;
-  Random::Randomize(&random_path_);
+  Random::RandomShuffle(random_path_.begin() + 1, random_path_.end() - 1);
 }
 
 bool RandomConstructiveAlgorithm::Iterate(int granularity) {

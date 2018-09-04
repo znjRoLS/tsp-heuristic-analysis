@@ -5,7 +5,7 @@
 namespace TSP {
 
 vector<Point2> RandomEuclideanWorldGenerator::GenerateNodes(int n) {
-  vector<Point2> nodes((uint) n);
+  vector<Point2> nodes((unsigned) n);
 
   for (int i = 0; i < n; i++) {
     nodes[i] = {Random::GetDouble(), Random::GetDouble()};

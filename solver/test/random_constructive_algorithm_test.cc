@@ -20,11 +20,13 @@ TEST(RandomConstructiveAlgorithmTest, ConstructsRandomPath) {
       }
   );
 
-  unique_ptr<ConstructiveAlgorithm> algo = make_unique<RandomConstructiveAlgorithm>(world);
+  unique_ptr<ConstructiveAlgorithm> algo = make_unique<RandomConstructiveAlgorithm>();
+  algo->SetWorld(world);
   algo->Reset();
   ASSERT_FALSE(algo->Iterate(0));
 
   ASSERT_EQ(algo->GetFinalPath().size(), 4);
+  ASSERT_EQ(algo->GetFinalPath()[0], 0);
 
   algo->Reset();
   ASSERT_TRUE(algo->Iterate(1));

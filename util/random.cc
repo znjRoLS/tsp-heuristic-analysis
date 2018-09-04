@@ -1,5 +1,7 @@
-
 #include <random>
+#include <algorithm>
+#include <climits>
+#include <vector>
 
 using std::shuffle;
 
@@ -36,8 +38,8 @@ double GetDouble() {
   return GetDouble(1.0);
 }
 
-void Randomize(vector<int> *data) {
-  shuffle(data->begin(), data->end(), mt);
+void RandomShuffle(std::vector<int>::iterator begin, std::vector<int>::iterator end) {
+  shuffle(begin, end, mt);
 }
 
 } // namespace Random

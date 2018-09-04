@@ -24,7 +24,7 @@ void State::SetDefaultPath() {
 double State::CurrentPathCost() {
   double sum = 0;
   int curr_node = current_path_[0];
-  for (uint i = 1; i < current_path_.size(); i++) {
+  for (unsigned i = 1; i < current_path_.size(); i++) {
     int next_node = current_path_[i];
     sum += (*world_->distances_)[curr_node][next_node];
     curr_node = next_node;
@@ -33,7 +33,7 @@ double State::CurrentPathCost() {
   return sum;
 }
 
-void State::UpdateOptimalPath(TSP::State state) {
+void State::UpdateOptimalPath(State state) {
   TSP_ASSERT_EQ(world_, state.world_);
 
   if (state.CurrentPathCost() < CurrentPathCost()) {

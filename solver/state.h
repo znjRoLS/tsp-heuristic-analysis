@@ -18,10 +18,10 @@ class State {
 
   void UpdateOptimalPath(State state);
 
- private:
-  void SetDefaultPath();
-
   const shared_ptr<World> world_;
   Path current_path_;
+
+ private:
+  void SetDefaultPath();
 };
 }
