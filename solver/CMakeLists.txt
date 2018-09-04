@@ -14,4 +14,7 @@ if (GTEST_USE)
         cxx_test(${testname} gtest_main ${testtarget})
         target_link_libraries(${testname} tsp_solver)
     endforeach ()
+
+    cxx_test(all_tests gtest_main ${TEST_SOURCES})
+    target_link_libraries(all_tests tsp_solver)
 endif ()
