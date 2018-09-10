@@ -5,6 +5,8 @@ target_link_libraries(tsp_solver util)
 add_executable(tsp_test test.cc)
 target_link_libraries(tsp_test tsp_solver)
 
+target_compile_definitions(tsp_solver PUBLIC TEST_DATA_LOCATION="../test_data/")
+
 if (GTEST_USE)
     file(GLOB TEST_SOURCES test/*_test.cc)
     foreach (testsourcefile ${TEST_SOURCES})
