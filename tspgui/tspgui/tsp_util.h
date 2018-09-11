@@ -13,5 +13,7 @@ using std::shared_ptr;
 using std::make_shared;
 
 namespace TSP {
-    extern unordered_map<string, shared_ptr<WorldGenerator>> world_generators;
-}
+
+extern unordered_map<string, shared_ptr<WorldGenerator>> world_generators;
+
+} // namespace TSP

@@ -208,7 +208,7 @@
                        <item>
                         <widget class="QSpinBox" name="spin_size_world_generator">
                          <property name="maximum">
-                          <number>2</number>
+                          <number>1000</number>
                          </property>
                         </widget>
                        </item>
