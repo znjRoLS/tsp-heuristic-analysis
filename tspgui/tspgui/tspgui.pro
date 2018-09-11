@@ -36,3 +36,11 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+unix|win32: LIBS += -L$$PWD/../../lib/ -ltsp_solver
+
+INCLUDEPATH += $$PWD/../../solver
+DEPENDPATH += $$PWD/../../solver
+
+win32:!win32-g++: PRE_TARGETDEPS += $$PWD/../../lib/tsp_solver.lib
+else:unix|win32-g++: PRE_TARGETDEPS += $$PWD/../../lib/libtsp_solver.a

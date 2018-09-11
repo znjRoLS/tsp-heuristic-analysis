@@ -15,6 +15,8 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void world_generator_action();
 private:
     Ui::MainWindow *ui;
 };
