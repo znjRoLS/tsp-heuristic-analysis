@@ -25,11 +25,15 @@ CONFIG += c++14
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    tsp_util.cpp
+    tsp_util.cpp \
+    tspview.cpp \
+    node.cpp
 
 HEADERS += \
         mainwindow.h \
-    tsp_util.h
+    tsp_util.h \
+    tspview.h \
+    node.h
 
 FORMS += \
         mainwindow.ui

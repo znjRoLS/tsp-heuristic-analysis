@@ -2,7 +2,7 @@
 
 namespace TSP {
 
-unordered_map<string, shared_ptr<WorldGenerator>> world_generators = {
+unordered_map<string, shared_ptr<EuclideanWorldGenerator>> world_generators = {
     {"Random Euclidean World Generator", make_shared<RandomEuclideanWorldGenerator>()},
 };
 

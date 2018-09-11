@@ -80,7 +80,7 @@
          <widget class="QWidget" name="widget_2" native="true">
           <layout class="QHBoxLayout" name="horizontalLayout_9">
            <item>
-            <widget class="QGraphicsView" name="graphicsView">
+            <widget class="TSPView" name="graphicsView">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Ignored" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -617,6 +617,13 @@
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>TSPView</class>
+   <extends>QGraphicsView</extends>
+   <header>tspview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

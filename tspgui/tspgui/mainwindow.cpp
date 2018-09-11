@@ -27,7 +27,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::world_generator_action() {
     string selected_world_generator = ui->combo_world_generator->currentText().toStdString();
-    shared_ptr<TSP::WorldGenerator> world_generator = TSP::world_generators[selected_world_generator];
+    shared_ptr<TSP::EuclideanWorldGenerator> world_generator = TSP::world_generators[selected_world_generator];
     int world_size = ui->spin_size_world_generator->value();
 
     world_ = shared_ptr<TSP::World>(world_generator->GenerateWorld(world_size));

@@ -3,7 +3,6 @@
 #include <unordered_map>
 #include <string>
 #include <memory>
-#include "world_generator.h"
 #include "euclidean_world_generator.h"
 #include "random_euclidean_world_generator.h"
 
@@ -14,6 +13,6 @@ using std::make_shared;
 
 namespace TSP {
 
-extern unordered_map<string, shared_ptr<WorldGenerator>> world_generators;
+extern unordered_map<string, shared_ptr<EuclideanWorldGenerator>> world_generators;
 
 } // namespace TSP
