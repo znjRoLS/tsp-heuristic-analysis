@@ -5,6 +5,6 @@
 namespace TSP {
 class RandomEuclideanWorldGenerator : public EuclideanWorldGenerator {
  public:
-  vector<Point2> GenerateNodes(int n) override;
+  shared_ptr<Nodes2> GenerateNodes(int n) override;
 };
 } // namespace TSP

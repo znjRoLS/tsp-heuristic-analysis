@@ -5,14 +5,15 @@
 
 using std::ifstream;
 using std::make_unique;
+using std::make_shared;
 
 namespace TSP {
 
-vector<Point2> FileEuclideanWorldGenerator::GenerateNodes(int n) {
-  vector<Point2> res;
+shared_ptr<Nodes2> FileEuclideanWorldGenerator::GenerateNodes(int n) {
+  shared_ptr<Nodes2> res = make_shared<Nodes2>();
 
   while (parser_->IterateNextPoint()) {
-    res.push_back(parser_->GetNextPoint());
+    res->push_back(parser_->GetNextPoint());
   }
 
   return res;

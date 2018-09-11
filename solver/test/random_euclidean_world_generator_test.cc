@@ -7,9 +7,9 @@ using namespace TSP;
 TEST(RandomEuclideanWorldGeneratorTest, GeneratesRandom) {
   std::unique_ptr<RandomEuclideanWorldGenerator> generator = std::make_unique<RandomEuclideanWorldGenerator>();
 
-  vector<Point2> nodes = generator->GenerateNodes(5);
+  shared_ptr<Nodes2> nodes = generator->GenerateNodes(5);
 
-  ASSERT_EQ(5, nodes.size());
-  ASSERT_NE(nodes[0].x_, nodes[0].y_);
-  ASSERT_NE(nodes[0].x_, nodes[1].x_);
+  ASSERT_EQ(5, nodes->size());
+  ASSERT_NE((*nodes)[0].x_, (*nodes)[0].y_);
+  ASSERT_NE((*nodes)[0].x_, (*nodes)[1].x_);
 }

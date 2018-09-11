@@ -6,7 +6,7 @@ using std::make_shared;
 
 namespace TSP {
 
-void Controller::SetWorldGenerator(shared_ptr<WorldGenerator> world_generator) {
+void Controller::SetWorldGenerator(shared_ptr<EuclideanWorldGenerator> world_generator) {
   world_generator_ = world_generator;
 }
 
