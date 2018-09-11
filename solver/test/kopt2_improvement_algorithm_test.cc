@@ -46,7 +46,7 @@ TEST(Kopt2ImprovementAlgorithmTest, ImprovementAlgorithmWorks) {
   ASSERT_TRUE(changed);
   // Note that this algo will never produce 0 3 1 2 0 since it always choses the first nodes of both edges as nodes
   // which appear first on the path.
-  Path path {0,2,1,3,0};
+  Path path{0, 2, 1, 3, 0};
   ASSERT_EQ(state->current_path_, path);
 }
 

@@ -34,7 +34,7 @@ TEST(Kopt2SearchImprovementAlgorithmTest, SimpleTest) {
 
   ASSERT_TRUE(algo->Iterate(2));
 
-  Path path = vector<int>{0,2,1,3,0};
+  Path path = vector<int>{0, 2, 1, 3, 0};
 
   ASSERT_EQ(state->current_path_, path);
 
