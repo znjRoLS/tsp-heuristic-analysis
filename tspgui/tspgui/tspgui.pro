@@ -20,14 +20,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-CONFIG += c++11
+CONFIG += c++14
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    tsp_util.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    tsp_util.h
 
 FORMS += \
         mainwindow.ui
@@ -44,3 +46,11 @@ DEPENDPATH += $$PWD/../../solver
 
 win32:!win32-g++: PRE_TARGETDEPS += $$PWD/../../lib/tsp_solver.lib
 else:unix|win32-g++: PRE_TARGETDEPS += $$PWD/../../lib/libtsp_solver.a
+
+unix|win32: LIBS += -L$$PWD/../../lib/ -lutil
+
+INCLUDEPATH += $$PWD/../../util
+DEPENDPATH += $$PWD/../../util
+
+win32:!win32-g++: PRE_TARGETDEPS += $$PWD/../../lib/util.lib
+else:unix|win32-g++: PRE_TARGETDEPS += $$PWD/../../lib/libutil.a

@@ -3,6 +3,11 @@
 
 #include <QMainWindow>
 
+#include <memory>
+#include "random_euclidean_world_generator.h"
+
+using std::unique_ptr;
+
 namespace Ui {
 class MainWindow;
 }
@@ -19,6 +24,7 @@ private slots:
     void world_generator_action();
 private:
     Ui::MainWindow *ui;
+    shared_ptr<TSP::World> world_;
 };
 
 #endif // MAINWINDOW_H
