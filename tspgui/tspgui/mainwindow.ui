@@ -228,6 +228,9 @@
                        </item>
                        <item>
                         <widget class="QSpinBox" name="spin_size_world_generator">
+                         <property name="minimum">
+                          <number>2</number>
+                         </property>
                          <property name="maximum">
                           <number>1000</number>
                          </property>
@@ -529,7 +532,7 @@
                      </widget>
                     </item>
                     <item row="2" column="0">
-                     <widget class="QPushButton" name="button_done_constructive_algorithm">
+                     <widget class="QPushButton" name="button_status_constructive_algorithm">
                       <property name="enabled">
                        <bool>false</bool>
                       </property>
@@ -540,8 +543,14 @@
                         <bold>true</bold>
                        </font>
                       </property>
+                      <property name="autoFillBackground">
+                       <bool>true</bool>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true"/>
+                      </property>
                       <property name="text">
-                       <string>DONE</string>
+                       <string>STATUS</string>
                       </property>
                       <property name="checkable">
                        <bool>false</bool>
@@ -688,7 +697,7 @@
                      </widget>
                     </item>
                     <item row="2" column="0">
-                     <widget class="QPushButton" name="button_done_improvement_algorithm">
+                     <widget class="QPushButton" name="button_status_improvement_algorithm">
                       <property name="enabled">
                        <bool>false</bool>
                       </property>
@@ -700,7 +709,7 @@
                        </font>
                       </property>
                       <property name="text">
-                       <string>DONE</string>
+                       <string>STATUS</string>
                       </property>
                       <property name="checkable">
                        <bool>false</bool>

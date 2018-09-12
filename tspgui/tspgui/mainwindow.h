@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 
+#include <QPushButton>
 #include <memory>
 #include "random_euclidean_world_generator.h"
 #include "constructive_algorithm.h"
@@ -26,20 +27,33 @@ public:
 private slots:
     void WorldGeneratorSelected(const QString& text);
     void WorldGeneratorAction();
-    void WorldGeneratorReset();
-    void SetWorldGeneratorDone(bool done);
 
     void ConstructiveAlgorithmSelected(const QString& text);
     void ConstructiveAlgorithmIterateAction();
     void ConstructiveAlgorithmResetAction();
-    void SetConstructiveAlgorithmDone(bool done);
 
     void ImprovementAlgorithmSelected(const QString& text);
     void ImprovementAlgorithmIterateAction();
     void ImprovementAlgorithmResetAction();
-    void SetImprovementAlgorithmDone(bool done);
 
 private:
+
+    enum ButtonState {
+        WAITING,
+        ITERATING,
+        DONE,
+    };
+
+    enum SolutionState {
+        START,
+        WORLD_GENERATED,
+        CONSTRUCTED_SOLUTION,
+        IMPROVED_SOLUTION,
+    };
+
+    void UpdateUserControls();
+    void SetButtonStatus(QPushButton* widget, ButtonState state);
+
     Ui::MainWindow *ui;
     TSPView* tspview_;
 
@@ -47,14 +61,14 @@ private:
     shared_ptr<TSP::ConstructiveAlgorithm> constructive_algorithm_;
     shared_ptr<TSP::ImprovementAlgorithm> improvement_algorithm_;
 
-    bool world_generated_;
     int generated_world_size_;
     shared_ptr<TSP::World> world_;
 
-    bool constructive_algorithm_done_;
     shared_ptr<TSP::State> state_;
 
-    bool improvement_algorithm_done_;
+    SolutionState solution_state_;
+
+
 
 };
 

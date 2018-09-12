@@ -10,9 +10,10 @@ using std::make_unique;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    world_generated_(false),
-    constructive_algorithm_done_(false),
-    improvement_algorithm_done_(false)
+    solution_state_(SolutionState::START)
+  //    world_generated_(false),
+  //    constructive_algorithm_done_(false),
+  //    improvement_algorithm_done_(false)
 {
     ui->setupUi(this);
     tspview_ = ui->graphics_tsp;
@@ -38,6 +39,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->button_iterate_improvement_algorithm, SIGNAL(released()), this, SLOT(ImprovementAlgorithmIterateAction()));
     connect(ui->button_reset_improvement_algorithm, SIGNAL(released()), this, SLOT(ImprovementAlgorithmResetAction()));
 
+    UpdateUserControls();
+
     WorldGeneratorSelected(ui->combo_world_generator->currentText());
     ConstructiveAlgorithmSelected(ui->combo_constructive_algorithm->currentText());
     ImprovementAlgorithmSelected(ui->combo_improvement_algorithm->currentText());
@@ -48,34 +51,117 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::SetButtonStatus(QPushButton* widget, ButtonState status) {
+    widget->setAutoFillBackground(true);
+    QPalette pal = widget->palette();
+    switch (status) {
+    case (ButtonState::WAITING): {
+        pal.setColor(widget->foregroundRole(), Qt::red);
+        widget->setText("WAITING");
+        break;
+    }
+    case (ButtonState::ITERATING): {
+        pal.setColor(widget->foregroundRole(), Qt::blue);
+        widget->setText("ITERATING");
+        break;
+    }
+    case (ButtonState::DONE): {
+        pal.setColor(widget->foregroundRole(), Qt::green);
+        widget->setText("DONE");
+        break;
+    }
+    }
+    widget->setPalette(pal);
+}
+
+void MainWindow::UpdateUserControls() {
+
+    switch(solution_state_) {
+    case SolutionState::START: {
+        ui->button_world_generator->setEnabled(true);
+
+        ui->button_iterate_constructive_algorithm->setEnabled(false);
+        ui->button_reset_constructive_algorithm->setEnabled(false);
+        SetButtonStatus(ui->button_status_constructive_algorithm, ButtonState::WAITING);
+
+        ui->button_iterate_improvement_algorithm->setEnabled(false);
+        ui->button_reset_improvement_algorithm->setEnabled(false);
+        SetButtonStatus(ui->button_status_improvement_algorithm, ButtonState::WAITING);
+        break;
+    }
+    case SolutionState::WORLD_GENERATED: {
+        ui->button_world_generator->setEnabled(true);
+
+        ui->button_iterate_constructive_algorithm->setEnabled(true);
+        ui->button_reset_constructive_algorithm->setEnabled(true);
+        SetButtonStatus(ui->button_status_constructive_algorithm, ButtonState::ITERATING);
+
+        ui->button_iterate_improvement_algorithm->setEnabled(false);
+        ui->button_reset_improvement_algorithm->setEnabled(false);
+        SetButtonStatus(ui->button_status_improvement_algorithm, ButtonState::WAITING);
+        break;
+    }
+    case SolutionState::CONSTRUCTED_SOLUTION: {
+        ui->button_world_generator->setEnabled(true);
+
+        ui->button_iterate_constructive_algorithm->setEnabled(false);
+        ui->button_reset_constructive_algorithm->setEnabled(true);
+        SetButtonStatus(ui->button_status_constructive_algorithm, ButtonState::DONE);
+
+        ui->button_iterate_improvement_algorithm->setEnabled(true);
+        ui->button_reset_improvement_algorithm->setEnabled(true);
+        SetButtonStatus(ui->button_status_improvement_algorithm, ButtonState::ITERATING);
+        break;
+    }
+    case SolutionState::IMPROVED_SOLUTION: {
+        ui->button_world_generator->setEnabled(true);
+
+        ui->button_iterate_constructive_algorithm->setEnabled(false);
+        ui->button_reset_constructive_algorithm->setEnabled(true);
+        SetButtonStatus(ui->button_status_constructive_algorithm, ButtonState::DONE);
+
+        ui->button_iterate_improvement_algorithm->setEnabled(false);
+        ui->button_reset_improvement_algorithm->setEnabled(true);
+        SetButtonStatus(ui->button_status_improvement_algorithm, ButtonState::DONE);
+        break;
+    }
+    }
+}
+
 void MainWindow::WorldGeneratorSelected(const QString& text) {
     world_generator_ = TSP::world_generators[text.toStdString()];
 
-    WorldGeneratorReset();
+    solution_state_ = SolutionState::START;
+
+    UpdateUserControls();
 }
 
 void MainWindow::WorldGeneratorAction() {
     generated_world_size_ = ui->spin_size_world_generator->value();
 
     world_ = shared_ptr<TSP::World>(world_generator_->GenerateWorld(generated_world_size_));
-    SetWorldGeneratorDone(true);
+
+    solution_state_ = SolutionState::WORLD_GENERATED;
+    constructive_algorithm_->SetWorld(world_);
+    constructive_algorithm_->Reset();
+    UpdateUserControls();
 
     tspview_->UpdateContents(world_);
 }
 
-void MainWindow::WorldGeneratorReset() {
-    SetWorldGeneratorDone(false);
-}
-
-void MainWindow::SetWorldGeneratorDone(bool done) {
-    world_generated_ = done;
-
-    ConstructiveAlgorithmResetAction();
-}
-
 void MainWindow::ConstructiveAlgorithmSelected(const QString& text) {
     constructive_algorithm_ = TSP::constructive_algorithms[text.toStdString()];
-    ConstructiveAlgorithmResetAction();
+
+    if (solution_state_ == SolutionState::CONSTRUCTED_SOLUTION || solution_state_ == SolutionState::IMPROVED_SOLUTION) {
+        solution_state_ = SolutionState::WORLD_GENERATED;
+    }
+
+    if (solution_state_ == SolutionState::WORLD_GENERATED) {
+        constructive_algorithm_->SetWorld(world_);
+        constructive_algorithm_->Reset();
+    }
+
+    UpdateUserControls();
 }
 
 void MainWindow::ConstructiveAlgorithmIterateAction() {
@@ -83,74 +169,46 @@ void MainWindow::ConstructiveAlgorithmIterateAction() {
 
     if (!constructive_algorithm_->Iterate(granularity)) {
         state_ = make_shared<TSP::State>(world_, constructive_algorithm_->GetFinalPath());
-        SetConstructiveAlgorithmDone(true);
-
-//        tspview_->UpdateContents();
+        solution_state_ = SolutionState::CONSTRUCTED_SOLUTION;
+        improvement_algorithm_->SetState(state_);
+        improvement_algorithm_->Reset();
+        UpdateUserControls();
     }
 }
 
 void MainWindow::ConstructiveAlgorithmResetAction() {
-
-    if (world_generated_) {
-        constructive_algorithm_->SetWorld(world_);
-        constructive_algorithm_->Reset();
-    }
-
-    SetConstructiveAlgorithmDone(false);
+    solution_state_ = SolutionState::WORLD_GENERATED;
+    constructive_algorithm_->Reset();
+    UpdateUserControls();
 }
-
-void MainWindow::SetConstructiveAlgorithmDone(bool done) {
-    constructive_algorithm_done_ = done;
-    QPalette pal = palette();
-
-    ui->button_iterate_constructive_algorithm->setEnabled(world_generated_ && !constructive_algorithm_done_);
-
-    if (done) {
-        pal.setColor(QPalette::Background, Qt::green);
-    } else {
-        pal.setColor(QPalette::Background, Qt::red);
-    }
-    ui->button_done_constructive_algorithm->setPalette(pal);
-
-    ImprovementAlgorithmResetAction();
-}
-
-#include <iostream>
 
 void MainWindow::ImprovementAlgorithmSelected(const QString& text) {
     improvement_algorithm_ = TSP::improvement_algorithms[text.toStdString()];
-    ImprovementAlgorithmResetAction();
+
+    if (solution_state_ == SolutionState::IMPROVED_SOLUTION) {
+        solution_state_ = SolutionState::CONSTRUCTED_SOLUTION;
+    }
+
+    if (solution_state_ == SolutionState::CONSTRUCTED_SOLUTION) {
+        improvement_algorithm_->SetState(state_);
+        improvement_algorithm_->Reset();
+    }
+
+    UpdateUserControls();
 }
 
 void MainWindow::ImprovementAlgorithmIterateAction() {
     int granularity = ui->spin_granularity_improvement_algorithm->value();
 
     if (!improvement_algorithm_->Iterate(granularity)) {
-        SetImprovementAlgorithmDone(true);
-
-//        tspview_->UpdateContents();
+        solution_state_ = SolutionState::IMPROVED_SOLUTION;
+        UpdateUserControls();
     }
 }
 
 void MainWindow::ImprovementAlgorithmResetAction() {
-    if (constructive_algorithm_done_) {
-        improvement_algorithm_->SetState(state_);
-        improvement_algorithm_->Reset();
-    }
+    solution_state_ = SolutionState::CONSTRUCTED_SOLUTION;
+    improvement_algorithm_->Reset();
 
-    SetImprovementAlgorithmDone(false);
-}
-
-void MainWindow::SetImprovementAlgorithmDone(bool done) {
-    improvement_algorithm_done_ = done;
-    QPalette pal = palette();
-
-    ui->button_iterate_improvement_algorithm->setEnabled(constructive_algorithm_done_ && !improvement_algorithm_done_);
-
-    if (done) {
-        pal.setColor(QPalette::Background, Qt::green);
-    } else {
-        pal.setColor(QPalette::Background, Qt::red);
-    }
-    ui->button_done_improvement_algorithm->setPalette(pal);
+    UpdateUserControls();
 }
