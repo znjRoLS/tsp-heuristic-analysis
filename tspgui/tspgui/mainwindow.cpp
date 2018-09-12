@@ -161,6 +161,8 @@ void MainWindow::ConstructiveAlgorithmSelected(const QString& text) {
         constructive_algorithm_->Reset();
     }
 
+    ui->spin_granularity_constructive_algorithm->setMaximum(constructive_algorithm_->GetMaxGranularity());
+
     UpdateUserControls();
 }
 
@@ -193,6 +195,8 @@ void MainWindow::ImprovementAlgorithmSelected(const QString& text) {
         improvement_algorithm_->SetState(state_);
         improvement_algorithm_->Reset();
     }
+
+    ui->spin_granularity_improvement_algorithm->setMaximum(improvement_algorithm_->GetMaxGranularity());
 
     UpdateUserControls();
 }
