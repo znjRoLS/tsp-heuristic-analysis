@@ -50,7 +50,7 @@
       <property name="tabsClosable">
        <bool>false</bool>
       </property>
-      <widget class="QWidget" name="tab">
+      <widget class="QWidget" name="tab_visualization">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -77,10 +77,10 @@
          <number>0</number>
         </property>
         <item row="0" column="0">
-         <widget class="QWidget" name="widget_2" native="true">
+         <widget class="QWidget" name="group_visualization" native="true">
           <layout class="QHBoxLayout" name="horizontalLayout_9">
            <item>
-            <widget class="TSPView" name="graphicsView">
+            <widget class="TSPView" name="graphics_tsp">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Ignored" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -96,7 +96,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QWidget" name="widget" native="true">
+            <widget class="QWidget" name="widget_controls" native="true">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
                <horstretch>20</horstretch>
@@ -250,7 +250,7 @@
                </widget>
               </item>
               <item>
-               <spacer name="verticalSpacer">
+               <spacer name="verticalSpacer_1">
                 <property name="orientation">
                  <enum>Qt::Vertical</enum>
                 </property>
@@ -266,7 +266,7 @@
                </spacer>
               </item>
               <item>
-               <widget class="QWidget" name="widget_3" native="true">
+               <widget class="QWidget" name="group_size" native="true">
                 <layout class="QVBoxLayout" name="verticalLayout_6">
                  <property name="spacing">
                   <number>0</number>
@@ -284,7 +284,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QWidget" name="widget_5" native="true">
+                  <widget class="QWidget" name="group_node_size" native="true">
                    <layout class="QHBoxLayout" name="horizontalLayout_10">
                     <property name="topMargin">
                      <number>0</number>
@@ -293,14 +293,14 @@
                      <number>0</number>
                     </property>
                     <item>
-                     <widget class="QLabel" name="label_3">
+                     <widget class="QLabel" name="label_node_size">
                       <property name="text">
                        <string>Node Size</string>
                       </property>
                      </widget>
                     </item>
                     <item>
-                     <widget class="QSlider" name="horizontalSlider_2">
+                     <widget class="QSlider" name="slider_node_size">
                       <property name="orientation">
                        <enum>Qt::Horizontal</enum>
                       </property>
@@ -310,7 +310,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QWidget" name="widget_4" native="true">
+                  <widget class="QWidget" name="group_edge_size" native="true">
                    <layout class="QHBoxLayout" name="horizontalLayout_8">
                     <property name="topMargin">
                      <number>0</number>
@@ -319,14 +319,14 @@
                      <number>0</number>
                     </property>
                     <item>
-                     <widget class="QLabel" name="label_2">
+                     <widget class="QLabel" name="label_edge_size">
                       <property name="text">
                        <string>Edge Size</string>
                       </property>
                      </widget>
                     </item>
                     <item>
-                     <widget class="QSlider" name="horizontalSlider">
+                     <widget class="QSlider" name="slider_edge_size">
                       <property name="orientation">
                        <enum>Qt::Horizontal</enum>
                       </property>
@@ -352,7 +352,7 @@
                </spacer>
               </item>
               <item>
-               <widget class="QGroupBox" name="groupBox_4">
+               <widget class="QGroupBox" name="group_lower_bound">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
                   <horstretch>0</horstretch>
@@ -412,7 +412,7 @@
                </spacer>
               </item>
               <item>
-               <widget class="QGroupBox" name="groupBox_5">
+               <widget class="QGroupBox" name="group_constructive_algorithm">
                 <property name="title">
                  <string/>
                 </property>
@@ -430,7 +430,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QGroupBox" name="groupBox_11">
+                  <widget class="QGroupBox" name="group_algorithms_constructive_algorithm">
                    <property name="title">
                     <string/>
                    </property>
@@ -480,7 +480,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QGroupBox" name="groupBox_2">
+                  <widget class="QGroupBox" name="group_action_constructive_algorithm">
                    <property name="title">
                     <string/>
                    </property>
@@ -492,34 +492,34 @@
                      <number>3</number>
                     </property>
                     <item row="1" column="1">
-                     <widget class="QPushButton" name="pushButton">
+                     <widget class="QPushButton" name="button_iterate_constructive_algorithm">
                       <property name="text">
                        <string>Iterate</string>
                       </property>
                      </widget>
                     </item>
                     <item row="2" column="1">
-                     <widget class="QPushButton" name="pushButton_2">
+                     <widget class="QPushButton" name="button_reset_constructive_algorithm">
                       <property name="text">
                        <string>Reset</string>
                       </property>
                      </widget>
                     </item>
                     <item row="1" column="0">
-                     <widget class="QGroupBox" name="groupBox">
+                     <widget class="QGroupBox" name="group_granularity_constructive_algorithm">
                       <property name="title">
                        <string/>
                       </property>
                       <layout class="QHBoxLayout" name="horizontalLayout">
                        <item>
-                        <widget class="QLabel" name="label">
+                        <widget class="QLabel" name="label_granularity_constructive_algorithm">
                          <property name="text">
                           <string>Chose Granularity</string>
                          </property>
                         </widget>
                        </item>
                        <item>
-                        <widget class="QSpinBox" name="spinBox">
+                        <widget class="QSpinBox" name="spin_granularity_constructive_algorithm">
                          <property name="maximum">
                           <number>2</number>
                          </property>
@@ -529,7 +529,7 @@
                      </widget>
                     </item>
                     <item row="2" column="0">
-                     <widget class="QPushButton" name="pushButton_3">
+                     <widget class="QPushButton" name="button_done_constructive_algorithm">
                       <property name="enabled">
                        <bool>false</bool>
                       </property>
@@ -571,7 +571,7 @@
                </spacer>
               </item>
               <item>
-               <widget class="QGroupBox" name="groupBox_7">
+               <widget class="QGroupBox" name="group_improvement_algorithm">
                 <property name="title">
                  <string/>
                 </property>
@@ -589,7 +589,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QGroupBox" name="groupBox_12">
+                  <widget class="QGroupBox" name="group_algorithm_improvement_algorithm">
                    <property name="title">
                     <string/>
                    </property>
@@ -610,7 +610,7 @@
                      <number>0</number>
                     </property>
                     <item>
-                     <widget class="QLabel" name="label_constructive_algorithm_2">
+                     <widget class="QLabel" name="label_improvement_algorithm">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                         <horstretch>0</horstretch>
@@ -618,7 +618,7 @@
                        </sizepolicy>
                       </property>
                       <property name="text">
-                       <string>Select Iterative Algorithm</string>
+                       <string>Select Improvement Algorithm</string>
                       </property>
                       <property name="alignment">
                        <set>Qt::AlignCenter</set>
@@ -626,7 +626,7 @@
                      </widget>
                     </item>
                     <item>
-                     <widget class="QComboBox" name="combo_constructive_algorithm_2">
+                     <widget class="QComboBox" name="combo_improvement_algorithm">
                       <property name="minimumSize">
                        <size>
                         <width>150</width>
@@ -639,7 +639,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QGroupBox" name="groupBox_6">
+                  <widget class="QGroupBox" name="group_action_improvement_algorithm">
                    <property name="title">
                     <string/>
                    </property>
@@ -651,34 +651,34 @@
                      <number>3</number>
                     </property>
                     <item row="1" column="1">
-                     <widget class="QPushButton" name="pushButton_7">
+                     <widget class="QPushButton" name="button_iterate_improvement_algorithm">
                       <property name="text">
                        <string>Iterate</string>
                       </property>
                      </widget>
                     </item>
                     <item row="2" column="1">
-                     <widget class="QPushButton" name="pushButton_8">
+                     <widget class="QPushButton" name="button_reset_improvement_algorithm">
                       <property name="text">
                        <string>Reset</string>
                       </property>
                      </widget>
                     </item>
                     <item row="1" column="0">
-                     <widget class="QGroupBox" name="groupBox_17">
+                     <widget class="QGroupBox" name="group_granularity_improvement_algorithm">
                       <property name="title">
                        <string/>
                       </property>
                       <layout class="QHBoxLayout" name="horizontalLayout_2">
                        <item>
-                        <widget class="QLabel" name="label_4">
+                        <widget class="QLabel" name="label_granularity_improvement_algorithm">
                          <property name="text">
                           <string>Chose Granularity</string>
                          </property>
                         </widget>
                        </item>
                        <item>
-                        <widget class="QSpinBox" name="spinBox_3">
+                        <widget class="QSpinBox" name="spin_granularity_improvement_algorithm">
                          <property name="maximum">
                           <number>2</number>
                          </property>
@@ -688,7 +688,7 @@
                      </widget>
                     </item>
                     <item row="2" column="0">
-                     <widget class="QPushButton" name="pushButton_9">
+                     <widget class="QPushButton" name="button_done_improvement_algorithm">
                       <property name="enabled">
                        <bool>false</bool>
                       </property>
@@ -724,17 +724,13 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_2">
+      <widget class="QWidget" name="tab_benchmarks">
        <attribute name="title">
         <string>Benchmark Results</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout">
         <item row="0" column="0">
-         <widget class="QGroupBox" name="groupBox_10">
-          <property name="title">
-           <string>GroupBox</string>
-          </property>
-         </widget>
+         <widget class="QWidget" name="group_benchmarks" native="true"/>
         </item>
        </layout>
       </widget>
