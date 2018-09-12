@@ -521,7 +521,7 @@
                        <item>
                         <widget class="QSpinBox" name="spin_granularity_constructive_algorithm">
                          <property name="maximum">
-                          <number>2</number>
+                          <number>0</number>
                          </property>
                         </widget>
                        </item>
@@ -680,7 +680,7 @@
                        <item>
                         <widget class="QSpinBox" name="spin_granularity_improvement_algorithm">
                          <property name="maximum">
-                          <number>2</number>
+                          <number>0</number>
                          </property>
                         </widget>
                        </item>
