@@ -5,6 +5,7 @@
 
 #include <memory>
 #include "random_euclidean_world_generator.h"
+#include "tspview.h"
 
 using std::unique_ptr;
 
@@ -21,10 +22,11 @@ public:
     ~MainWindow();
 
 private slots:
-    void world_generator_action();
+    void WorldGeneratorAction();
 private:
     Ui::MainWindow *ui;
     shared_ptr<TSP::World> world_;
+    TSPView* tspview_;
 };
 
 #endif // MAINWINDOW_H

@@ -83,11 +83,11 @@ void MainWindow::on_button_clicked()
           graph_node->setPos(world_scale_x, 0);
 
           Edge* edge;
-          for (int i = 1; i< state->path->size(); i++) {
-              edge = new Edge(graph_nodes[state->path->at(i-1)], graph_nodes[state->path->at(i)]);
+          for (int i = 1; i< state->current_path->size(); i++) {
+              edge = new Edge(graph_nodes[state->current_path->at(i-1)], graph_nodes[state->current_path->at(i)]);
               graphic_scene->addItem(edge);
           }
-          edge = new Edge(graph_nodes[state->path->at(state->path->size()-1)], graph_nodes[state->path->at(0)]);
+          edge = new Edge(graph_nodes[state->current_path->at(state->current_path->size()-1)], graph_nodes[state->current_path->at(0)]);
           graphic_scene->addItem(edge);
 
       });
