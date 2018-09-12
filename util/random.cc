@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <climits>
 #include <vector>
+#include <ctime>
 
 using std::shuffle;
 
@@ -9,8 +10,10 @@ using std::shuffle;
 
 namespace Random {
 
-std::random_device rd;
-std::mt19937 mt(rd());
+// MINGW implementation of random_device returns same number always
+// https://sourceforge.net/p/mingw-w64/bugs/338/
+// std::random_device rd;
+std::mt19937 mt((unsigned) time(nullptr));
 
 int GetInt(int min, int max) {
   std::uniform_int_distribution<int> dist(min, max);
