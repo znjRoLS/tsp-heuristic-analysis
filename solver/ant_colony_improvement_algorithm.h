@@ -2,6 +2,11 @@
 
 #include "improvement_algorithm.h"
 
-class AntColonyImprovementAlgorithm: public ImprovementAlgorithm {
+namespace TSP {
+
+class AntColonyImprovementAlgorithm : public ImprovementAlgorithm {
 
 };
+
+} // namespace TSP
+

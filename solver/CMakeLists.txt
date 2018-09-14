@@ -1,4 +1,6 @@
 file(GLOB SOURCES *.cc)
+list(REMOVE_ITEM SOURCES test.cc)
+
 add_library(tsp_solver ${SOURCES})
 target_link_libraries(tsp_solver util)
 

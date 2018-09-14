@@ -2,6 +2,11 @@
 
 #include "constructive_algorithm.h"
 
-class NearestNeighbourConstructiveAlgorithm: public ConstructiveAlgorithm {
+namespace TSP {
+
+class NearestNeighbourConstructiveAlgorithm : public ConstructiveAlgorithm {
 
 };
+
+} // namespace TSP
+
