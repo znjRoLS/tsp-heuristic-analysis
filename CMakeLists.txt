@@ -30,4 +30,7 @@ endif()
 include_directories("util")
 add_subdirectory(util)
 
+include_directories("solver")
 add_subdirectory(solver)
+
+add_subdirectory(benchmark)

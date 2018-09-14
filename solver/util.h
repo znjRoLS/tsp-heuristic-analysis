@@ -6,6 +6,8 @@
 
 #define TSP_ASSERT(x) assert(x);
 #define TSP_ASSERT_EQ(x, y) TSP_ASSERT(x == y)
+#define TSP_ASSERT_CONTAINS(x, y) TSP_ASSERT(x.find(y) != x.end())
+#define TSP_ILLEGAL TSP_ASSERT(false)
 
 namespace TSP {
 

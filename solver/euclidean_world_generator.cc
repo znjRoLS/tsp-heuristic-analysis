@@ -8,6 +8,7 @@ namespace TSP {
 
 shared_ptr<World> EuclideanWorldGenerator::GenerateWorld(int n) {
   shared_ptr<Nodes2> nodes = GenerateNodes(n);
+  n = nodes->size(); // because file generator actually ignores the "n" parameter
 
   shared_ptr<Matrix<double>> world = make_shared<Matrix<double>>(n, n);
 
