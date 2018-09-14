@@ -19,10 +19,9 @@ void TSPView::resizeEvent(QResizeEvent* event) {
     QGraphicsView::resizeEvent(event);
 }
 
-void TSPView::UpdateContents(shared_ptr<World> world) {
 
-    node_pos_.clear();
-    if (!world->nodes_->empty()) {
+void TSPView::AddNodes(shared_ptr<World> world) {
+    if (world && !world->nodes_->empty()) {
         Point2 minpt = (*world->nodes_)[0];
         Point2 maxpt = (*world->nodes_)[0];
 
@@ -47,6 +46,32 @@ void TSPView::UpdateContents(shared_ptr<World> world) {
             point.setY(point.y() / scale_max);
         }
     }
+}
+
+void TSPView::AddEdges(Path& path) {
+    unsigned first = static_cast<unsigned>( path[0]);
+    for (unsigned i = 1; i < path.size(); i ++) {
+        unsigned second = static_cast<unsigned> ( path[i] );
+        edge_pos_.push_back({first, second});
+        first = second;
+    }
+}
+
+void TSPView::UpdateContents(shared_ptr<World> world) {
+    node_pos_.clear();
+    edge_pos_.clear();
+
+    AddNodes(world);
+
+    UpdateView();
+}
+
+void TSPView::UpdateContents(shared_ptr<State> state) {
+    node_pos_.clear();
+    edge_pos_.clear();
+
+    AddNodes(state->world_);
+    AddEdges(state->current_path_);
 
     UpdateView();
 }
@@ -54,10 +79,13 @@ void TSPView::UpdateContents(shared_ptr<World> world) {
 void TSPView::UpdateView() {
     // This might not belong here, but its important to put it before scene_->clear(),
     // since scene clear deletes all pointers.
+    // TODO: might be better to just update positions, and not actuall objects?
+    edges_.clear();
     nodes_.clear();
     scene_->clear();
 
-    UpdateNodes();
+    ConstructNodes();
+    ConstructEdges();
 
     // Default behavior (when sceneRect is not set) is:
     // a rectangle that grows when items are added to or moved in the scene, but never shrinks.
@@ -65,7 +93,7 @@ void TSPView::UpdateView() {
     scene_->setSceneRect(scene_->itemsBoundingRect());
 }
 
-void TSPView::UpdateNodes() {
+void TSPView::ConstructNodes() {
     QSize world_scale = 0.8 * size();
 
     for (auto& point: node_pos_) {
@@ -75,5 +103,15 @@ void TSPView::UpdateNodes() {
         Node* node = new Node(scaled_point, 5);
         nodes_.emplace_back(node);
         scene_->addItem(node);
+    }
+}
+
+void TSPView::ConstructEdges() {
+    for (pair<unsigned,unsigned> edge_pos : edge_pos_) {
+        Node *n1 = nodes_[edge_pos.first];
+        Node *n2 = nodes_[edge_pos.second];
+        Edge *edge = new Edge(n1, n2);
+        edges_.push_back(edge);
+        scene_->addItem(edge);
     }
 }

@@ -175,13 +175,18 @@ void MainWindow::ConstructiveAlgorithmIterateAction() {
         improvement_algorithm_->SetState(state_);
         improvement_algorithm_->Reset();
         UpdateUserControls();
+
+        tspview_->UpdateContents(state_);
     }
+
 }
 
 void MainWindow::ConstructiveAlgorithmResetAction() {
     solution_state_ = SolutionState::WORLD_GENERATED;
     constructive_algorithm_->Reset();
     UpdateUserControls();
+
+    tspview_->UpdateContents(world_);
 }
 
 void MainWindow::ImprovementAlgorithmSelected(const QString& text) {
@@ -208,6 +213,8 @@ void MainWindow::ImprovementAlgorithmIterateAction() {
         solution_state_ = SolutionState::IMPROVED_SOLUTION;
         UpdateUserControls();
     }
+
+    tspview_->UpdateContents(state_);
 }
 
 void MainWindow::ImprovementAlgorithmResetAction() {

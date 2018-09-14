@@ -1,5 +1,5 @@
 #include "node.h"
-#include "QPainter.h"
+#include <QPainter>
 
 Node::Node(QPointF& pos, double radius)
 {
@@ -20,7 +20,7 @@ QPainterPath Node::shape() const
     return path;
 }
 
-void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
+void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     painter->setBrush(Qt::darkGray);
     painter->setPen(QPen(Qt::black, 0));

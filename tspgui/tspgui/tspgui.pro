@@ -27,13 +27,15 @@ SOURCES += \
         mainwindow.cpp \
     tsp_util.cpp \
     tspview.cpp \
-    node.cpp
+    node.cpp \
+    edge.cpp
 
 HEADERS += \
         mainwindow.h \
     tsp_util.h \
     tspview.h \
-    node.h
+    node.h \
+    edge.h
 
 FORMS += \
         mainwindow.ui
