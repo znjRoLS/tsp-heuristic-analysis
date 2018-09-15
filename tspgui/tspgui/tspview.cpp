@@ -117,11 +117,12 @@ void TSPView::ConstructNodes() {
 
         Node* node = new Node(scaled_point, 10);
         nodes_.emplace_back(node);
-        scene_->addItem(node);
 
         QGraphicsSimpleTextItem* text_item = new QGraphicsSimpleTextItem(QString::number(i+1), node);
         text_item->setPos(-5, -5);
-        scene_->addItem(text_item);
+
+        scene_->addItem(node);
+//        scene_->addItem(text_item);
     }
 }
 

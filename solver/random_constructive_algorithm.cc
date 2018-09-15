@@ -5,7 +5,7 @@
 namespace TSP {
 
 int RandomConstructiveAlgorithm::GetMaxGranularity() {
-  return 2;
+  return 1;
 }
 
 void RandomConstructiveAlgorithm::Reset() {
