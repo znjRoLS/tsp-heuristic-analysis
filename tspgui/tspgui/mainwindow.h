@@ -56,6 +56,7 @@ private:
 
     Ui::MainWindow *ui;
     TSPView* tspview_;
+    TSPView* tspview_visualization_;
 
     shared_ptr<TSP::EuclideanWorldGenerator> world_generator_;
     shared_ptr<TSP::ConstructiveAlgorithm> constructive_algorithm_;

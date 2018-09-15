@@ -13,12 +13,15 @@ TSPView::TSPView(QWidget*& widget):
     setScene(scene_.get());
 }
 
+void TSPView::SetEdgeColor(QColor color) {
+    edge_color_ = color;
+}
+
 void TSPView::resizeEvent(QResizeEvent* event) {
     UpdateView();
 
     QGraphicsView::resizeEvent(event);
 }
-
 
 void TSPView::AddNodes(shared_ptr<World> world) {
     if (world && !world->nodes_->empty()) {
@@ -26,7 +29,7 @@ void TSPView::AddNodes(shared_ptr<World> world) {
         Point2 maxpt = (*world->nodes_)[0];
 
         for (auto& point: (*world->nodes_)) {
-            node_pos_.push_back(QPointF(point.x_, point.y_));
+            node_data_.push_back(QPointF(point.x_, point.y_));
             minpt.x_ = min(minpt.x_, point.x_);
             minpt.y_ = min(minpt.y_, point.y_);
             maxpt.x_ = max(maxpt.x_, point.x_);
@@ -37,7 +40,7 @@ void TSPView::AddNodes(shared_ptr<World> world) {
         double scale_y = max(EPSILON, maxpt.y_ - minpt.y_);
         double scale_max = max(scale_x, scale_y);
 
-        for (auto& point: node_pos_) {
+        for (auto& point: node_data_) {
             // Translate to (0,0)
             point.setX(point.x() - minpt.x_);
             point.setY(point.y() - minpt.y_);
@@ -52,26 +55,35 @@ void TSPView::AddEdges(Path& path) {
     unsigned first = static_cast<unsigned>( path[0]);
     for (unsigned i = 1; i < path.size(); i ++) {
         unsigned second = static_cast<unsigned> ( path[i] );
-        edge_pos_.push_back({first, second});
+        edge_data_.push_back({{first, second}, 1.0});
         first = second;
     }
 }
 
-void TSPView::UpdateContents(shared_ptr<World> world) {
-    node_pos_.clear();
-    edge_pos_.clear();
+void TSPView::UpdateContents(const shared_ptr<World> world) {
+    node_data_.clear();
+    edge_data_.clear();
 
     AddNodes(world);
 
     UpdateView();
 }
 
-void TSPView::UpdateContents(shared_ptr<State> state) {
-    node_pos_.clear();
-    edge_pos_.clear();
+void TSPView::UpdateContents(const shared_ptr<State> state) {
+    node_data_.clear();
+    edge_data_.clear();
 
     AddNodes(state->world_);
     AddEdges(state->current_path_);
+
+    UpdateView();
+}
+
+void TSPView::UpdateContents(const vector<pair<pair<int,int>, double>>& visuals) {
+    edge_data_.clear();
+    for (auto& visual : visuals) {
+        edge_data_.push_back(visual);
+    }
 
     UpdateView();
 }
@@ -96,22 +108,34 @@ void TSPView::UpdateView() {
 void TSPView::ConstructNodes() {
     QSize world_scale = 0.8 * size();
 
-    for (auto& point: node_pos_) {
+    for (unsigned i = 0; i < node_data_.size(); i ++) {
+        auto& point = node_data_[i];
+
         QPointF scaled_point = point;
         scaled_point.setX(scaled_point.x() * world_scale.width());
         scaled_point.setY(scaled_point.y() * world_scale.height());
-        Node* node = new Node(scaled_point, 5);
+
+        Node* node = new Node(scaled_point, 10);
         nodes_.emplace_back(node);
         scene_->addItem(node);
+
+        QGraphicsSimpleTextItem* text_item = new QGraphicsSimpleTextItem(QString::number(i+1), node);
+        text_item->setPos(-5, -5);
+        scene_->addItem(text_item);
     }
 }
 
 void TSPView::ConstructEdges() {
-    for (pair<unsigned,unsigned> edge_pos : edge_pos_) {
-        Node *n1 = nodes_[edge_pos.first];
-        Node *n2 = nodes_[edge_pos.second];
-        Edge *edge = new Edge(n1, n2);
+    for (unsigned i = 0; i < edge_data_.size(); i ++) {
+        auto& edge_data = edge_data_[i];
+        Node *n1 = nodes_[edge_data.first.first];
+        Node *n2 = nodes_[edge_data.first.second];
+        Edge *edge = new Edge(n1, n2, edge_color_, edge_data.second);
         edges_.push_back(edge);
         scene_->addItem(edge);
+
+        QGraphicsSimpleTextItem* text_item = new QGraphicsSimpleTextItem(QString::number(i+1));
+        text_item->setPos((n1->pos() + n2->pos())/2);
+        scene_->addItem(text_item);
     }
 }

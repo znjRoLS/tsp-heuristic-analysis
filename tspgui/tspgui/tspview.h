@@ -17,8 +17,12 @@ class TSPView : public QGraphicsView
 {
 public:
     TSPView(QWidget*&);
-    void UpdateContents(shared_ptr<World> world);
-    void UpdateContents(shared_ptr<State> state);
+    void UpdateContents(const shared_ptr<World> world);
+    void UpdateContents(const shared_ptr<State> state);
+    // called only for second graphview_visualization
+    void UpdateContents(const vector<pair<pair<int,int>, double>>& visuals);
+
+    void SetEdgeColor(const QColor color);
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -30,10 +34,11 @@ private:
     void AddNodes(shared_ptr<World> world);
     void AddEdges(Path& path);
 
-    vector<QPointF> node_pos_;
-    vector<pair<unsigned,unsigned>> edge_pos_;
+    vector<QPointF> node_data_;
+    vector<pair<pair<unsigned,unsigned>, double>> edge_data_;
     // Not shared pointer, since QT automatically deletes pointers to QWidgets
     vector<Node*> nodes_;
     vector<Edge*> edges_;
     shared_ptr<QGraphicsScene> scene_;
+    QColor edge_color_;
 };

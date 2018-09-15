@@ -5,7 +5,7 @@ Node::Node(QPointF& pos, double radius)
 {
     r = radius;
     setPos(pos);
-    setZValue(-1);
+    setZValue(1);
 }
 
 QRectF Node::boundingRect() const
@@ -22,7 +22,7 @@ QPainterPath Node::shape() const
 
 void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    painter->setBrush(Qt::darkGray);
+    painter->setBrush(Qt::lightGray);
     painter->setPen(QPen(Qt::black, 0));
     painter->drawPath(shape());
 }

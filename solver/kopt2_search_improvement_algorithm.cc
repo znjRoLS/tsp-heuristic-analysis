@@ -24,10 +24,17 @@ bool Kopt2SearchImprovementAlgorithm::Iterate(int granularity) {
   if (granularity == 2) {
     reset_ = false;
 
+    visualization_.clear();
+
     int node_a = state_->current_path_[current_search_first_edge_];
     int node_b = state_->current_path_[current_search_first_edge_ + 1];
     int node_c = state_->current_path_[current_search_second_edge_];
     int node_d = state_->current_path_[current_search_second_edge_ + 1];
+
+    visualization_.push_back({{node_a, node_b}, 1.0});
+    visualization_.push_back({{node_c, node_d}, 1.0});
+    visualization_.push_back({{node_a, node_c}, 0.5});
+    visualization_.push_back({{node_b, node_d}, 0.5});
 
     double first_edge = (*state_->world_->distances_)[node_a][node_b];
     double second_edge = (*state_->world_->distances_)[node_c][node_d];

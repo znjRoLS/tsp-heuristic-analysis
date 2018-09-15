@@ -21,6 +21,8 @@ bool Kopt2ImprovementAlgorithm::Iterate(int granularity) {
 
   if (granularity == 0) {
 
+    visualization_.clear();
+
     int a = Random::GetInt(n - 1);
     int b = a + 1;
 
@@ -35,6 +37,11 @@ bool Kopt2ImprovementAlgorithm::Iterate(int granularity) {
     int node_b = state_->current_path_[b];
     int node_c = state_->current_path_[c];
     int node_d = state_->current_path_[d];
+
+    visualization_.push_back({{node_a, node_b}, 1.0});
+    visualization_.push_back({{node_c, node_d}, 1.0});
+    visualization_.push_back({{node_a, node_c}, 0.5});
+    visualization_.push_back({{node_b, node_d}, 0.5});
 
     // a - b is the first edge and c - d is the second one, so the path goes as following:
     //   0 ... x - a - b - x ... x - c - d - x ... 0

@@ -17,6 +17,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     tspview_ = ui->graphics_tsp;
+    tspview_visualization_ = ui->graphics_tsp_visualization;
+    tspview_->SetEdgeColor(Qt::green);
+    tspview_visualization_->SetEdgeColor(Qt::black);
 
     for (auto &world_generator : TSP::world_generators) {
         ui->combo_world_generator->addItem(QString::fromStdString(world_generator.first));
@@ -147,6 +150,7 @@ void MainWindow::WorldGeneratorAction() {
     UpdateUserControls();
 
     tspview_->UpdateContents(world_);
+    tspview_visualization_->UpdateContents(world_);
 }
 
 void MainWindow::ConstructiveAlgorithmSelected(const QString& text) {
@@ -178,6 +182,8 @@ void MainWindow::ConstructiveAlgorithmIterateAction() {
 
         tspview_->UpdateContents(state_);
     }
+
+    tspview_visualization_->UpdateContents(constructive_algorithm_->GetVisualization());
 
 }
 
@@ -215,6 +221,8 @@ void MainWindow::ImprovementAlgorithmIterateAction() {
     }
 
     tspview_->UpdateContents(state_);
+
+    tspview_visualization_->UpdateContents(improvement_algorithm_->GetVisualization());
 }
 
 void MainWindow::ImprovementAlgorithmResetAction() {
