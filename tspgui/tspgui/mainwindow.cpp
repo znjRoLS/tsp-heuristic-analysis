@@ -18,8 +18,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     tspview_ = ui->graphics_tsp;
     tspview_visualization_ = ui->graphics_tsp_visualization;
-    tspview_->SetEdgeColor(Qt::green);
-    tspview_visualization_->SetEdgeColor(Qt::black);
 
     for (auto &world_generator : TSP::world_generators) {
         ui->combo_world_generator->addItem(QString::fromStdString(world_generator.first));

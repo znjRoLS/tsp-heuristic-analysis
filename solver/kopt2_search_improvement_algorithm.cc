@@ -31,11 +31,6 @@ bool Kopt2SearchImprovementAlgorithm::Iterate(int granularity) {
     int node_c = state_->current_path_[current_search_second_edge_];
     int node_d = state_->current_path_[current_search_second_edge_ + 1];
 
-    visualization_.push_back({{node_a, node_b}, 1.0});
-    visualization_.push_back({{node_c, node_d}, 1.0});
-    visualization_.push_back({{node_a, node_c}, 0.5});
-    visualization_.push_back({{node_b, node_d}, 0.5});
-
     double first_edge = (*state_->world_->distances_)[node_a][node_b];
     double second_edge = (*state_->world_->distances_)[node_c][node_d];
     double new_first_edge = (*state_->world_->distances_)[node_a][node_c];
@@ -45,8 +40,21 @@ bool Kopt2SearchImprovementAlgorithm::Iterate(int granularity) {
       reverse(state_->current_path_.begin() + current_search_first_edge_ + 1,
               state_->current_path_.begin() + current_search_second_edge_ + 1);
       Reset();
+
+
+      visualization_.push_back( {node_a, node_b, GlobalColor::red, 0.5});
+      visualization_.push_back( {node_c, node_d, GlobalColor::red, 0.5});
+      visualization_.push_back( {node_a, node_c, GlobalColor::green, 1.0});
+      visualization_.push_back({node_b, node_d, GlobalColor::green, 1.0});
+
       return true;
     } else {
+
+      visualization_.push_back( {node_a, node_b, GlobalColor::green, 1.0});
+      visualization_.push_back( {node_c, node_d, GlobalColor::green, 1.0});
+      visualization_.push_back( {node_a, node_c, GlobalColor::lightGray, 0.5});
+      visualization_.push_back({node_b, node_d, GlobalColor::lightGray, 0.5});
+
       current_search_second_edge_++;
       // if the first edge is 0, second edge first invalid value is n-1, but otherwise its n;
       if ((current_search_first_edge_ >= 1 && current_search_second_edge_ == n)

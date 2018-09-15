@@ -6,8 +6,8 @@
 using std::numeric_limits;
 
 
-#define CHOSEN 1.0
-#define BEST 0.6
+#define CHOSEN 0.6
+#define BEST 1.0
 #define CONSIDERING 0.2
 
 namespace TSP {
@@ -30,7 +30,7 @@ void NearestNeighbourConstructiveAlgorithm::Reset() {
 bool NearestNeighbourConstructiveAlgorithm::Iterate(int granularity) {
   if (granularity == 2) {
 
-    if (!visualization_.empty() && visualization_.rbegin()->second == CONSIDERING) {
+    if (!visualization_.empty() && visualization_.rbegin()->strength == CONSIDERING) {
       visualization_.pop_back();
     }
 
@@ -38,16 +38,16 @@ bool NearestNeighbourConstructiveAlgorithm::Iterate(int granularity) {
 
       if ((*world_->distances_)[current_last_][*current_processing_] < current_closest_dist_) {
 
-        if (!visualization_.empty() && visualization_.rbegin()->second == BEST) {
+        if (!visualization_.empty() && visualization_.rbegin()->strength == BEST) {
           visualization_.pop_back();
         }
 
         current_closest_ = *current_processing_;
         current_closest_dist_ = (*world_->distances_)[current_last_][current_closest_];
 
-        visualization_.push_back({{current_last_, current_closest_}, BEST});
+        visualization_.push_back({current_last_, current_closest_, GlobalColor::green, BEST});
       } else {
-        visualization_.push_back({{current_last_, *current_processing_}, CONSIDERING});
+        visualization_.push_back({current_last_, *current_processing_, GlobalColor::lightGray, CONSIDERING});
       }
 
 
@@ -55,9 +55,10 @@ bool NearestNeighbourConstructiveAlgorithm::Iterate(int granularity) {
 
     } else {
 
-      TSP_ASSERT_EQ(visualization_.rbegin()->second, BEST);
+      TSP_ASSERT_EQ(visualization_.rbegin()->strength, BEST);
 
-      visualization_.rbegin()->second = CHOSEN;
+      visualization_.rbegin()->strength = CHOSEN;
+      visualization_.rbegin()->color = GlobalColor::darkGreen;
 
       current_path_.push_back(current_closest_);
       current_last_ = current_closest_;

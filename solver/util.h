@@ -16,4 +16,34 @@ typedef std::vector<int> Path;
 
 typedef std::vector<Point2> Nodes2;
 
+enum GlobalColor {
+  color0,
+  color1,
+  black,
+  white,
+  darkGray,
+  gray,
+  lightGray,
+  red,
+  green,
+  blue,
+  cyan,
+  magenta,
+  yellow,
+  darkRed,
+  darkGreen,
+  darkBlue,
+  darkCyan,
+  darkMagenta,
+  darkYellow,
+  transparent
+};
+
+struct VisualEdge {
+  int n1;
+  int n2;
+  GlobalColor color;
+  double strength;
+};
+
 } // namespace TSP

@@ -2,7 +2,7 @@
 
 namespace TSP {
 
-vector<pair<pair<int, int>, double>> Algorithm::GetVisualization() {
+vector<VisualEdge> Algorithm::GetVisualization() {
   return visualization_;
 }
 

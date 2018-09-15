@@ -2,6 +2,7 @@
 #include <QDebug>
 #include "double_compare.h"
 
+using TSP::GlobalColor;
 using std::min;
 using std::max;
 using std::make_shared;
@@ -11,10 +12,6 @@ TSPView::TSPView(QWidget*& widget):
     scene_(make_shared<QGraphicsScene>()){
 
     setScene(scene_.get());
-}
-
-void TSPView::SetEdgeColor(QColor color) {
-    edge_color_ = color;
 }
 
 void TSPView::resizeEvent(QResizeEvent* event) {
@@ -52,10 +49,10 @@ void TSPView::AddNodes(shared_ptr<World> world) {
 }
 
 void TSPView::AddEdges(Path& path) {
-    unsigned first = static_cast<unsigned>( path[0]);
+    int first =  path[0];
     for (unsigned i = 1; i < path.size(); i ++) {
-        unsigned second = static_cast<unsigned> ( path[i] );
-        edge_data_.push_back({{first, second}, 1.0});
+        int second =  path[i];
+        edge_data_.push_back({first, second, GlobalColor::darkGray, 1.0});
         first = second;
     }
 }
@@ -79,11 +76,9 @@ void TSPView::UpdateContents(const shared_ptr<State> state) {
     UpdateView();
 }
 
-void TSPView::UpdateContents(const vector<pair<pair<int,int>, double>>& visuals) {
-    edge_data_.clear();
-    for (auto& visual : visuals) {
-        edge_data_.push_back(visual);
-    }
+void TSPView::UpdateContents(const vector<VisualEdge>& visuals) {
+
+    edge_data_ = visuals;
 
     UpdateView();
 }
@@ -129,9 +124,10 @@ void TSPView::ConstructNodes() {
 void TSPView::ConstructEdges() {
     for (unsigned i = 0; i < edge_data_.size(); i ++) {
         auto& edge_data = edge_data_[i];
-        Node *n1 = nodes_[edge_data.first.first];
-        Node *n2 = nodes_[edge_data.first.second];
-        Edge *edge = new Edge(n1, n2, edge_color_, edge_data.second);
+        Node *n1 = nodes_[edge_data.n1];
+        Node *n2 = nodes_[edge_data.n2];
+
+        Edge *edge = new Edge(n1, n2, (Qt::GlobalColor)edge_data.color, edge_data.strength);
         edges_.push_back(edge);
         scene_->addItem(edge);
 

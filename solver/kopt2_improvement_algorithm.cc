@@ -38,10 +38,6 @@ bool Kopt2ImprovementAlgorithm::Iterate(int granularity) {
     int node_c = state_->current_path_[c];
     int node_d = state_->current_path_[d];
 
-    visualization_.push_back({{node_a, node_b}, 1.0});
-    visualization_.push_back({{node_c, node_d}, 1.0});
-    visualization_.push_back({{node_a, node_c}, 0.5});
-    visualization_.push_back({{node_b, node_d}, 0.5});
 
     // a - b is the first edge and c - d is the second one, so the path goes as following:
     //   0 ... x - a - b - x ... x - c - d - x ... 0
@@ -59,6 +55,16 @@ bool Kopt2ImprovementAlgorithm::Iterate(int granularity) {
         reverse(state_->current_path_.begin() + d, state_->current_path_.begin() + b);
       }
 
+      visualization_.push_back( {node_a, node_b, GlobalColor::red, 0.5});
+      visualization_.push_back( {node_c, node_d, GlobalColor::red, 0.5});
+      visualization_.push_back( {node_a, node_c, GlobalColor::green, 1.0});
+      visualization_.push_back({node_b, node_d, GlobalColor::green, 1.0});
+    } else {
+
+      visualization_.push_back( {node_a, node_b, GlobalColor::green, 1.0});
+      visualization_.push_back( {node_c, node_d, GlobalColor::green, 1.0});
+      visualization_.push_back( {node_a, node_c, GlobalColor::lightGray, 0.5});
+      visualization_.push_back({node_b, node_d, GlobalColor::lightGray, 0.5});
     }
   }
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "world.h"
+#include "util.h"
 
 using std::pair;
 using std::vector;
@@ -13,10 +14,10 @@ class Algorithm {
   virtual bool Iterate(int granularity) = 0;
   virtual int GetMaxGranularity() = 0;
 
-  vector<pair<pair<int,int>, double>> GetVisualization();
+  vector<VisualEdge> GetVisualization();
 
  protected:
-  vector<pair<pair<int,int>, double>> visualization_;
+  vector<VisualEdge> visualization_;
 
 };
 
