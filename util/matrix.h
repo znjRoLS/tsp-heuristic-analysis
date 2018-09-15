@@ -1,10 +1,9 @@
 #pragma once
 
 #include <vector>
-#include <tuple>
 
 using std::vector;
-using std::tuple;
+using std::pair;
 
 template<typename T>
 class Matrix {
@@ -15,7 +14,7 @@ class Matrix {
 
   vector<T> &operator[](int i);
 
-  tuple<int, int> size();
+  pair<int, int> size();
 
  private:
   const int n_;
@@ -45,6 +44,6 @@ vector<T> &Matrix<T>::operator[](int i) {
 }
 
 template<typename T>
-tuple<int, int> Matrix<T>::size() {
+pair<int, int> Matrix<T>::size() {
   return {n_, m_};
 }

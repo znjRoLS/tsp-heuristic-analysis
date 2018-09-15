@@ -5,7 +5,7 @@
 #include "split_str.h"
 #include "random_euclidean_world_generator.h"
 #include "file_euclidean_world_generator.h"
-#include "held_karp_lower_bound.h"
+#include "held_karp_lower_bound_algorithm.h"
 #include "random_constructive_algorithm.h"
 #include "nearest_neighbour_constructive_algorithm.h"
 #include "brute_force_constructive_algorithm.h"
