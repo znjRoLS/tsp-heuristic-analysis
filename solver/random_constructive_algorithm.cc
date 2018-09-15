@@ -17,6 +17,10 @@ void RandomConstructiveAlgorithm::Reset() {
   }
   current_path_.clear();
 
+  current_path_.push_back(0);
+
+  visualization_.clear();
+
   random_path_.resize(n + 1);
   for (int i = 0; i < n; i++) random_path_[i] = i;
   random_path_[n] = 0;
@@ -25,12 +29,18 @@ void RandomConstructiveAlgorithm::Reset() {
 
 bool RandomConstructiveAlgorithm::Iterate(int granularity) {
   if (granularity == 1) {
-    if (current_path_.size() == random_path_.size()) {
-      return false;
-    } else {
-      current_path_.push_back(random_path_[current_path_.size()]);
-      return true;
+
+    if (!visualization_.empty()) {
+      visualization_.rbegin()->color = GlobalColor::lightGray;
     }
+
+    current_path_.push_back(random_path_[current_path_.size()]);
+
+    visualization_.push_back({current_path_[current_path_.size() - 2], current_path_[current_path_.size() - 1],
+                              GlobalColor::green, 0.5});
+
+    return (current_path_.size() != random_path_.size());
+
   }
   if (granularity == 0) {
     while (Iterate(1)) {};

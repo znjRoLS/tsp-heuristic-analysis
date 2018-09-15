@@ -17,6 +17,8 @@ void NearestNeighbourConstructiveAlgorithm::Reset() {
   current_path_.push_back(0);
   current_last_ = 0;
 
+  visualization_.clear();
+
   for (int i = 1; i < world_->size; i++) {
     unvisited_.insert(i);
   }
@@ -47,7 +49,7 @@ bool NearestNeighbourConstructiveAlgorithm::Iterate(int granularity) {
 
         visualization_.push_back({current_last_, current_closest_, GlobalColor::green, BEST});
       } else {
-        visualization_.push_back({current_last_, *current_processing_, GlobalColor::lightGray, CONSIDERING});
+        visualization_.push_back({current_last_, *current_processing_, GlobalColor::darkGreen, CONSIDERING});
       }
 
 
@@ -58,7 +60,7 @@ bool NearestNeighbourConstructiveAlgorithm::Iterate(int granularity) {
       TSP_ASSERT_EQ(visualization_.rbegin()->strength, BEST);
 
       visualization_.rbegin()->strength = CHOSEN;
-      visualization_.rbegin()->color = GlobalColor::darkGreen;
+      visualization_.rbegin()->color = GlobalColor::lightGray;
 
       current_path_.push_back(current_closest_);
       current_last_ = current_closest_;
