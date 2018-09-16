@@ -12,7 +12,7 @@ TEST(StateTest, CurrentCost) {
           World{
               3,
               WorldType::EUCLIDEAN2D,
-              make_shared<Matrix<double>>(vector<vector<double>>{
+              make_shared<SquareMatrix<double>>(vector<vector<double>>{
                   {0, 1, 2},
                   {1, 0, 1.5},
                   {2, 1.5, 0},

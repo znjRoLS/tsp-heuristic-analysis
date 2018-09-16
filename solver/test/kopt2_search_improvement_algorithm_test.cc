@@ -13,7 +13,7 @@ TEST(Kopt2SearchImprovementAlgorithmTest, SimpleTest) {
           World{
               4,
               WorldType::EUCLIDEAN2D,
-              make_shared<Matrix<double>>(vector<vector<double>>{
+              make_shared<SquareMatrix<double>>(vector<vector<double>>{
                   // square
                   // 2 | 1
                   // - - -

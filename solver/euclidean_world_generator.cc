@@ -10,7 +10,7 @@ shared_ptr<World> EuclideanWorldGenerator::GenerateWorld(int n) {
   shared_ptr<Nodes2> nodes = GenerateNodes(n);
   n = nodes->size(); // because file generator actually ignores the "n" parameter
 
-  shared_ptr<Matrix<double>> world = make_shared<Matrix<double>>(n, n);
+  shared_ptr<SquareMatrix<double>> world = make_shared<SquareMatrix<double>>(n);
 
   for (int i = 0; i < n; i++) {
     for (int j = i + 1; j < n; j++) {

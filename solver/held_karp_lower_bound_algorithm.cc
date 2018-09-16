@@ -2,17 +2,16 @@
 
 namespace TSP {
 
-void HeldKarpLowerBound::Reset() {
+void HeldKarpLowerBoundAlgorithm::Reset() {
 
 }
 
-bool HeldKarpLowerBound::Iterate(int granularity) {
+bool HeldKarpLowerBoundAlgorithm::Iterate(int granularity) {
 
-
-
+  return false;
 }
 
-int HeldKarpLowerBound::GetMaxGranularity() {
+int HeldKarpLowerBoundAlgorithm::GetMaxGranularity() {
   return 0;
 }
 

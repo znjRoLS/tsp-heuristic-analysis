@@ -13,7 +13,7 @@ TEST(Kopt2ImprovementAlgorithmTest, ImprovementAlgorithmWorks) {
           World{
               4,
               WorldType::EUCLIDEAN2D,
-              make_shared<Matrix<double>>(vector<vector<double>>{
+              make_shared<SquareMatrix<double>>(vector<vector<double>>{
                   // square
                   {0, 1.5, 1, 1},
                   {1.5, 0, 1, 1},
@@ -56,7 +56,7 @@ TEST(Kopt2ImprovementAlgorithmTest, DoesntImproveOptimal) {
           World{
               4,
               WorldType::EUCLIDEAN2D,
-              make_shared<Matrix<double>>(vector<vector<double>>{
+              make_shared<SquareMatrix<double>>(vector<vector<double>>{
                   // square
                   {0, 1.5, 1, 1},
                   {1.5, 0, 1, 1},
