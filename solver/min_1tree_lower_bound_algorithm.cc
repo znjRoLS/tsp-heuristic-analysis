@@ -12,6 +12,7 @@ namespace TSP {
 
 void Min1treeLowerBoundAlgorithm::Reset() {
   current_node_ = 0;
+  value_ = 0;
 }
 
 bool Min1treeLowerBoundAlgorithm::Iterate(int granularity) {
@@ -21,34 +22,17 @@ bool Min1treeLowerBoundAlgorithm::Iterate(int granularity) {
     int n = world_->size;
     auto mst = MST(world_->distances_, current_node_);
 
-    double min_weight = numeric_limits<double>::max();
-    double second_min_weight = numeric_limits<double>::max();
+    auto nearest_nodes = GetNearestNodes(world_->distances_, current_node_);
 
-    int min_node = current_node_;
-    int second_min_node = current_node_;
-
-    for (int i = 0; i < n; i ++) {
-      if (i == current_node_) continue;
-
-      double dist = (*world_->distances_)[current_node_][i];
-      if (dist < min_weight) {
-        second_min_node = min_node;
-        second_min_weight = min_weight;
-        min_weight = dist;
-        min_node = i;
-      } else if (dist < second_min_weight) {
-        second_min_weight = dist;
-        second_min_node = i;
-      }
-    }
-    
-    double total_weight = min_weight + second_min_weight;
+    double total_weight = 0;
+    total_weight += (*world_->distances_)[current_node_][nearest_nodes.first];
+    total_weight += (*world_->distances_)[current_node_][nearest_nodes.second];
     for (auto& edge : mst) {
       total_weight += (*world_->distances_)[edge.first][edge.second];
     }
-    
+
     value_ = max(value_, total_weight);
-    
+
     current_node_ ++;
     return current_node_ == n;
 
@@ -63,6 +47,35 @@ bool Min1treeLowerBoundAlgorithm::Iterate(int granularity) {
 int Min1treeLowerBoundAlgorithm::GetMaxGranularity() {
   return 1;
 }
+
+pair<int,int> Min1treeLowerBoundAlgorithm::GetNearestNodes(const shared_ptr<SquareMatrix<double>> distances, const int node) const {
+
+  int n = (*distances)[0].size();
+
+  double min_weight = numeric_limits<double>::max();
+  double second_min_weight = numeric_limits<double>::max();
+
+  int min_node = node;
+  int second_min_node = node;
+
+  for (int i = 0; i < n; i ++) {
+    if (i == node) continue;
+
+    double dist = (*world_->distances_)[node][i];
+    if (dist < min_weight) {
+      second_min_node = min_node;
+      second_min_weight = min_weight;
+      min_weight = dist;
+      min_node = i;
+    } else if (dist < second_min_weight) {
+      second_min_weight = dist;
+      second_min_node = i;
+    }
+  }
+
+  return {min_node, second_min_node};
+
+};
 
 unordered_set<pair<int, int>> Min1treeLowerBoundAlgorithm::MST(const shared_ptr<SquareMatrix<double>> distances, const int node_to_skip) const {
   int n = distances->size().first;
