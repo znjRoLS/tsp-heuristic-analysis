@@ -89,6 +89,10 @@ void MainWindow::UpdateUserControls() {
     case SolutionState::START: {
         ui->button_world_generator->setEnabled(true);
 
+        ui->button_iterate_lower_bound_algorithm->setEnabled(false);
+        ui->button_reset_lower_bound_algorithm->setEnabled(false);
+        SetButtonStatus(ui->button_status_lower_bound_algorithm, ButtonState::WAITING);
+
         ui->button_iterate_constructive_algorithm->setEnabled(false);
         ui->button_reset_constructive_algorithm->setEnabled(false);
         SetButtonStatus(ui->button_status_constructive_algorithm, ButtonState::WAITING);
@@ -104,6 +108,7 @@ void MainWindow::UpdateUserControls() {
         ui->button_iterate_constructive_algorithm->setEnabled(true);
         ui->button_reset_constructive_algorithm->setEnabled(true);
         SetButtonStatus(ui->button_status_constructive_algorithm, ButtonState::ITERATING);
+        ui->button_status_constructive_algorithm->setText(QString::number(constructive_algorithm_->GetFinalPathCost()));
 
         ui->button_iterate_improvement_algorithm->setEnabled(false);
         ui->button_reset_improvement_algorithm->setEnabled(false);
@@ -116,10 +121,12 @@ void MainWindow::UpdateUserControls() {
         ui->button_iterate_constructive_algorithm->setEnabled(false);
         ui->button_reset_constructive_algorithm->setEnabled(true);
         SetButtonStatus(ui->button_status_constructive_algorithm, ButtonState::DONE);
+        ui->button_status_constructive_algorithm->setText(QString::number(constructive_algorithm_->GetFinalPathCost()));
 
         ui->button_iterate_improvement_algorithm->setEnabled(true);
         ui->button_reset_improvement_algorithm->setEnabled(true);
         SetButtonStatus(ui->button_status_improvement_algorithm, ButtonState::ITERATING);
+        ui->button_status_improvement_algorithm->setText(QString::number(improvement_algorithm_->GetCurrentPathCost()));
         break;
     }
     case SolutionState::IMPROVED_SOLUTION: {
@@ -128,10 +135,12 @@ void MainWindow::UpdateUserControls() {
         ui->button_iterate_constructive_algorithm->setEnabled(false);
         ui->button_reset_constructive_algorithm->setEnabled(true);
         SetButtonStatus(ui->button_status_constructive_algorithm, ButtonState::DONE);
+        ui->button_status_constructive_algorithm->setText(QString::number(constructive_algorithm_->GetFinalPathCost()));
 
         ui->button_iterate_improvement_algorithm->setEnabled(false);
         ui->button_reset_improvement_algorithm->setEnabled(true);
         SetButtonStatus(ui->button_status_improvement_algorithm, ButtonState::DONE);
+        ui->button_status_improvement_algorithm->setText(QString::number(improvement_algorithm_->GetCurrentPathCost()));
         break;
     }
     }
@@ -153,18 +162,30 @@ void MainWindow::WorldGeneratorAction() {
     solution_state_ = SolutionState::WORLD_GENERATED;
     constructive_algorithm_->SetWorld(world_);
     constructive_algorithm_->Reset();
+
+    lower_bound_algorithm_->SetWorld(world_);
+    lower_bound_algorithm_->Reset();
+
+    ui->button_reset_lower_bound_algorithm->setEnabled(true);
+    ui->button_iterate_lower_bound_algorithm->setEnabled(true);
+    SetButtonStatus(ui->button_status_lower_bound_algorithm, ButtonState::ITERATING);
+
     UpdateUserControls();
 
     tspview_->UpdateContents(world_);
     tspview_visualization_->UpdateContents(world_);
+    UpdateVisualParams({});
 }
 
 void MainWindow::LowerBoundAlgorithmSelected(const QString& text) {
     lower_bound_algorithm_ = TSP::lower_bound_algorithms[text.toStdString()];
 
-    if (solution_state_ == SolutionState::WORLD_GENERATED) {
+    if (solution_state_ != SolutionState::START) {
         lower_bound_algorithm_->SetWorld(world_);
         lower_bound_algorithm_->Reset();
+        ui->button_iterate_lower_bound_algorithm->setEnabled(true);
+    } else {
+        ui->button_iterate_lower_bound_algorithm->setEnabled(false);
     }
 
     ui->spin_granularity_lower_bound_algorithm->setMaximum(lower_bound_algorithm_->GetMaxGranularity());
@@ -176,22 +197,35 @@ void MainWindow::LowerBoundAlgorithmIterateAction() {
     int granularity = ui->spin_granularity_lower_bound_algorithm->value();
 
     if (!lower_bound_algorithm_->Iterate(granularity)) {
-        double value_ = lower_bound_algorithm_->GetFinalValue();
 
         SetButtonStatus(ui->button_status_lower_bound_algorithm, ButtonState::DONE);
-        ui->button_status_lower_bound_algorithm->setText(QString::number(value_));
 
         UpdateUserControls();
 
-//        tspview_->UpdateContents(state_);
+        ui->button_iterate_lower_bound_algorithm->setEnabled(false);
+
     }
 
-    tspview_visualization_->UpdateContents(lower_bound_algorithm_->GetVisualization());
+    double value_ = lower_bound_algorithm_->GetFinalValue();
+    ui->button_status_lower_bound_algorithm->setText(QString::number(value_));
 
+    tspview_visualization_->UpdateContents(lower_bound_algorithm_->GetVisualization());
+    UpdateVisualParams(lower_bound_algorithm_->GetVisualParams());
+}
+
+void MainWindow::UpdateVisualParams(unordered_map<string, string> params) {
+    QString label_text;
+
+    for (auto& param : params) {
+        label_text.append(QString::fromStdString(param.first + ": " + param.second + "\n"));
+    }
+
+    ui->label_visual_params->setText(label_text);
 }
 
 void MainWindow::LowerBoundAlgorithmResetAction() {
     lower_bound_algorithm_->Reset();
+    ui->button_iterate_lower_bound_algorithm->setEnabled(true);
     UpdateUserControls();
 }
 
@@ -226,6 +260,7 @@ void MainWindow::ConstructiveAlgorithmIterateAction() {
     }
 
     tspview_visualization_->UpdateContents(constructive_algorithm_->GetVisualization());
+    UpdateVisualParams({});
 
 }
 
@@ -265,6 +300,7 @@ void MainWindow::ImprovementAlgorithmIterateAction() {
     tspview_->UpdateContents(state_);
 
     tspview_visualization_->UpdateContents(improvement_algorithm_->GetVisualization());
+    UpdateVisualParams({});
 }
 
 void MainWindow::ImprovementAlgorithmResetAction() {

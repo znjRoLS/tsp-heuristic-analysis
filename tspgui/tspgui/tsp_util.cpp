@@ -17,7 +17,10 @@ unordered_map<string, shared_ptr<EuclideanWorldGenerator>> world_generators = {
 
 unordered_map<string, shared_ptr<LowerBoundAlgorithm>> lower_bound_algorithms = {
     {"Min 1-tree", make_shared<Min1treeLowerBoundAlgorithm>()},
-    {"Held Karp", make_shared<HeldKarpLowerBoundAlgorithm>(1)},
+    {"Held Karp 0", make_shared<HeldKarpLowerBoundAlgorithm>(0)},
+    {"Held Karp 1", make_shared<HeldKarpLowerBoundAlgorithm>(1)},
+    {"Held Karp 2", make_shared<HeldKarpLowerBoundAlgorithm>(2)},
+    {"Held Karp 3", make_shared<HeldKarpLowerBoundAlgorithm>(3)},
 };
 
 unordered_map<string, shared_ptr<ConstructiveAlgorithm>> constructive_algorithms = {

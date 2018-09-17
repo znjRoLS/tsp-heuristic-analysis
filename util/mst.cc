@@ -5,7 +5,7 @@
 #include <limits>
 
 using std::numeric_limits;
-using std::map;
+using std::multimap;
 
 namespace MST {
 
@@ -14,7 +14,7 @@ EdgeSet Calculate(const shared_ptr<SquareMatrix<double>>& distances, int exclude
   int n = distances->Size().first;
   DisjointSet disjoint_set(n);
 
-  map<double, pair<int,int>> edges;
+  multimap<double, pair<int,int>> edges;
 
   for (int i = 0; i < n; i++) {
     if (i == excluded_node) continue;

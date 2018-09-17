@@ -41,6 +41,7 @@ private slots:
     void ImprovementAlgorithmIterateAction();
     void ImprovementAlgorithmResetAction();
 
+
 private:
 
     enum ButtonState {
@@ -56,6 +57,7 @@ private:
         IMPROVED_SOLUTION,
     };
 
+    void UpdateVisualParams(unordered_map<string, string> params);
     void UpdateUserControls();
     void SetButtonStatus(QPushButton* widget, ButtonState state);
 

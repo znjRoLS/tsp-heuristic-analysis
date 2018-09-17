@@ -27,6 +27,9 @@ class HeldKarpLowerBoundAlgorithm : public LowerBoundAlgorithm {
   //     - The step size is constant for a fixed number of iterations, called a period.
   //     - When a period is finished, both the length of the period and the step size are halved.
   //     - The length of the first period is set to n/2, where n is the number of cities.
+  //     - The initial step size, t0, is set to 1, but is doubled in the beginning of the
+  //         first period until W does not increase, i.e., w(πk)≤w(πk-1). When this
+  //         happens, the step size remains constant for the rest of the period.
   //     - The algorithm terminates when either the length of the period or vk becomes zero.
   //     - If the last iteration of a period leads to an increment of W, then the period
   //         is doubled.
@@ -66,11 +69,10 @@ class HeldKarpLowerBoundAlgorithm : public LowerBoundAlgorithm {
     double t_;
 
     int iter_no_increase_;
-
     double w_;
+    bool initial_increase_;
 
     const double v_intertia_ = 0.3;
-
   } step_data_;
 
   double curr_max_1tree_;

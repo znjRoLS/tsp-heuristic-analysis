@@ -11,10 +11,12 @@ class ConstructiveAlgorithm : public Algorithm {
   void SetWorld(shared_ptr<World> world);
 
   Path GetFinalPath();
+
+  double GetFinalPathCost();
  protected:
   Path current_path_;
 
-  shared_ptr<const World> world_;
+  shared_ptr<World> world_;
 };
 
 } // namespace TSP

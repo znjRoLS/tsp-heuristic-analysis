@@ -13,6 +13,8 @@ class ImprovementAlgorithm : public Algorithm {
  public:
   void SetState(shared_ptr<State> state);
 
+  double GetCurrentPathCost();
+
  protected:
   shared_ptr<State> state_;
 };

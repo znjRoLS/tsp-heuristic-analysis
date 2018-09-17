@@ -7,11 +7,14 @@
 #include "disjoint_set.h"
 #include "double_compare.h"
 #include "mst.h"
+#include "vector_util.h"
 
 using std::map;
 using std::make_shared;
 using std::numeric_limits;
 using std::max;
+using std::min;
+using std::to_string;
 
 namespace TSP {
 
@@ -30,18 +33,21 @@ void HeldKarpLowerBoundAlgorithm::Reset() {
   step_data_.pi_ = vector<double>(world_->size, 0);
   step_data_.v_ = vector<int>(world_->size, 0);
 
-  // set first step to maximum edge
-  double max_edge = 0;
-  for (auto &row : world_->distances_->GetData())
-    for (auto &dist : row) {
-      max_edge = max(max_edge, dist);
-    }
-  step_data_.t_ = max_edge;
+  // set first step to minimum edge
+  double min_edge = numeric_limits<double>::max();
+  for (int i = 0 ; i < distances_->Size().first; i ++) {
+      for (int j = 0 ; j < distances_->Size().second; j ++) {
+          if (i == j) continue;
+          min_edge = min(min_edge, (*distances_)[i][j]);
+      }
+  }
+  step_data_.t_ = min_edge;
   step_data_.w_ = 0;
 
   step_data_.iter_no_increase_ = 0;
   step_data_.current_iter_ = 0;
   step_data_.current_period_ = world_->size / 2;
+  step_data_.initial_increase_ = true;
 }
 
 bool HeldKarpLowerBoundAlgorithm::Iterate(int granularity) {
@@ -67,9 +73,27 @@ bool HeldKarpLowerBoundAlgorithm::Iterate(int granularity) {
 
     auto min1tree = MST::Min1Tree(distances_, current_node_);
 
+    visualization_.clear();
+    for (auto& edge : min1tree) {
+      if (edge.first == current_node_ || edge.second == current_node_) {
+        visualization_.push_back({edge.first, edge.second, GlobalColor::green, 1.0});
+      } else {
+        visualization_.push_back({edge.first, edge.second, GlobalColor::green, 0.5});
+      }
+    }
+
+    visual_params_["current_iter"] = to_string(step_data_.current_iter_);
+    visual_params_["current_period"] = to_string(step_data_.current_period_);
+    visual_params_["current_step_size"] = to_string(step_data_.t_);
+    visual_params_["pi_"] = vector_to_string(step_data_.pi_);
+    visual_params_["v_"] = vector_to_string(step_data_.v_);
+    visual_params_["iter_no_increase"] = to_string(step_data_.iter_no_increase_);
+    visual_params_["w"] = to_string(step_data_.w_);
+    visual_params_["initial_increase"] = to_string(step_data_.initial_increase_);
+
     double total_weight = 0;
     for (auto &edge : min1tree) {
-      total_weight += (*world_->distances_)[edge.first][edge.second];
+      total_weight += (*distances_)[edge.first][edge.second];
     }
 
     for (double pi_elem : step_data_.pi_) {
@@ -129,10 +153,13 @@ bool HeldKarpLowerBoundAlgorithm::Iterate(int granularity) {
     }
 
   } else if (granularity == 1) {
-    bool result;
-    do {
+    int last_current_iter = step_data_.current_iter_;
+    int last_current_period = step_data_.current_period_;
+
+    bool result = true;
+    while (result && last_current_iter == step_data_.current_iter_ && last_current_period == step_data_.current_period_) {
       result = Iterate(2);
-    } while (current_node_ != 0);
+    }
 
     return result;
   } else if (granularity == 0) {
@@ -144,7 +171,7 @@ bool HeldKarpLowerBoundAlgorithm::Iterate(int granularity) {
 }
 
 int HeldKarpLowerBoundAlgorithm::GetMaxGranularity() {
-  return 0;
+  return 2;
 }
 
 bool HeldKarpLowerBoundAlgorithm::IteratePi_0(unordered_set<pair<int, int>> min_1tree, double W) {
@@ -167,6 +194,12 @@ bool HeldKarpLowerBoundAlgorithm::IteratePi_0(unordered_set<pair<int, int>> min_
   }
 
   if (all_zeroes) return false;
+
+  if (step_data_.initial_increase_ && w_increase) {
+    step_data_.t_ *= 2;
+  } else {
+    step_data_.initial_increase_ = false;
+  }
 
   // check if period is zero
   if (step_data_.current_period_ == step_data_.current_iter_) {
@@ -219,6 +252,12 @@ bool HeldKarpLowerBoundAlgorithm::IteratePi_2(unordered_set<pair<int, int>> min_
   }
 
   if (all_zeroes) return false;
+
+  if (step_data_.initial_increase_ && w_increase) {
+    step_data_.t_ *= 2;
+  } else {
+    step_data_.initial_increase_ = false;
+  }
 
   // check if period is zero
   if (step_data_.current_period_ == step_data_.current_iter_) {
