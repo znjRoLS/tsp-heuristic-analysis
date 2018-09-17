@@ -26,12 +26,12 @@ bool Min1treeLowerBoundAlgorithm::Iterate(int granularity) {
     auto mst = MST::Min1Tree(world_->distances_, current_node_);
 
     double total_weight = 0;
-    for (auto& edge : mst) {
+    for (auto &edge : mst) {
       total_weight += (*world_->distances_)[edge.first][edge.second];
     }
 
     visualization_.clear();
-    for (auto& edge : mst) {
+    for (auto &edge : mst) {
       if (edge.first == current_node_ || edge.second == current_node_) {
         visualization_.push_back({edge.first, edge.second, GlobalColor::green, 1.0});
       } else {
@@ -45,7 +45,7 @@ bool Min1treeLowerBoundAlgorithm::Iterate(int granularity) {
       return false;
     }
 
-    current_node_ ++;
+    current_node_++;
     return current_node_ != n;
 
   } else if (granularity == 0) {
@@ -64,12 +64,12 @@ bool Min1treeLowerBoundAlgorithm::CheckFoundOptimalPath(unordered_set<pair<int, 
   vector<int> degrees(world_->size, 0);
 
   int num_degree_2 = 0;
-  for (auto& edge : edges) {
-    degrees[edge.first] ++;
-    degrees[edge.second] ++;
+  for (auto &edge : edges) {
+    degrees[edge.first]++;
+    degrees[edge.second]++;
 
-    if (degrees[edge.first] == 2) num_degree_2 ++;
-    if (degrees[edge.second] == 2) num_degree_2 ++;
+    if (degrees[edge.first] == 2) num_degree_2++;
+    if (degrees[edge.second] == 2) num_degree_2++;
   }
 
   if (num_degree_2 == world_->size) {

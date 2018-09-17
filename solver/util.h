@@ -52,6 +52,6 @@ struct VisualEdge {
   double strength;
 };
 
-Path GetPathFromEdgeSet(unordered_set<pair<int,int>> edge_set);
+Path GetPathFromEdgeSet(unordered_set<pair<int, int>> edge_set);
 
 } // namespace TSP

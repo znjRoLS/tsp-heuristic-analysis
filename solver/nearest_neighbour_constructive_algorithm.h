@@ -21,7 +21,6 @@ class NearestNeighbourConstructiveAlgorithm : public ConstructiveAlgorithm {
   int current_last_;
   double current_closest_dist_;
 
-
 };
 
 } // namespace TSP

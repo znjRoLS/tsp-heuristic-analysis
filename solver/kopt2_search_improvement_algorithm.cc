@@ -41,18 +41,17 @@ bool Kopt2SearchImprovementAlgorithm::Iterate(int granularity) {
               state_->current_path_.begin() + current_search_second_edge_ + 1);
       Reset();
 
-
-      visualization_.push_back( {node_a, node_b, GlobalColor::red, 0.5});
-      visualization_.push_back( {node_c, node_d, GlobalColor::red, 0.5});
-      visualization_.push_back( {node_a, node_c, GlobalColor::green, 1.0});
+      visualization_.push_back({node_a, node_b, GlobalColor::red, 0.5});
+      visualization_.push_back({node_c, node_d, GlobalColor::red, 0.5});
+      visualization_.push_back({node_a, node_c, GlobalColor::green, 1.0});
       visualization_.push_back({node_b, node_d, GlobalColor::green, 1.0});
 
       return true;
     } else {
 
-      visualization_.push_back( {node_a, node_b, GlobalColor::green, 1.0});
-      visualization_.push_back( {node_c, node_d, GlobalColor::green, 1.0});
-      visualization_.push_back( {node_a, node_c, GlobalColor::lightGray, 0.5});
+      visualization_.push_back({node_a, node_b, GlobalColor::green, 1.0});
+      visualization_.push_back({node_c, node_d, GlobalColor::green, 1.0});
+      visualization_.push_back({node_a, node_c, GlobalColor::lightGray, 0.5});
       visualization_.push_back({node_b, node_d, GlobalColor::lightGray, 0.5});
 
       current_search_second_edge_++;

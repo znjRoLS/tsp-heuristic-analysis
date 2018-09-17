@@ -24,9 +24,9 @@ class GreedyConstructiveAlgorithm : public ConstructiveAlgorithm {
 
   void TransformFinalPath();
 
-  multimap<double, pair<int,int>> edges_;
+  multimap<double, pair<int, int>> edges_;
 
-  unordered_set<pair<int,int>> selected_edges_;
+  unordered_set<pair<int, int>> selected_edges_;
 
   unique_ptr<DisjointSet> disjoint_set_;
 

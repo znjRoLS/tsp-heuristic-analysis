@@ -10,11 +10,11 @@ using std::multimap;
 namespace MST {
 
 // Note: if excluded_node == -1, no node is excluded
-EdgeSet Calculate(const shared_ptr<SquareMatrix<double>>& distances, int excluded_node = -1) {
+EdgeSet Calculate(const shared_ptr<SquareMatrix<double>> &distances, int excluded_node = -1) {
   int n = distances->Size().first;
   DisjointSet disjoint_set(n);
 
-  multimap<double, pair<int,int>> edges;
+  multimap<double, pair<int, int>> edges;
 
   for (int i = 0; i < n; i++) {
     if (i == excluded_node) continue;
@@ -26,8 +26,8 @@ EdgeSet Calculate(const shared_ptr<SquareMatrix<double>>& distances, int exclude
 
   EdgeSet chosen_edges;
 
-  while(static_cast<int>(chosen_edges.size()) != (excluded_node == -1?n-1:n-2)) {
-    auto& edge = edges.begin()->second;
+  while (static_cast<int>(chosen_edges.size()) != (excluded_node == -1 ? n - 1 : n - 2)) {
+    auto &edge = edges.begin()->second;
 
     if (!disjoint_set.SameSet(edge.first, edge.second)) {
       disjoint_set.Merge(edge.first, edge.second);
@@ -41,7 +41,7 @@ EdgeSet Calculate(const shared_ptr<SquareMatrix<double>>& distances, int exclude
   return chosen_edges;
 }
 
-pair<Edge, Edge> NearestNodesEdges(const shared_ptr<SquareMatrix<double>>& distances, int node) {
+pair<Edge, Edge> NearestNodesEdges(const shared_ptr<SquareMatrix<double>> &distances, int node) {
   int n = distances->Size().first;
 
   double min_weight = numeric_limits<double>::max();
@@ -50,7 +50,7 @@ pair<Edge, Edge> NearestNodesEdges(const shared_ptr<SquareMatrix<double>>& dista
   int min_node = node;
   int second_min_node = node;
 
-  for (int i = 0; i < n; i ++) {
+  for (int i = 0; i < n; i++) {
     if (i == node) continue;
 
     double dist = (*distances)[node][i];
@@ -65,11 +65,10 @@ pair<Edge, Edge> NearestNodesEdges(const shared_ptr<SquareMatrix<double>>& dista
     }
   }
 
-
   return {{node, min_node}, {node, second_min_node}};
 }
 
-EdgeSet Min1Tree(const shared_ptr<SquareMatrix<double>>& distances, const int special_node) {
+EdgeSet Min1Tree(const shared_ptr<SquareMatrix<double>> &distances, const int special_node) {
 
   EdgeSet mst = Calculate(distances, special_node);
 

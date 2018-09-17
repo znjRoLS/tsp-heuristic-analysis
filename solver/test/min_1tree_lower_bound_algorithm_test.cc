@@ -31,7 +31,7 @@ TEST(Min1treeLowerBoundAlgorithmTest, SimpleTest) {
   unique_ptr<LowerBoundAlgorithm> algo = make_unique<Min1treeLowerBoundAlgorithm>();
   algo->SetWorld(world);
   algo->Reset();
-  
+
   ASSERT_TRUE(algo->Iterate(1));
   double prev = 0;
   while (algo->Iterate(1)) {
@@ -39,6 +39,6 @@ TEST(Min1treeLowerBoundAlgorithmTest, SimpleTest) {
     ASSERT_GE(curr, prev);
     prev = curr;
   }
-  
+
   ASSERT_GE(4.0, prev);
 }

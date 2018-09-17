@@ -14,7 +14,7 @@ class LowerBoundAlgorithm : public Algorithm {
  protected:
   double value_;
   shared_ptr<const World> world_;
-    Path optimal_path_;
+  Path optimal_path_;
 };
 
 } // namespace TSP

@@ -13,10 +13,10 @@ typedef pair<int, int> Edge;
 typedef unordered_set<Edge> EdgeSet;
 
 namespace MST {
-  EdgeSet Calculate(shared_ptr<SquareMatrix<double>>& distances, int excluded_node = -1);
+EdgeSet Calculate(shared_ptr<SquareMatrix<double>> &distances, int excluded_node = -1);
 
-  pair<Edge, Edge> NearestNodesEdges(const shared_ptr<SquareMatrix<double>>& distances, int node);
+pair<Edge, Edge> NearestNodesEdges(const shared_ptr<SquareMatrix<double>> &distances, int node);
 
-  EdgeSet Min1Tree(const shared_ptr<SquareMatrix<double>>& distances, int special_node);
+EdgeSet Min1Tree(const shared_ptr<SquareMatrix<double>> &distances, int special_node);
 
 };

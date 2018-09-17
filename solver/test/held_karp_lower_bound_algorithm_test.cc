@@ -28,8 +28,6 @@ TEST(HeldKarpLowerBoundAlgorithmTest, SimpleTest) {
       }
   );
 
-
-
   unique_ptr<LowerBoundAlgorithm> algo = make_unique<HeldKarpLowerBoundAlgorithm>(0);
   algo->SetWorld(world);
   algo->Reset();
@@ -46,8 +44,6 @@ TEST(HeldKarpLowerBoundAlgorithmTest, SimpleTest) {
 
   ASSERT_GE(4.0, prev);
 
-
-
   algo = make_unique<HeldKarpLowerBoundAlgorithm>(1);
   algo->SetWorld(world);
   algo->Reset();
@@ -56,8 +52,6 @@ TEST(HeldKarpLowerBoundAlgorithmTest, SimpleTest) {
   prev = -1;
   ASSERT_GE(4.0, prev);
 
-
-
   algo = make_unique<HeldKarpLowerBoundAlgorithm>(2);
   algo->SetWorld(world);
   algo->Reset();
@@ -65,8 +59,6 @@ TEST(HeldKarpLowerBoundAlgorithmTest, SimpleTest) {
   ASSERT_FALSE(algo->Iterate(2));
   prev = -1;
   ASSERT_GE(4.0, prev);
-
-
 
   algo = make_unique<HeldKarpLowerBoundAlgorithm>(3);
   algo->SetWorld(world);

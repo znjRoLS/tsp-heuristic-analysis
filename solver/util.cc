@@ -6,7 +6,7 @@ Path GetPathFromEdgeSet(unordered_set<pair<int, int>> edge_set) {
   vector<vector<int>> edges(edge_set.size());
   Path current_path;
 
-  for (pair<int,int> edge : edge_set) {
+  for (pair<int, int> edge : edge_set) {
     edges[edge.second].push_back(edge.first);
     edges[edge.first].push_back(edge.second);
   }

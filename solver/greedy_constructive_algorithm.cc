@@ -16,7 +16,7 @@ void GreedyConstructiveAlgorithm::Reset() {
 
   visualization_.clear();
 
-  for(int i = 0 ; i < world_->size; i ++) {
+  for (int i = 0; i < world_->size; i++) {
     node_degrees_[i] = 0;
   }
 
@@ -44,7 +44,7 @@ bool GreedyConstructiveAlgorithm::Iterate(int granularity) {
     if (selected_edges_.size() + 1 == static_cast<unsigned>(world_->size)) {
 
       vector<int> nodes_left;
-      for (auto& node : node_degrees_) {
+      for (auto &node : node_degrees_) {
         if (node.second == 1) {
           nodes_left.push_back(node.first);
         }
@@ -65,11 +65,12 @@ bool GreedyConstructiveAlgorithm::Iterate(int granularity) {
 
     auto &edge = edge_iter->second;
 
-    if (node_degrees_[edge.first] != 2 && node_degrees_[edge.second] != 2 && !disjoint_set_->SameSet(edge.first, edge.second)) {
+    if (node_degrees_[edge.first] != 2 && node_degrees_[edge.second] != 2
+        && !disjoint_set_->SameSet(edge.first, edge.second)) {
       selected_edges_.insert(edge);
 
-      node_degrees_[edge.first] ++;
-      node_degrees_[edge.second] ++;
+      node_degrees_[edge.first]++;
+      node_degrees_[edge.second]++;
       disjoint_set_->Merge(edge.first, edge.second);
 
       visualization_.push_back({edge.first, edge.second, GlobalColor::green, 1.0});
@@ -107,7 +108,7 @@ int GreedyConstructiveAlgorithm::GetMaxGranularity() {
 
 void GreedyConstructiveAlgorithm::TransformFinalPath() {
 
- current_path_ = GetPathFromEdgeSet(selected_edges_);
+  current_path_ = GetPathFromEdgeSet(selected_edges_);
 
 }
 

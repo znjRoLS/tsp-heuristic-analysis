@@ -117,7 +117,7 @@ void TSPView::ConstructNodes() {
         text_item->setPos(-5, -5);
 
         scene_->addItem(node);
-//        scene_->addItem(text_item);
+        //        scene_->addItem(text_item);
     }
 }
 

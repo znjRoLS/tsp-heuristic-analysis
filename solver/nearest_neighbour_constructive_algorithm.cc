@@ -5,7 +5,6 @@
 
 using std::numeric_limits;
 
-
 #define CHOSEN 0.6
 #define BEST 1.0
 #define CONSIDERING 0.2
@@ -25,7 +24,6 @@ void NearestNeighbourConstructiveAlgorithm::Reset() {
 
   current_processing_ = unvisited_.begin();
   current_closest_dist_ = numeric_limits<double>::max();
-
 
 }
 
@@ -51,7 +49,6 @@ bool NearestNeighbourConstructiveAlgorithm::Iterate(int granularity) {
       } else {
         visualization_.push_back({current_last_, *current_processing_, GlobalColor::darkGreen, CONSIDERING});
       }
-
 
       current_processing_++;
 

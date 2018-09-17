@@ -55,15 +55,15 @@ bool Kopt2ImprovementAlgorithm::Iterate(int granularity) {
         reverse(state_->current_path_.begin() + d, state_->current_path_.begin() + b);
       }
 
-      visualization_.push_back( {node_a, node_b, GlobalColor::red, 0.5});
-      visualization_.push_back( {node_c, node_d, GlobalColor::red, 0.5});
-      visualization_.push_back( {node_a, node_c, GlobalColor::green, 1.0});
+      visualization_.push_back({node_a, node_b, GlobalColor::red, 0.5});
+      visualization_.push_back({node_c, node_d, GlobalColor::red, 0.5});
+      visualization_.push_back({node_a, node_c, GlobalColor::green, 1.0});
       visualization_.push_back({node_b, node_d, GlobalColor::green, 1.0});
     } else {
 
-      visualization_.push_back( {node_a, node_b, GlobalColor::green, 1.0});
-      visualization_.push_back( {node_c, node_d, GlobalColor::green, 1.0});
-      visualization_.push_back( {node_a, node_c, GlobalColor::lightGray, 0.5});
+      visualization_.push_back({node_a, node_b, GlobalColor::green, 1.0});
+      visualization_.push_back({node_c, node_d, GlobalColor::green, 1.0});
+      visualization_.push_back({node_a, node_c, GlobalColor::lightGray, 0.5});
       visualization_.push_back({node_b, node_d, GlobalColor::lightGray, 0.5});
     }
   }

@@ -37,11 +37,11 @@ void HeldKarpLowerBoundAlgorithm::Reset() {
 
   // set first step to minimum edge
   double min_edge = numeric_limits<double>::max();
-  for (int i = 0 ; i < distances_->Size().first; i ++) {
-      for (int j = 0 ; j < distances_->Size().second; j ++) {
-          if (i == j) continue;
-          min_edge = min(min_edge, (*distances_)[i][j]);
-      }
+  for (int i = 0; i < distances_->Size().first; i++) {
+    for (int j = 0; j < distances_->Size().second; j++) {
+      if (i == j) continue;
+      min_edge = min(min_edge, (*distances_)[i][j]);
+    }
   }
   step_data_.t_ = min_edge;
   step_data_.w_ = 0;
@@ -76,7 +76,7 @@ bool HeldKarpLowerBoundAlgorithm::Iterate(int granularity) {
     auto min1tree = MST::Min1Tree(distances_, current_node_);
 
     visualization_.clear();
-    for (auto& edge : min1tree) {
+    for (auto &edge : min1tree) {
       if (edge.first == current_node_ || edge.second == current_node_) {
         visualization_.push_back({edge.first, edge.second, GlobalColor::green, 1.0});
       } else {
@@ -163,7 +163,8 @@ bool HeldKarpLowerBoundAlgorithm::Iterate(int granularity) {
     int last_current_period = step_data_.current_period_;
 
     bool result = true;
-    while (result && last_current_iter == step_data_.current_iter_ && last_current_period == step_data_.current_period_) {
+    while (result && last_current_iter == step_data_.current_iter_
+        && last_current_period == step_data_.current_period_) {
       result = Iterate(2);
     }
 
@@ -346,16 +347,16 @@ bool HeldKarpLowerBoundAlgorithm::IteratePi_3(unordered_set<pair<int, int>> min_
   return true;
 }
 
-bool HeldKarpLowerBoundAlgorithm::CheckFoundOptimalPath(unordered_set<pair<int,int>> edges) {
+bool HeldKarpLowerBoundAlgorithm::CheckFoundOptimalPath(unordered_set<pair<int, int>> edges) {
   vector<int> degrees(world_->size, 0);
 
   int num_degree_2 = 0;
-  for (auto& edge : edges) {
-    degrees[edge.first] ++;
-    degrees[edge.second] ++;
+  for (auto &edge : edges) {
+    degrees[edge.first]++;
+    degrees[edge.second]++;
 
-    if (degrees[edge.first] == 2) num_degree_2 ++;
-    if (degrees[edge.second] == 2) num_degree_2 ++;
+    if (degrees[edge.first] == 2) num_degree_2++;
+    if (degrees[edge.second] == 2) num_degree_2++;
   }
 
   if (num_degree_2 == world_->size) {
