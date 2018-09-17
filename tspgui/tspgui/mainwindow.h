@@ -8,6 +8,7 @@
 #include "random_euclidean_world_generator.h"
 #include "constructive_algorithm.h"
 #include "improvement_algorithm.h"
+#include "lower_bound_algorithm.h"
 #include "tspview.h"
 
 using std::unique_ptr;
@@ -27,6 +28,10 @@ public:
 private slots:
     void WorldGeneratorSelected(const QString& text);
     void WorldGeneratorAction();
+
+    void LowerBoundAlgorithmSelected(const QString& text);
+    void LowerBoundAlgorithmIterateAction();
+    void LowerBoundAlgorithmResetAction();
 
     void ConstructiveAlgorithmSelected(const QString& text);
     void ConstructiveAlgorithmIterateAction();
@@ -59,6 +64,7 @@ private:
     TSPView* tspview_visualization_;
 
     shared_ptr<TSP::EuclideanWorldGenerator> world_generator_;
+    shared_ptr<TSP::LowerBoundAlgorithm> lower_bound_algorithm_;
     shared_ptr<TSP::ConstructiveAlgorithm> constructive_algorithm_;
     shared_ptr<TSP::ImprovementAlgorithm> improvement_algorithm_;
 

@@ -78,7 +78,7 @@ pair<int,int> Min1treeLowerBoundAlgorithm::GetNearestNodes(const shared_ptr<Squa
 };
 
 unordered_set<pair<int, int>> Min1treeLowerBoundAlgorithm::MST(const shared_ptr<SquareMatrix<double>> distances, const int node_to_skip) const {
-  int n = distances->size().first;
+  int n = distances->Size().first;
   DisjointSet disjoint_set(n);
 
   map<double, pair<int, int>> edges;
@@ -93,7 +93,7 @@ unordered_set<pair<int, int>> Min1treeLowerBoundAlgorithm::MST(const shared_ptr<
 
   unordered_set<pair<int, int>> chosen_edges;
 
-  while (chosen_edges.size() != n - 2) {
+  while (static_cast<int>(chosen_edges.size()) != n - 2) {
     auto &edge = edges.begin()->second;
 
     if (!disjoint_set.SameSet(edge.first, edge.second)) {

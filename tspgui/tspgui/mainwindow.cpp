@@ -22,6 +22,9 @@ MainWindow::MainWindow(QWidget *parent) :
     for (auto &world_generator : TSP::world_generators) {
         ui->combo_world_generator->addItem(QString::fromStdString(world_generator.first));
     }
+    for (auto &lower_bound_algorithm : TSP::lower_bound_algorithms) {
+        ui->combo_lower_bound_algorithm->addItem(QString::fromStdString(lower_bound_algorithm.first));
+    }
     for (auto &constructive_algorithm : TSP::constructive_algorithms) {
         ui->combo_constructive_algorithm->addItem(QString::fromStdString(constructive_algorithm.first));
     }
@@ -31,6 +34,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->combo_world_generator, SIGNAL(activated(const QString&)), this, SLOT(WorldGeneratorSelected(const QString&)));
     connect(ui->button_world_generator, SIGNAL(released()), this, SLOT(WorldGeneratorAction()));
+
+    connect(ui->combo_lower_bound_algorithm, SIGNAL(activated(const QString&)), this, SLOT(LowerBoundAlgorithmSelected(const QString&)));
+    connect(ui->button_iterate_lower_bound_algorithm, SIGNAL(released()), this, SLOT(LowerBoundAlgorithmIterateAction()));
+    connect(ui->button_reset_lower_bound_algorithm, SIGNAL(released()), this, SLOT(LowerBoundAlgorithmResetAction()));
 
     connect(ui->combo_constructive_algorithm, SIGNAL(activated(const QString&)), this, SLOT(ConstructiveAlgorithmSelected(const QString&)));
     connect(ui->button_iterate_constructive_algorithm, SIGNAL(released()), this, SLOT(ConstructiveAlgorithmIterateAction()));
@@ -43,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
     UpdateUserControls();
 
     WorldGeneratorSelected(ui->combo_world_generator->currentText());
+    LowerBoundAlgorithmSelected(ui->combo_lower_bound_algorithm->currentText());
     ConstructiveAlgorithmSelected(ui->combo_constructive_algorithm->currentText());
     ImprovementAlgorithmSelected(ui->combo_improvement_algorithm->currentText());
 }
@@ -149,6 +157,42 @@ void MainWindow::WorldGeneratorAction() {
 
     tspview_->UpdateContents(world_);
     tspview_visualization_->UpdateContents(world_);
+}
+
+void MainWindow::LowerBoundAlgorithmSelected(const QString& text) {
+    lower_bound_algorithm_ = TSP::lower_bound_algorithms[text.toStdString()];
+
+    if (solution_state_ == SolutionState::WORLD_GENERATED) {
+        lower_bound_algorithm_->SetWorld(world_);
+        lower_bound_algorithm_->Reset();
+    }
+
+    ui->spin_granularity_lower_bound_algorithm->setMaximum(lower_bound_algorithm_->GetMaxGranularity());
+
+    UpdateUserControls();
+}
+
+void MainWindow::LowerBoundAlgorithmIterateAction() {
+    int granularity = ui->spin_granularity_lower_bound_algorithm->value();
+
+    if (!lower_bound_algorithm_->Iterate(granularity)) {
+        double value_ = lower_bound_algorithm_->GetFinalValue();
+
+        SetButtonStatus(ui->button_status_lower_bound_algorithm, ButtonState::DONE);
+        ui->button_status_lower_bound_algorithm->setText(QString::number(value_));
+
+        UpdateUserControls();
+
+//        tspview_->UpdateContents(state_);
+    }
+
+    tspview_visualization_->UpdateContents(lower_bound_algorithm_->GetVisualization());
+
+}
+
+void MainWindow::LowerBoundAlgorithmResetAction() {
+    lower_bound_algorithm_->Reset();
+    UpdateUserControls();
 }
 
 void MainWindow::ConstructiveAlgorithmSelected(const QString& text) {

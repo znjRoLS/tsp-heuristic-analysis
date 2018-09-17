@@ -10,7 +10,7 @@ using std::pair;
 
 namespace TSP {
 
-class Min1treeLowerBoundAlgorithm : LowerBoundAlgorithm {
+class Min1treeLowerBoundAlgorithm : public LowerBoundAlgorithm {
  public:
   void Reset() override;
   bool Iterate(int granularity) override;

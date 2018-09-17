@@ -14,7 +14,9 @@ class Matrix {
 
   vector<T> &operator[](int i);
 
-  pair<int, int> size();
+  pair<int, int> Size();
+
+  vector<vector<T>>& GetData();
 
  private:
   const int n_;
@@ -44,6 +46,11 @@ vector<T> &Matrix<T>::operator[](int i) {
 }
 
 template<typename T>
-pair<int, int> Matrix<T>::size() {
+pair<int, int> Matrix<T>::Size() {
   return {n_, m_};
+}
+
+template<typename T>
+vector<vector<T>>& Matrix<T>::GetData() {
+  return data_;
 }
