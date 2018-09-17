@@ -89,4 +89,9 @@ shared_ptr<SquareMatrix<double>> AlfaMeasure(shared_ptr<SquareMatrix<double>> me
   return alfa;
 }
 
+
+//shared_ptr<SquareMatrix<double>> ImprovedAlfaMeasure(shared_ptr<SquareMatrix<double>> measure_, int special_node) {
+//
+//}
+
 }

@@ -58,22 +58,18 @@ bool HeldKarpLowerBoundAlgorithm::Iterate(int granularity) {
 
   if (granularity == 2) {
 
+    EdgeSet min1tree;
+
     if (variant_ == 1) {
       current_node_ = 0;
     }
-    if (variant_ == 2) {
-      double nearest_biggest = 0;
+    if (variant_ == 2 || variant_ == 3) {
 
-      for (int i = 0; i < n; i++) {
-        pair<Edge, Edge> nearest_edges = MST::NearestNodesEdges(distances_, i);
-        if (nearest_biggest < (*distances_)[nearest_edges.second.first][nearest_edges.second.second]) {
-          nearest_biggest = (*distances_)[nearest_edges.second.first][nearest_edges.second.second];
-          current_node_ = i;
-        }
-      }
+      min1tree = MST::Min1TreeSetSpecialNode(distances_, &current_node_);
+
+    } else {
+      min1tree = MST::Min1Tree(distances_, current_node_);
     }
-
-    auto min1tree = MST::Min1Tree(distances_, current_node_);
 
     visualization_.clear();
     for (auto &edge : min1tree) {
@@ -132,31 +128,33 @@ bool HeldKarpLowerBoundAlgorithm::Iterate(int granularity) {
       return true;
     }
 
-    if (variant_ == 1 || variant_ == 2) {
+    if (variant_ == 1 || variant_ == 2 || variant_ == 3) {
       bool res;
       switch (variant_) {
         case 1:res = IteratePi_0(min_1tree_, curr_max_1tree_);
           break;
         case 2:res = IteratePi_2(min_1tree_, curr_max_1tree_);
           break;
+        case 3:res = IteratePi_3(min_1tree_, curr_max_1tree_);
+          break;
       }
       curr_max_1tree_ = 0;
       return res;
     }
 
-    if (variant_ == 3) {
-      current_node_++;
-
-      if (current_node_ == n) {
-        current_node_ = 0;
-
-        bool res = IteratePi_3(min_1tree_, curr_max_1tree_);
-
-        curr_max_1tree_ = 0;
-
-        return res;
-      }
-    }
+//    if (variant_ == 3) {
+//      current_node_++;
+//
+//      if (current_node_ == n) {
+//        current_node_ = 0;
+//
+//        bool res = IteratePi_3(min_1tree_, curr_max_1tree_);
+//
+//        curr_max_1tree_ = 0;
+//
+//        return res;
+//      }
+//    }
 
   } else if (granularity == 1) {
     int last_current_iter = step_data_.current_iter_;

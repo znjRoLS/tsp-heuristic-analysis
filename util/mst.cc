@@ -80,4 +80,42 @@ EdgeSet Min1Tree(const shared_ptr<SquareMatrix<double>> &distances, const int sp
   return mst;
 }
 
+int BestLeaf(const shared_ptr<SquareMatrix<double>> &distances, EdgeSet& mst) {
+  int n = distances->Size().first;
+  vector<int> degrees(n, 0);
+
+  for (auto& edge : mst) {
+    degrees[edge.first] ++;
+    degrees[edge.second] ++;
+  }
+
+  int largest_second_neighbour_node = -1;
+  double largest_second_neighbour = 0.0;
+
+  for (int i = 0 ; i < n; i ++) {
+    if (degrees[i] == 1) {
+      auto edge_pair = NearestNodesEdges(distances, i);
+      double second_neighbour = (*distances)[edge_pair.second.first][edge_pair.second.second];
+      if (second_neighbour > largest_second_neighbour ) {
+        largest_second_neighbour = second_neighbour;
+        largest_second_neighbour_node = i;
+      }
+    }
+  }
+  
+  return largest_second_neighbour_node;
+}
+
+EdgeSet Min1TreeSetSpecialNode(const shared_ptr<SquareMatrix<double>> &distances, int* special_node) {
+
+  EdgeSet mst = Calculate(distances);
+
+  *special_node = BestLeaf(distances, mst);
+  
+  pair<Edge, Edge> additional_edges = NearestNodesEdges(distances, *special_node);
+  mst.insert(additional_edges.second);
+
+  return mst;
+}
+
 } // namespace MST
