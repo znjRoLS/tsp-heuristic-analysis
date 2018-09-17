@@ -4,6 +4,7 @@
 #include "random_constructive_algorithm.h"
 #include "nearest_neighbour_constructive_algorithm.h"
 #include "greedy_constructive_algorithm.h"
+#include "brute_force_constructive_algorithm.h"
 #include "kopt2_improvement_algorithm.h"
 #include "kopt2_search_improvement_algorithm.h"
 #include "held_karp_lower_bound_algorithm.h"
@@ -27,6 +28,7 @@ unordered_map<string, shared_ptr<ConstructiveAlgorithm>> constructive_algorithms
     {"Random", make_shared<RandomConstructiveAlgorithm>()},
     {"Nearest Neighbour", make_shared<NearestNeighbourConstructiveAlgorithm>()},
     {"Greedy", make_shared<GreedyConstructiveAlgorithm>()},
+    {"Brute Force", make_shared<BruteForceConstructiveAlgorithm>()},
 };
 
 unordered_map<string, shared_ptr<ImprovementAlgorithm>> improvement_algorithms = {
