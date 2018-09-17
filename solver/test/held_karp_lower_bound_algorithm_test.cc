@@ -34,6 +34,8 @@ TEST(HeldKarpLowerBoundAlgorithmTest, SimpleTest) {
   algo->SetWorld(world);
   algo->Reset();
 
+  // TODO: fix this!!
+
   ASSERT_TRUE(algo->Iterate(2));
   double prev = -1;
   while (algo->Iterate(2)) {

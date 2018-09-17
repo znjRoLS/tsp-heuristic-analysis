@@ -3,6 +3,12 @@
 #include <vector>
 #include <cassert>
 #include "point2.h"
+#include <unordered_set>
+#include "pair_hash.h"
+
+using std::unordered_set;
+using std::pair;
+using std::vector;
 
 #define TSP_ASSERT(x) assert(x);
 #define TSP_ASSERT_EQ(x, y) TSP_ASSERT(x == y)
@@ -12,9 +18,9 @@
 namespace TSP {
 
 /// Path type representing a solution Path in TSP
-typedef std::vector<int> Path;
+typedef vector<int> Path;
 
-typedef std::vector<Point2> Nodes2;
+typedef vector<Point2> Nodes2;
 
 enum GlobalColor {
   color0,
@@ -45,5 +51,7 @@ struct VisualEdge {
   GlobalColor color;
   double strength;
 };
+
+Path GetPathFromEdgeSet(unordered_set<pair<int,int>> edge_set);
 
 } // namespace TSP

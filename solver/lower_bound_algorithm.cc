@@ -10,4 +10,11 @@ double LowerBoundAlgorithm::GetFinalValue() {
   return value_;
 }
 
+bool LowerBoundAlgorithm::FoundOptimalSolution() {
+  return !optimal_path_.empty();
+}
+Path LowerBoundAlgorithm::GetOptimalPath() {
+  return optimal_path_;
+}
+
 }

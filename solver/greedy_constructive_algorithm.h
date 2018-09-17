@@ -26,7 +26,7 @@ class GreedyConstructiveAlgorithm : public ConstructiveAlgorithm {
 
   multimap<double, pair<int,int>> edges_;
 
-  vector<pair<int,int>> selected_edges_;
+  unordered_set<pair<int,int>> selected_edges_;
 
   unique_ptr<DisjointSet> disjoint_set_;
 

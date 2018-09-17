@@ -12,6 +12,8 @@ using std::max;
 namespace TSP {
 
 void Min1treeLowerBoundAlgorithm::Reset() {
+  optimal_path_.clear();
+
   current_node_ = 0;
   value_ = 0;
 }
@@ -39,6 +41,10 @@ bool Min1treeLowerBoundAlgorithm::Iterate(int granularity) {
 
     value_ = max(value_, total_weight);
 
+    if (CheckFoundOptimalPath(mst)) {
+      return false;
+    }
+
     current_node_ ++;
     return current_node_ != n;
 
@@ -52,6 +58,28 @@ bool Min1treeLowerBoundAlgorithm::Iterate(int granularity) {
 
 int Min1treeLowerBoundAlgorithm::GetMaxGranularity() {
   return 1;
+}
+
+bool Min1treeLowerBoundAlgorithm::CheckFoundOptimalPath(unordered_set<pair<int, int>> edges) {
+  vector<int> degrees(world_->size, 0);
+
+  int num_degree_2 = 0;
+  for (auto& edge : edges) {
+    degrees[edge.first] ++;
+    degrees[edge.second] ++;
+
+    if (degrees[edge.first] == 2) num_degree_2 ++;
+    if (degrees[edge.second] == 2) num_degree_2 ++;
+  }
+
+  if (num_degree_2 == world_->size) {
+
+    optimal_path_ = GetPathFromEdgeSet(edges);
+
+    return true;
+  }
+
+  return false;
 }
 
 } // namespace TSP

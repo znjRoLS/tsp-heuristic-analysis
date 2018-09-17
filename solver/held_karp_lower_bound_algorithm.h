@@ -17,6 +17,9 @@ class HeldKarpLowerBoundAlgorithm : public LowerBoundAlgorithm {
   bool Iterate(int granularity) override;
   int GetMaxGranularity() override;
  private:
+
+  bool CheckFoundOptimalPath(unordered_set<pair<int,int>> edges);
+
   bool IteratePi_0(unordered_set<pair<int, int>> min_1tree, double W);
   bool IteratePi_2(unordered_set<pair<int, int>> min_1tree, double W);
   bool IteratePi_3(unordered_set<pair<int, int>> min_1tree, double W);

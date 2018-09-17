@@ -209,6 +209,10 @@ void MainWindow::LowerBoundAlgorithmIterateAction() {
     double value_ = lower_bound_algorithm_->GetFinalValue();
     ui->button_status_lower_bound_algorithm->setText(QString::number(value_));
 
+    if (lower_bound_algorithm_->FoundOptimalSolution()) {
+        ui->button_status_lower_bound_algorithm->setText(QString::fromStdString("Found optimal: ") + QString::number(value_));
+    }
+
     tspview_visualization_->UpdateContents(lower_bound_algorithm_->GetVisualization());
     UpdateVisualParams(lower_bound_algorithm_->GetVisualParams());
 }

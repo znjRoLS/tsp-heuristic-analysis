@@ -52,7 +52,7 @@ bool GreedyConstructiveAlgorithm::Iterate(int granularity) {
 
       TSP_ASSERT_EQ(nodes_left.size(), 2);
 
-      selected_edges_.push_back({nodes_left[0], nodes_left[1]});
+      selected_edges_.insert({nodes_left[0], nodes_left[1]});
 
       visualization_.push_back({nodes_left[0], nodes_left[1], GlobalColor::lightGray, 0.5});
 
@@ -66,7 +66,7 @@ bool GreedyConstructiveAlgorithm::Iterate(int granularity) {
     auto &edge = edge_iter->second;
 
     if (node_degrees_[edge.first] != 2 && node_degrees_[edge.second] != 2 && !disjoint_set_->SameSet(edge.first, edge.second)) {
-      selected_edges_.push_back(edge);
+      selected_edges_.insert(edge);
 
       node_degrees_[edge.first] ++;
       node_degrees_[edge.second] ++;
@@ -107,31 +107,8 @@ int GreedyConstructiveAlgorithm::GetMaxGranularity() {
 
 void GreedyConstructiveAlgorithm::TransformFinalPath() {
 
-  vector<vector<int>> edges(selected_edges_.size());
+ current_path_ = GetPathFromEdgeSet(selected_edges_);
 
-  for (pair<int,int>& edge : selected_edges_) {
-    edges[edge.second].push_back(edge.first);
-    edges[edge.first].push_back(edge.second);
-  }
-
-  current_path_.push_back(0);
-
-  vector<bool> used(edges.size(), false);
-  used[0] = true;
-
-  while (current_path_.size() != edges.size()) {
-    int last_edge = *current_path_.rbegin();
-
-    if (used[edges[last_edge][0]]) {
-      current_path_.push_back(edges[last_edge][1]);
-      used[edges[last_edge][1]] = true;
-    } else {
-      current_path_.push_back(edges[last_edge][0]);
-      used[edges[last_edge][0]] = true;
-    }
-  }
-
-  current_path_.push_back(0);
 }
 
 } // namespace TSP

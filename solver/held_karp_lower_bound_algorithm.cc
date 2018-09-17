@@ -24,6 +24,8 @@ HeldKarpLowerBoundAlgorithm::HeldKarpLowerBoundAlgorithm(int variant) :
 }
 
 void HeldKarpLowerBoundAlgorithm::Reset() {
+  optimal_path_.clear();
+
   distances_ = make_shared<SquareMatrix<double>>(*(world_->distances_));
 
   curr_max_1tree_ = 0;
@@ -107,6 +109,10 @@ bool HeldKarpLowerBoundAlgorithm::Iterate(int granularity) {
     if DOUBLE_GREATER(total_weight, curr_max_1tree_) {
       curr_max_1tree_ = total_weight;
       min_1tree_ = min1tree;
+
+      if (CheckFoundOptimalPath(min_1tree_)) {
+        return false;
+      }
     }
 
     if (variant_ == 0) {
@@ -188,12 +194,12 @@ bool HeldKarpLowerBoundAlgorithm::IteratePi_0(unordered_set<pair<int, int>> min_
   }
 
   // check if optimal tour (all zeros)
-  bool all_zeroes = true;
-  for (int v_single : v) {
-    if (v_single != 0) all_zeroes = false;
-  }
-
-  if (all_zeroes) return false;
+//  bool all_zeroes = true;
+//  for (int v_single : v) {
+//    if (v_single != 0) all_zeroes = false;
+//  }
+//
+//  if (all_zeroes) return false;
 
   if (step_data_.initial_increase_ && w_increase) {
     step_data_.t_ *= 2;
@@ -246,12 +252,12 @@ bool HeldKarpLowerBoundAlgorithm::IteratePi_2(unordered_set<pair<int, int>> min_
   }
 
   // check if optimal tour (all zeros)
-  bool all_zeroes = true;
-  for (int v_single : v) {
-    if (v_single != 0) all_zeroes = false;
-  }
-
-  if (all_zeroes) return false;
+//  bool all_zeroes = true;
+//  for (int v_single : v) {
+//    if (v_single != 0) all_zeroes = false;
+//  }
+//
+//  if (all_zeroes) return false;
 
   if (step_data_.initial_increase_ && w_increase) {
     step_data_.t_ *= 2;
@@ -305,12 +311,12 @@ bool HeldKarpLowerBoundAlgorithm::IteratePi_3(unordered_set<pair<int, int>> min_
   }
 
   // check if optimal tour (all zeros)
-  bool all_zeroes = true;
-  for (int v_single : v) {
-    if (v_single != 0) all_zeroes = false;
-  }
-
-  if (all_zeroes) return false;
+//  bool all_zeroes = true;
+//  for (int v_single : v) {
+//    if (v_single != 0) all_zeroes = false;
+//  }
+//
+//  if (all_zeroes) return false;
 
   if (w_increase) {
     step_data_.iter_no_increase_ = 0;
@@ -338,6 +344,28 @@ bool HeldKarpLowerBoundAlgorithm::IteratePi_3(unordered_set<pair<int, int>> min_
 
   step_data_.current_iter_++;
   return true;
+}
+
+bool HeldKarpLowerBoundAlgorithm::CheckFoundOptimalPath(unordered_set<pair<int,int>> edges) {
+  vector<int> degrees(world_->size, 0);
+
+  int num_degree_2 = 0;
+  for (auto& edge : edges) {
+    degrees[edge.first] ++;
+    degrees[edge.second] ++;
+
+    if (degrees[edge.first] == 2) num_degree_2 ++;
+    if (degrees[edge.second] == 2) num_degree_2 ++;
+  }
+
+  if (num_degree_2 == world_->size) {
+
+    optimal_path_ = GetPathFromEdgeSet(edges);
+
+    return true;
+  }
+
+  return false;
 }
 
 }; // namespace TSP
