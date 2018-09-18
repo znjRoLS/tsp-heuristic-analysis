@@ -13,8 +13,8 @@ using std::numeric_limits;
 
 namespace TSP {
 
-AntColonyImprovementAlgorithm::AntColonyImprovementAlgorithm(int variant, int num_ants, double alfa, double beta, double ro, double q) :
-    variant_(variant), num_ants_(num_ants), alfa_(alfa), beta_(beta), ro_(ro), q_(q) {
+AntColonyImprovementAlgorithm::AntColonyImprovementAlgorithm(int variant, int num_ants, double alfa, double beta, double ro, double q, double phi) :
+    variant_(variant), num_ants_(num_ants), alfa_(alfa), beta_(beta), ro_(ro), q_(q), phi_(phi) {
 
 }
 
@@ -28,7 +28,7 @@ void AntColonyImprovementAlgorithm::Reset() {
 
   for (int i = 0 ; i < n; i ++) {
     for (int j = 0 ; j < n ; j ++) {
-      (*pheromones_)[i][j] = 1.0;
+      (*pheromones_)[i][j] = phi_;
     }
   }
 

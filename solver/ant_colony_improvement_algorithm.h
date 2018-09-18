@@ -6,7 +6,7 @@ namespace TSP {
 
 class AntColonyImprovementAlgorithm : public ImprovementAlgorithm {
  public:
-  AntColonyImprovementAlgorithm(int variant, int num_ants, double alfa, double beta, double ro, double q);
+  AntColonyImprovementAlgorithm(int variant, int num_ants, double alfa, double beta, double ro, double q, double phi);
   void Reset() override;
   bool Iterate(int granularity) override;
   int GetMaxGranularity() override;
@@ -35,6 +35,7 @@ class AntColonyImprovementAlgorithm : public ImprovementAlgorithm {
   const double beta_;
   const double ro_;
   const double q_;
+  const double phi_;
 };
 
 } // namespace TSP

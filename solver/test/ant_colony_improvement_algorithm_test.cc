@@ -29,7 +29,7 @@ TEST(AntColonyImprovementAlgorithm, SimpleTest) {
       vector<int>{0, 1, 2, 3, 0}
   );
 
-  unique_ptr<ImprovementAlgorithm> algo = make_unique<AntColonyImprovementAlgorithm>(0, 10, 1, 3, 0.5, 10);
+  unique_ptr<ImprovementAlgorithm> algo = make_unique<AntColonyImprovementAlgorithm>(0, 10, 1, 3, 0.5, 10, 1);
   algo->SetState(state);
   algo->Reset();
 
