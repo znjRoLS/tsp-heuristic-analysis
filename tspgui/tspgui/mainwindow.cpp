@@ -229,6 +229,7 @@ void MainWindow::UpdateVisualParams(unordered_map<string, string> params) {
 
 void MainWindow::LowerBoundAlgorithmResetAction() {
     lower_bound_algorithm_->Reset();
+    SetButtonStatus(ui->button_status_lower_bound_algorithm, ButtonState::ITERATING);
     ui->button_iterate_lower_bound_algorithm->setEnabled(true);
     UpdateUserControls();
 }
@@ -298,8 +299,9 @@ void MainWindow::ImprovementAlgorithmIterateAction() {
 
     if (!improvement_algorithm_->Iterate(granularity)) {
         solution_state_ = SolutionState::IMPROVED_SOLUTION;
-        UpdateUserControls();
     }
+
+    UpdateUserControls();
 
     tspview_->UpdateContents(state_);
 
@@ -309,6 +311,8 @@ void MainWindow::ImprovementAlgorithmIterateAction() {
 
 void MainWindow::ImprovementAlgorithmResetAction() {
     solution_state_ = SolutionState::CONSTRUCTED_SOLUTION;
+    state_ = make_shared<TSP::State>(world_, constructive_algorithm_->GetFinalPath());
+    improvement_algorithm_->SetState(state_);
     improvement_algorithm_->Reset();
 
     UpdateUserControls();

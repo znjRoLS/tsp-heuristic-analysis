@@ -22,15 +22,7 @@ void State::SetDefaultPath() {
 }
 
 double State::CurrentPathCost() {
-  double sum = 0;
-  int curr_node = current_path_[0];
-  for (unsigned i = 1; i < current_path_.size(); i++) {
-    int next_node = current_path_[i];
-    sum += (*world_->distances_)[curr_node][next_node];
-    curr_node = next_node;
-  }
-  sum += (*world_->distances_)[curr_node][current_path_[0]];
-  return sum;
+  return PathCost(current_path_, world_->distances_);
 }
 
 void State::UpdateOptimalPath(State state) {
@@ -39,6 +31,20 @@ void State::UpdateOptimalPath(State state) {
   if (state.CurrentPathCost() < CurrentPathCost()) {
     current_path_ = state.current_path_;
   }
+}
+
+double State::PathCost(const Path& path, const shared_ptr<SquareMatrix<double>>& distances) {
+  if (static_cast<int>(path.size()-1) != distances->Size().first) return 0.0;
+
+  double sum = 0;
+  int curr_node = path[0];
+  for (unsigned i = 1; i < path.size(); i++) {
+    int next_node = path[i];
+    sum += (*distances)[curr_node][next_node];
+    curr_node = next_node;
+  }
+  sum += (*distances)[curr_node][path[0]];
+  return sum;
 }
 
 } // namespace TSP

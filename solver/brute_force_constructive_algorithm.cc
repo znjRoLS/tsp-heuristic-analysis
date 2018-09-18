@@ -18,7 +18,7 @@ void BruteForceConstructiveAlgorithm::Reset() {
 
   current_path_ = current_brute_force_path_;
 
-  current_path_cost_ = State(world_, current_brute_force_path_).CurrentPathCost();
+  current_path_cost_ = State::PathCost(current_brute_force_path_, world_->distances_);
 }
 
 bool BruteForceConstructiveAlgorithm::Iterate(int granularity) {
@@ -27,7 +27,7 @@ bool BruteForceConstructiveAlgorithm::Iterate(int granularity) {
     if (!next_permutation(current_brute_force_path_.begin()+1, current_brute_force_path_.end()-1)) {
       return false;
     } else {
-      double new_path_cost = State(world_, current_brute_force_path_).CurrentPathCost();
+      double new_path_cost = State::PathCost(current_brute_force_path_, world_->distances_);
       if (new_path_cost < current_path_cost_) {
         current_path_cost_ = new_path_cost;
         current_path_ = current_brute_force_path_;

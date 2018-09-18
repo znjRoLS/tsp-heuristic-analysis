@@ -14,7 +14,7 @@ Path ConstructiveAlgorithm::GetFinalPath() {
 
 double ConstructiveAlgorithm::GetFinalPathCost() {
   if (static_cast<int>(current_path_.size()) != world_->size + 1) return 0.0;
-  return State(world_, current_path_).CurrentPathCost();
+  return State::PathCost(current_path_, world_->distances_);
 }
 
 } // namespace TSP

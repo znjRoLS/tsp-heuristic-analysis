@@ -41,8 +41,28 @@ double GetDouble() {
   return GetDouble(1.0);
 }
 
-void RandomShuffle(std::vector<int>::iterator begin, std::vector<int>::iterator end) {
+void Shuffle(std::vector<int>::iterator begin, std::vector<int>::iterator end) {
   shuffle(begin, end, mt);
+}
+
+int GetWeightedInt(vector<double> weights) {
+  if (weights.empty()) return -1;
+
+  double sum = 0;
+  for (auto& item : weights) sum += item;
+
+  double r = GetDouble(sum);
+
+  for (unsigned i = 0 ; i < weights.size(); i ++) {
+    if (r > weights[i]) {
+      r -= weights[i];
+    } else {
+      return i;
+    }
+  }
+
+  // not reachable;
+  return -1;
 }
 
 } // namespace Random
