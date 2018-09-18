@@ -4,6 +4,7 @@
 #include <memory>
 #include <greedy_constructive_algorithm.h>
 #include "split_str.h"
+#include "container_contains.h"
 #include "random_euclidean_world_generator.h"
 #include "file_euclidean_world_generator.h"
 #include "held_karp_lower_bound_algorithm.h"
@@ -15,6 +16,7 @@
 #include "kopt2_search_improvement_algorithm.h"
 #include "ant_colony_improvement_algorithm.h"
 #include "lin_kernighan_improvement_algorithm.h"
+#include "min_1tree_lower_bound_algorithm.h"
 
 using std::ifstream;
 using std::make_shared;
@@ -23,6 +25,8 @@ using std::stoi;
 namespace TSP::Benchmark {
 
 void ConfigReader::LoadConfig(string file_path) {
+  file_world_generator_ = false;
+
   file_path_ = file_path;
   LoadFile();
 
@@ -30,10 +34,15 @@ void ConfigReader::LoadConfig(string file_path) {
   ParseLowerBoundAlgorithms();
   ParseConstructiveAlgorithms();
   ParseImprovementAlgorithms();
-  ParseInputFiles();
+  if (file_world_generator_) {
+    ParseInputFiles();
+  }
+
   ParseEndCriterion();
   ParseNumRuns();
   ParseWorldSizes();
+
+  ParseTimeTrackResolution();
 }
 
 
@@ -72,21 +81,37 @@ void ConfigReader::ParseWorldGenerators() {
 }
 
 void ConfigReader::ParseLowerBoundAlgorithms() {
-  TSP_ASSERT_CONTAINS(input_, "LOWER_BOUND_ALGORITHM");
+  lower_bound_algorithms_.clear();
 
-  string item = input_["LOWER_BOUND_ALGORITHM"];
-  lower_bound_algorithm_string_ = item;
-  if (item == "held_karp") {
-    lower_bound_algorithm_ = make_shared<HeldKarpLowerBoundAlgorithm>();
-  } else {
-    TSP_ILLEGAL;
+  if (!CONTAINS(input_, "LOWER_BOUND_ALGORITHMS")) return;
+
+  vector<string> items = split_str(input_["LOWER_BOUND_ALGORITHMS"], ' ');
+  lower_bound_algorithms_strings_ = items;
+  for (string& item : items) {
+    if (item == "held_karp_0") {
+      lower_bound_algorithms_.push_back(make_shared<HeldKarpLowerBoundAlgorithm>(0));
+    } else if (item == "held_karp_1") {
+      lower_bound_algorithms_.push_back(make_shared<HeldKarpLowerBoundAlgorithm>(1));
+    } else if (item == "held_karp_2") {
+      lower_bound_algorithms_.push_back(make_shared<HeldKarpLowerBoundAlgorithm>(2));
+    } else if (item == "held_karp_3") {
+      lower_bound_algorithms_.push_back(make_shared<HeldKarpLowerBoundAlgorithm>(3));
+    } else if (item == "min1tree") {
+      lower_bound_algorithms_.push_back(make_shared<Min1treeLowerBoundAlgorithm>());
+//    } else if (item == "christofides") {
+//      constructive_algorithms_.push_back(make_shared<ChristofidesConstructiveAlgorithm>());
+    } else {
+      TSP_ILLEGAL;
+    }
   }
 }
 
 void ConfigReader::ParseConstructiveAlgorithms() {
-  TSP_ASSERT_CONTAINS(input_, "CONSTRUCTIVE_ALGORITHMS");
 
   constructive_algorithms_.clear();
+
+  if (!CONTAINS(input_, "CONSTRUCTIVE_ALGORITHMS")) return;
+
 
   vector<string> items = split_str(input_["CONSTRUCTIVE_ALGORITHMS"], ' ');
   constructive_algorithms_strings_ = items;
@@ -108,9 +133,11 @@ void ConfigReader::ParseConstructiveAlgorithms() {
 }
 
 void ConfigReader::ParseImprovementAlgorithms() {
-  TSP_ASSERT_CONTAINS(input_, "IMPROVEMENT_ALGORITHMS");
 
   improvement_algorithms_.clear();
+
+  if (!CONTAINS(input_, "IMPROVEMENT_ALGORITHMS")) return;
+
 
   vector<string> items = split_str(input_["IMPROVEMENT_ALGORITHMS"], ' ');
   improvement_algorithms_strings_ = items;
@@ -119,8 +146,10 @@ void ConfigReader::ParseImprovementAlgorithms() {
       improvement_algorithms_.push_back(make_shared<Kopt2ImprovementAlgorithm>());
     } else if (item == "kopt2_search") {
       improvement_algorithms_.push_back(make_shared<Kopt2SearchImprovementAlgorithm>());
-    } else if (item == "ant_colony") {
-      improvement_algorithms_.push_back(make_shared<AntColonyImprovementAlgorithm>());
+    } else if (item == "ant_colony_0") {
+      improvement_algorithms_.push_back(make_shared<AntColonyImprovementAlgorithm>(0, 10, 1, 3, 0.5, 10, 10));
+    } else if (item == "ant_colony_1") {
+      improvement_algorithms_.push_back(make_shared<AntColonyImprovementAlgorithm>(1, 10, 1, 3, 0.5, 10, 10));
 //    } else if (item == "lin_kernighan") {
 //      improvement_algorithms_.push_back(make_shared<LinKernighanImprovementAlgorithm>());
     } else {
@@ -179,6 +208,10 @@ void ConfigReader::ParseNumRuns() {
   TSP_ASSERT_CONTAINS(input_, "NUM_RUNS");
 
   num_repeat_ = stoi(input_["NUM_RUNS"]);
+
+  TSP_ASSERT_CONTAINS(input_, "NUM_RANDOM_CONSTRUCTIVE_RUNS");
+
+  num_random_constructive_repeat_ = stoi(input_["NUM_RANDOM_CONSTRUCTIVE_RUNS"]);
 }
 
 void ConfigReader::ParseWorldSizes() {
@@ -189,6 +222,14 @@ void ConfigReader::ParseWorldSizes() {
   vector<string> items = split_str(input_["WORLD_SIZES"], ' ');
   for (string& item : items) {
     world_sizes_.push_back(stoi(item));
+  }
+}
+
+void ConfigReader::ParseTimeTrackResolution() {
+  time_track_resolution_ = 0;
+
+  if (CONTAINS(input_, "TIME_TRACK_RESOLUTION")) {
+    time_track_resolution_ = stoi(input_["TIME_TRACK_RESOLUTION"]);
   }
 }
 

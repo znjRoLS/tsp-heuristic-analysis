@@ -20,14 +20,12 @@ void Min1treeLowerBoundAlgorithm::Reset() {
 
 bool Min1treeLowerBoundAlgorithm::Iterate(int granularity) {
 
-  if (granularity == 1) {
+  if (granularity == 0) {
+    auto mst = MST::Min1TreeSetSpecialNode(world_->distances_, &current_node_);
 
-    int n = world_->size;
-    auto mst = MST::Min1Tree(world_->distances_, current_node_);
-
-    double total_weight = 0;
+    value_ = 0;
     for (auto &edge : mst) {
-      total_weight += (*world_->distances_)[edge.first][edge.second];
+      value_ += (*world_->distances_)[edge.first][edge.second];
     }
 
     visualization_.clear();
@@ -39,25 +37,51 @@ bool Min1treeLowerBoundAlgorithm::Iterate(int granularity) {
       }
     }
 
-    value_ = max(value_, total_weight);
+    CheckFoundOptimalPath(mst);
 
-    if (CheckFoundOptimalPath(mst)) {
-      return false;
-    }
-
-    current_node_++;
-    return current_node_ != n;
-
-  } else if (granularity == 0) {
-    while (Iterate(1));
     return false;
   }
 
   return true;
+
+//  if (granularity == 1) {
+//
+//    int n = world_->size;
+//    auto mst = MST::Min1Tree(world_->distances_, current_node_);
+//
+//    double total_weight = 0;
+//    for (auto &edge : mst) {
+//      total_weight += (*world_->distances_)[edge.first][edge.second];
+//    }
+//
+//    visualization_.clear();
+//    for (auto &edge : mst) {
+//      if (edge.first == current_node_ || edge.second == current_node_) {
+//        visualization_.push_back({edge.first, edge.second, GlobalColor::green, 1.0});
+//      } else {
+//        visualization_.push_back({edge.first, edge.second, GlobalColor::green, 0.5});
+//      }
+//    }
+//
+//    value_ = max(value_, total_weight);
+//
+//    if (CheckFoundOptimalPath(mst)) {
+//      return false;
+//    }
+//
+//    current_node_++;
+//    return current_node_ != n;
+//
+//  } else if (granularity == 0) {
+//    while (Iterate(1));
+//    return false;
+//  }
+//
+//  return true;
 }
 
 int Min1treeLowerBoundAlgorithm::GetMaxGranularity() {
-  return 1;
+  return 0;
 }
 
 bool Min1treeLowerBoundAlgorithm::CheckFoundOptimalPath(unordered_set<pair<int, int>> edges) {

@@ -40,6 +40,7 @@ class ConfigReader {
   vector<string> input_files_;
   vector<int> world_sizes_;
   int num_repeat_;
+  int num_random_constructive_repeat_;
   // closeness in percetages
   double end_lower_bound_;
   // in seconds
@@ -48,6 +49,8 @@ class ConfigReader {
   int end_iterations_;
 
   bool file_world_generator_;
+
+  int time_track_resolution_;
 
 //  EndCriterion end_criterion_;
 
@@ -62,6 +65,7 @@ class ConfigReader {
   void ParseEndCriterion();
   void ParseNumRuns();
   void ParseWorldSizes();
+  void ParseTimeTrackResolution();
 
 };
 

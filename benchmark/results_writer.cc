@@ -3,6 +3,7 @@
 #include <fstream>
 #include <unordered_set>
 #include "container_contains.h"
+#include "util.h"
 
 using std::unordered_set;
 using std::ofstream;
@@ -11,6 +12,8 @@ namespace TSP::Benchmark {
 
 void ResultsWriter::Output(string file_path) {
   ofstream file_(file_path);
+
+  TSP_ASSERT(file_.is_open());
 
   unordered_set<string> header;
   for (auto& mapa : data_) {

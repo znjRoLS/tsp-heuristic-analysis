@@ -11,7 +11,7 @@
 #include <iostream>
 #include "controller.h"
 #include "file_euclidean_world_generator.h"
-#include <chrono>
+#include "random_constructive_algorithm.h"
 #include "random.h"
 
 using std::make_unique;
@@ -24,7 +24,8 @@ using std::max;
 namespace TSP::Benchmark {
 
 Runner::Runner() :
-    config_reader_(make_unique<ConfigReader>()) {
+    config_reader_(make_unique<ConfigReader>()),
+    results_writer_(make_unique<ResultsWriter>()){
 
 }
 
@@ -32,125 +33,248 @@ void Runner::Run(string input_prefix, vector<string> input_configs, string outpu
   for (string &input : input_configs) {
 
     LOG << "Reading file " << input_prefix + input << "" << endl;
-    config_reader_->LoadConfig(input);
+    config_reader_->LoadConfig(input_prefix + input);
 
     LOG << "Successfully parsed!" << endl;
 
-    LOG << "Repeating runs " << config_reader_->num_repeat_ << " times" << endl;
+    RunRuns();
 
-    for (int iter = 0; iter < config_reader_->num_repeat_; iter++) {
+    LOG << "Writing file " << output_prefix + input + ".out" << "" << endl;
 
-      LOG1 << "Running run: " << iter << endl;
-
-      for (unsigned wg_iter = 0; wg_iter < config_reader_->world_generators_.size(); wg_iter++) {
-
-        LOG2 << "Running world gen: " << config_reader_->world_generators_strings_[wg_iter] << endl;
-        shared_ptr<EuclideanWorldGenerator> world_generator = config_reader_->world_generators_[wg_iter];
-
-        for (unsigned ws_iter = 0; ws_iter < config_reader_->world_sizes_.size(); ws_iter++) {
-
-          LOG3 << "Running size: " << config_reader_->world_sizes_[ws_iter] << endl;
-          int world_size = config_reader_->world_sizes_[ws_iter];
-
-          shared_ptr<World> world = world_generator->GenerateWorld(world_size);
-          int world_random_identifier = Random::GetInt();
-
-          bool lower_bound_calculated = false;
-          double lower_bound_value = 0.0;
-
-          //////////////////////// LOWER BOUND ALGORITHMS
-
-          for (unsigned lb_iter = 0; lb_iter < config_reader_->lower_bound_algorithms_.size(); lb_iter ++) {
-
-            LOG4 << "Running lower bound: " << config_reader_->lower_bound_algorithms_strings_[lb_iter] << endl;
-
-            lower_bound_calculated = true;
-
-            shared_ptr<LowerBoundAlgorithm> lower_bound_algorithm = config_reader_->lower_bound_algorithms_[lb_iter];
-
-            lower_bound_algorithm->SetWorld(world);
-            auto start = std::chrono::steady_clock::now();
-            lower_bound_algorithm->Iterate(0);
-            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
-                std::chrono::steady_clock::now() - start).count();
-            lower_bound_value = max(lower_bound_value, lower_bound_algorithm->GetFinalValue());
-
-            unordered_map<string, string> output;
-            output["dur"] = to_string(duration);
-            output["lower_bound_name"] = config_reader_->lower_bound_algorithms_strings_[lb_iter];
-            output["found_optimal"] = to_string(lower_bound_algorithm->FoundOptimalSolution());
-            output["lower_bound_value"] = to_string(lower_bound_value);
-            output["world_generator_name"] = config_reader_->world_generators_strings_[wg_iter];
-            output["world_size"] = to_string(world_size);
-            output["world_id"] = to_string(world_random_identifier);
-            output["run_iteration"] = to_string(iter);
-
-            results_writer_->AddItem(output);
-
-          }
-
-          //////////////////////// CONSTRUCTIVE ALGORITHMS
-
-          if (!config_reader_->constructive_algorithms_.empty()) {
-
-            for (unsigned ca_iter = 0; ca_iter < config_reader_->constructive_algorithms_.size(); ca_iter++) {
-
-              LOG4 << "Running constructive: " << config_reader_->constructive_algorithms_strings_[ca_iter] << endl;
-
-              controller.SetConstructiveAlgorithm(config_reader_->constructive_algorithms_[ca_iter]);
-
-              auto start = std::chrono::steady_clock::now();
-              controller.IterateConstructiveAlgorithm(0);
-              auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
-                  std::chrono::steady_clock::now() - start).count();
-
-              unordered_map<string, string> output;
-
-              output["dur"] = to_string(duration);
-              output[""]
-
-            }
-          }
-        }
-      }
-    }
-
-
-
-      if (config_reader_->file_world_generator_) {
-        for (unsigned if_iter = 0; if_iter < config_reader_->input_files_.size(); if_iter++) {
-          Controller controller;
-
-          shared_ptr<FileEuclideanWorldGenerator> world_generator_ = make_shared<FileEuclideanWorldGenerator>();
-          world_generator_->SetFile(config_reader_->input_files_[if_iter]);
-          controller.SetWorldGenerator(world_generator_);
-          controller.GenerateNewWorld(0);
-          for (unsigned ca_iter = 0; ca_iter < config_reader_->constructive_algorithms_.size(); ca_iter++) {
-            for (unsigned ia_iter = 0; ia_iter < config_reader_->improvement_algorithms_.size(); ia_iter++) {
-
-              LOG << "Running file world generator file: " << if_iter << ", constructive: " << ca_iter
-                  << ", improvement: " << ia_iter << endl;
-
-              controller.SetConstructiveAlgorithm(config_reader_->constructive_algorithms_[ca_iter]);
-              controller.IterateConstructiveAlgorithm(0);
-
-              controller.SetImprovementAlgorithm(config_reader_->improvement_algorithms_[ia_iter]);
-              controller.IterateImprovementAlgorithm(0);
-
-              LOG << "Final cost " << controller.GetCurrentState()->CurrentPathCost() << endl;
-            }
-          }
-        }
-      }
-    }
-
-    results_writer_->Output(output_prefix + input);
-
+    results_writer_->Output(output_prefix + input + ".out");
   }
 }
 
+void Runner::RunRuns() {
+  LOG << "Repeating runs " << config_reader_->num_repeat_ << " times" << endl;
+
+  for (int iter = 0; iter < config_reader_->num_repeat_; iter++) {
+
+    LOG1 << "Running run: " << iter << endl;
+
+    current_state_.iter = iter;
+    RunSingleRun();
+  }
+
+  if (config_reader_->file_world_generator_) {
+
+    LOG << "Running file generator runs" << endl;
+
+    RunFileWorldGenerator();
+  }
+
+}
+
+void Runner::RunSingleRun() {
+  current_state_.inputs_from_file = false;
+  for (unsigned wg_iter = 0; wg_iter < config_reader_->world_generators_.size(); wg_iter++) {
+
+    LOG2 << "Running world gen: " << config_reader_->world_generators_strings_[wg_iter] << endl;
+    current_state_.world_generator = config_reader_->world_generators_[wg_iter];
+
+    current_state_.world_generator_string = config_reader_->world_generators_strings_[wg_iter];
+
+    RunSingleWorldGenerator();
+  }
+}
+
+void Runner::RunSingleWorldGenerator() {
+  for (unsigned ws_iter = 0; ws_iter < config_reader_->world_sizes_.size(); ws_iter++) {
+
+    LOG3 << "Running size: " << config_reader_->world_sizes_[ws_iter] << endl;
+    current_state_.world_size = config_reader_->world_sizes_[ws_iter];
+
+    current_state_.world = current_state_.world_generator->GenerateWorld(current_state_.world_size);
+    current_state_.world_random_identifier = Random::GetInt();
+
+    RunSingleWorld();
+  }
+}
+
+void Runner::RunFileWorldGenerator() {
+  current_state_.inputs_from_file = true;
+
+  for (unsigned if_iter = 0; if_iter < config_reader_->input_files_.size(); if_iter++) {
+
+    LOG1 << "Running with input file: " << config_reader_->input_files_[if_iter] << endl;
+
+    shared_ptr<FileEuclideanWorldGenerator> world_generator_ = make_shared<FileEuclideanWorldGenerator>();
+    world_generator_->SetFile(config_reader_->input_files_[if_iter]);
+
+    current_state_.world_generator = world_generator_;
+    current_state_.input_file = config_reader_->input_files_[if_iter];
+
+    current_state_.world = current_state_.world_generator->GenerateWorld(0);
+    current_state_.world_size = current_state_.world->size;
+    current_state_.world_random_identifier = Random::GetInt();
+
+    RunSingleWorld();
+  }
+
+  current_state_.inputs_from_file = false;
+}
+
+void Runner::RunSingleWorld() {
+  current_state_.lower_bound_calculated = false;
+  current_state_.lower_bound_value = 0.0;
+
+  //////////////////////// LOWER BOUND ALGORITHMS
+
+  for (unsigned lb_iter = 0; lb_iter < config_reader_->lower_bound_algorithms_.size(); lb_iter++) {
+
+    LOG4 << "Running lower bound: " << config_reader_->lower_bound_algorithms_strings_[lb_iter] << endl;
+
+    current_state_.lower_bound_calculated = true;
+    current_state_.lower_bound_algorithm = config_reader_->lower_bound_algorithms_[lb_iter];
+    current_state_.lower_bound_algorithm_string = config_reader_->lower_bound_algorithms_strings_[lb_iter];
+
+    RunSingleLowerBound();
+  }
+
+  //////////////////////// CONSTRUCTIVE ALGORITHMS
+
+  for (unsigned ca_iter = 0; ca_iter < config_reader_->constructive_algorithms_.size(); ca_iter++) {
+
+    LOG4 << "Running constructive: " << config_reader_->constructive_algorithms_strings_[ca_iter] << endl;
+
+    current_state_.constructive_algorithm = config_reader_->constructive_algorithms_[ca_iter];
+    current_state_.constructive_algorithm_string = config_reader_->constructive_algorithms_strings_[ca_iter];
+
+    RunSingleConstructive();
+  }
+
+  //////////////////////// IMPROVEMENT ALGORITHMS
+
+  for (int rca_iter = 0; rca_iter < config_reader_->num_random_constructive_repeat_; rca_iter++ ) {
+
+    LOG4 << "Running random constructive for improvement, num: " << rca_iter << endl;
+
+    shared_ptr<ConstructiveAlgorithm> random_constructive_algorithm = make_shared<RandomConstructiveAlgorithm>();
+
+    random_constructive_algorithm->SetWorld(current_state_.world);
+    random_constructive_algorithm->Reset();
+    random_constructive_algorithm->Iterate(0);
+
+    current_state_.path_random = random_constructive_algorithm->GetFinalPath();
+    current_state_.path_random_identifier = Random::GetInt();
+
+    RunSingleStartingPathImprovement();
+  }
+}
+
+
+void Runner::RunSingleLowerBound() {
+  current_state_.lower_bound_algorithm->SetWorld(current_state_.world);
+  current_state_.lower_bound_algorithm->Reset();
+
+  auto start = std::chrono::high_resolution_clock::now();
+  current_state_.lower_bound_algorithm->Iterate(0);
+  auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
+      std::chrono::high_resolution_clock::now() - start).count();
+  current_state_.lower_bound_value = max(current_state_.lower_bound_value, current_state_.lower_bound_algorithm->GetFinalValue());
+
+  unordered_map<string, string> output;
+  output["dur"] = to_string(duration);
+  output["lower_bound_name"] = current_state_.lower_bound_algorithm_string;
+  output["found_optimal"] = to_string(current_state_.lower_bound_algorithm->FoundOptimalSolution());
+  output["lower_bound_value"] = to_string(current_state_.lower_bound_value);
+  output["world_generator_name"] = current_state_.world_generator_string;
+  output["world_size"] = to_string(current_state_.world_size);
+  output["world_id"] = to_string(current_state_.world_random_identifier);
+  output["run_iteration"] = to_string(current_state_.iter);
+
+  results_writer_->AddItem(output);
+}
+
+void Runner::RunSingleConstructive() {
+
+  current_state_.constructive_algorithm->SetWorld(current_state_.world);
+  current_state_.constructive_algorithm->Reset();
+
+  auto start = std::chrono::high_resolution_clock::now();
+  current_state_.constructive_algorithm->Iterate(0);
+  auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
+      std::chrono::high_resolution_clock::now() - start).count();
+
+  double constructive_value = current_state_.constructive_algorithm->GetFinalPathCost();
+
+  unordered_map<string, string> output;
+  output["dur"] = to_string(duration);
+  output["constructive_name"] = current_state_.constructive_algorithm_string;
+  output["constructive_value"] = to_string(constructive_value);
+  if (current_state_.lower_bound_calculated) {
+    output["constructive_closeness"] =
+        to_string((constructive_value - current_state_.lower_bound_value) / current_state_.lower_bound_value);
+  }
+  output["world_generator_name"] = current_state_.world_generator_string;
+  output["world_size"] = to_string(current_state_.world_size);
+  output["world_id"] = to_string(current_state_.world_random_identifier);
+  output["run_iteration"] = to_string(current_state_.iter);
+
+  results_writer_->AddItem(output);
+}
+
+void Runner::RunSingleStartingPathImprovement() {
+  for (unsigned ia_iter = 0; ia_iter < config_reader_->improvement_algorithms_.size(); ia_iter++) {
+
+    LOG5 << "Running improvement: " << config_reader_->improvement_algorithms_strings_[ia_iter] << endl;
+
+    current_state_.improvement_algorithm = config_reader_->improvement_algorithms_[ia_iter];
+    current_state_.improvement_algorithm_string = config_reader_->improvement_algorithms_strings_[ia_iter];
+    current_state_.state_current = make_shared<State>(current_state_.world, current_state_.path_random);
+
+    RunSingleImprovement();
+  }
+}
+
+void Runner::RunSingleImprovement() {
+  current_state_.improvement_algorithm->SetState(current_state_.state_current);
+  current_state_.improvement_algorithm->Reset();
+
+  current_state_.improvement_start = std::chrono::high_resolution_clock::now();
+
+  auto last_duration = std::chrono::duration_cast<std::chrono::microseconds>(
+      std::chrono::high_resolution_clock::now() - current_state_.improvement_start).count();
+
+  while (!SingleImprovementEndCriteria()) {
+    current_state_.improvement_algorithm->Iterate(0);
+
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
+        std::chrono::high_resolution_clock::now() - current_state_.improvement_start).count();
+
+    double improvement_value = current_state_.improvement_algorithm->GetCurrentPathCost();
+
+    if (duration - last_duration > config_reader_->time_track_resolution_) {
+      last_duration = duration;
+
+      unordered_map<string, string> output;
+      output["dur"] = to_string(duration);
+      output["improvement_name"] = current_state_.improvement_algorithm_string;
+      output["improvement_value"] = to_string(improvement_value);
+      if (current_state_.lower_bound_calculated) {
+        output["improvement_closeness"] =
+            to_string((improvement_value - current_state_.lower_bound_value) / current_state_.lower_bound_value);
+      }
+      output["world_generator_name"] = current_state_.world_generator_string;
+      output["world_size"] = to_string(current_state_.world_size);
+      output["world_id"] = to_string(current_state_.world_random_identifier);
+      output["random_path_id"] = to_string(current_state_.path_random_identifier);
+      output["run_iteration"] = to_string(current_state_.iter);
+
+      results_writer_->AddItem(output);
+    }
+  }
+}
+
+bool Runner::SingleImprovementEndCriteria() {
+  auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
+      std::chrono::high_resolution_clock::now() - current_state_.improvement_start).count();
+
+  return duration > config_reader_->end_time_;
+}
+
 string Runner::LogInfo() {
-  return "";
+  return "pisi vreme ";
 }
 
 } // namespace TSP::Benchmark
