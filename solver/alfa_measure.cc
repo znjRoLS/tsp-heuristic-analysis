@@ -20,13 +20,13 @@ shared_ptr<SquareMatrix<double>> AlfaMeasure(shared_ptr<SquareMatrix<double>> me
   // this is actually beta for now
   auto alfa = make_shared<SquareMatrix<double>>(n);
 
-  for (int i = 0; i < n ; i ++) {
+  for (int i = 0; i < n; i++) {
     (*alfa)[i][i] = 0;
   }
 
   double longer_special_node_edge = 0;
   vector<int> connected_special_nodes;
-  for (auto& edge : min1tree) {
+  for (auto &edge : min1tree) {
     if (edge.first == special_node) {
       connected_special_nodes.push_back(edge.second);
       longer_special_node_edge = max(longer_special_node_edge, (*measure_)[edge.first][edge.second]);
@@ -36,7 +36,7 @@ shared_ptr<SquareMatrix<double>> AlfaMeasure(shared_ptr<SquareMatrix<double>> me
     }
   }
 
-  for (int j = 0 ; j < n ; j ++) {
+  for (int j = 0; j < n; j++) {
     if (j == special_node) continue;
     if (j == connected_special_nodes[0] || j == connected_special_nodes[1]) {
       (*alfa)[special_node][j] = (*alfa)[j][special_node] = 0;
@@ -47,14 +47,14 @@ shared_ptr<SquareMatrix<double>> AlfaMeasure(shared_ptr<SquareMatrix<double>> me
 
   vector<vector<int>> edges(n);
 
-  for (auto& edge : min1tree) {
+  for (auto &edge : min1tree) {
     if (edge.first == special_node || edge.second == special_node) continue;
 
     edges[edge.first].push_back(edge.second);
     edges[edge.second].push_back(edge.first);
   }
 
-  for (int root_node = 0 ; root_node < n; root_node ++) {
+  for (int root_node = 0; root_node < n; root_node++) {
     if (root_node == special_node) continue;
 
     vector<bool> visited(n, false);

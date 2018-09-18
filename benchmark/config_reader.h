@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include <unordered_map>
+#include <lower_bound_algorithm.h>
 #include "euclidean_world_generator.h"
 #include "constructive_algorithm.h"
 #include "improvement_algorithm.h"
@@ -28,9 +29,13 @@ class ConfigReader {
 
   string file_path_;
   unordered_map<string, string> input_;
+  vector<string> world_generators_strings_;
   vector<shared_ptr<EuclideanWorldGenerator>> world_generators_;
-  shared_ptr<Algorithm> lower_bound_algorithm_;
+  vector<string> lower_bound_algorithms_strings_;
+  vector<shared_ptr<LowerBoundAlgorithm>> lower_bound_algorithms_;
+  vector<string> constructive_algorithms_strings_;
   vector<shared_ptr<ConstructiveAlgorithm>> constructive_algorithms_;
+  vector<string> improvement_algorithms_strings_;
   vector<shared_ptr<ImprovementAlgorithm>> improvement_algorithms_;
   vector<string> input_files_;
   vector<int> world_sizes_;

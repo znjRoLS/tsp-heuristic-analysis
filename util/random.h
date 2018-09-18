@@ -23,7 +23,7 @@ void Shuffle(std::vector<int>::iterator begin, std::vector<int>::iterator end);
 template<typename T>
 T GetChoice(vector<T> items) {
   if (items.empty()) return T();
-  return items[GetInt(items.size()-1)];
+  return items[GetInt(items.size() - 1)];
 }
 
 int GetWeightedInt(vector<double> weights);
@@ -32,6 +32,5 @@ template<typename T>
 T GetWeightedChoice(vector<T> items, vector<double> weights) {
   return items[GetWeightedInt(weights)];
 }
-
 
 } // namespace Random

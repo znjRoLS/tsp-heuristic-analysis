@@ -19,9 +19,11 @@ class Controller {
 
   void SetConstructiveAlgorithm(shared_ptr<ConstructiveAlgorithm> algorithm);
   void IterateConstructiveAlgorithm(int granularity);
+  void IterateOptimizedConstructiveAlgorithm();
 
   void SetImprovementAlgorithm(shared_ptr<ImprovementAlgorithm> algorithm);
   void IterateImprovementAlgorithm(int granularity);
+  void IterateOptimizedImprovementAlgorithm();
 
   shared_ptr<State> GetCurrentState();
 

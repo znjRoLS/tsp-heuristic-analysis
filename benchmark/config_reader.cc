@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <memory>
+#include <greedy_constructive_algorithm.h>
 #include "split_str.h"
 #include "random_euclidean_world_generator.h"
 #include "file_euclidean_world_generator.h"
@@ -57,6 +58,7 @@ void ConfigReader::ParseWorldGenerators() {
   file_world_generator_ = false;
 
   vector<string> items = split_str(input_["WORLD_GENERATORS"], ' ');
+  world_generators_strings_ = items;
   for (string& item : items) {
     if (item == "random") {
       world_generators_.push_back(make_shared<RandomEuclideanWorldGenerator>());
@@ -73,11 +75,12 @@ void ConfigReader::ParseLowerBoundAlgorithms() {
   TSP_ASSERT_CONTAINS(input_, "LOWER_BOUND_ALGORITHM");
 
   string item = input_["LOWER_BOUND_ALGORITHM"];
-//  if (item == "held_karp") {
-//    lower_bound_algorithm_ = make_shared<HeldKarpLowerBound>();
-//  } else {
-//    TSP_ILLEGAL;
-//  }
+  lower_bound_algorithm_string_ = item;
+  if (item == "held_karp") {
+    lower_bound_algorithm_ = make_shared<HeldKarpLowerBoundAlgorithm>();
+  } else {
+    TSP_ILLEGAL;
+  }
 }
 
 void ConfigReader::ParseConstructiveAlgorithms() {
@@ -86,13 +89,16 @@ void ConfigReader::ParseConstructiveAlgorithms() {
   constructive_algorithms_.clear();
 
   vector<string> items = split_str(input_["CONSTRUCTIVE_ALGORITHMS"], ' ');
+  constructive_algorithms_strings_ = items;
   for (string& item : items) {
     if (item == "random") {
       constructive_algorithms_.push_back(make_shared<RandomConstructiveAlgorithm>());
-//    } else if (item == "nearest_neighbour") {
-//      constructive_algorithms_.push_back(make_shared<NearestNeighbourConstructiveAlgorithm>());
-//    } else if (item == "brute_force") {
-//      constructive_algorithms_.push_back(make_shared<NearestNeighbourConstructiveAlgorithm>());
+    } else if (item == "nearest_neighbour") {
+      constructive_algorithms_.push_back(make_shared<NearestNeighbourConstructiveAlgorithm>());
+    } else if (item == "brute_force") {
+      constructive_algorithms_.push_back(make_shared<BruteForceConstructiveAlgorithm>());
+    } else if (item == "greedy") {
+      constructive_algorithms_.push_back(make_shared<GreedyConstructiveAlgorithm>());
 //    } else if (item == "christofides") {
 //      constructive_algorithms_.push_back(make_shared<ChristofidesConstructiveAlgorithm>());
     } else {
@@ -107,13 +113,14 @@ void ConfigReader::ParseImprovementAlgorithms() {
   improvement_algorithms_.clear();
 
   vector<string> items = split_str(input_["IMPROVEMENT_ALGORITHMS"], ' ');
+  improvement_algorithms_strings_ = items;
   for (string& item : items) {
     if (item == "kopt2") {
       improvement_algorithms_.push_back(make_shared<Kopt2ImprovementAlgorithm>());
     } else if (item == "kopt2_search") {
       improvement_algorithms_.push_back(make_shared<Kopt2SearchImprovementAlgorithm>());
-//    } else if (item == "ant_colony") {
-//      improvement_algorithms_.push_back(make_shared<AntColonyImprovementAlgorithm>());
+    } else if (item == "ant_colony") {
+      improvement_algorithms_.push_back(make_shared<AntColonyImprovementAlgorithm>());
 //    } else if (item == "lin_kernighan") {
 //      improvement_algorithms_.push_back(make_shared<LinKernighanImprovementAlgorithm>());
     } else {

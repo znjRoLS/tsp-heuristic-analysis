@@ -11,7 +11,7 @@ namespace TSP {
 void BruteForceConstructiveAlgorithm::Reset() {
   current_brute_force_path_.clear();
 
-  for (int i = 0 ; i < world_->size ; i ++) {
+  for (int i = 0; i < world_->size; i++) {
     current_brute_force_path_.push_back(i);
   }
   current_brute_force_path_.push_back(0);
@@ -24,7 +24,7 @@ void BruteForceConstructiveAlgorithm::Reset() {
 bool BruteForceConstructiveAlgorithm::Iterate(int granularity) {
 
   if (granularity == 1) {
-    if (!next_permutation(current_brute_force_path_.begin()+1, current_brute_force_path_.end()-1)) {
+    if (!next_permutation(current_brute_force_path_.begin() + 1, current_brute_force_path_.end() - 1)) {
       return false;
     } else {
       double new_path_cost = State::PathCost(current_brute_force_path_, world_->distances_);
@@ -52,19 +52,19 @@ int BruteForceConstructiveAlgorithm::GetMaxGranularity() {
 void BruteForceConstructiveAlgorithm::SetVisuals() {
   visualization_.clear();
 
-  unordered_set<pair<int,int>> current_path_edges;
+  unordered_set<pair<int, int>> current_path_edges;
   int last = current_path_[0];
-  for (unsigned nexti = 1 ; nexti < current_path_.size() ; nexti ++) {
+  for (unsigned nexti = 1; nexti < current_path_.size(); nexti++) {
     int next = current_path_[nexti];
     current_path_edges.insert({last, next});
     last = next;
   }
 
   last = current_brute_force_path_[0];
-  for (unsigned nexti = 1 ; nexti < current_brute_force_path_.size() ; nexti ++) {
+  for (unsigned nexti = 1; nexti < current_brute_force_path_.size(); nexti++) {
     int next = current_brute_force_path_[nexti];
-    pair<int,int> edge = {last,next};
-    pair<int,int> rev_edge = {next, last};
+    pair<int, int> edge = {last, next};
+    pair<int, int> rev_edge = {next, last};
     if (CONTAINS(current_path_edges, edge) || CONTAINS(current_path_edges, rev_edge)) {
       current_path_edges.erase(edge);
       current_path_edges.erase(rev_edge);
@@ -75,8 +75,8 @@ void BruteForceConstructiveAlgorithm::SetVisuals() {
     last = next;
   }
 
-  for (auto& edge : current_path_edges) {
-    visualization_.push_back({edge.first, edge.second, GlobalColor ::green, 1.0});
+  for (auto &edge : current_path_edges) {
+    visualization_.push_back({edge.first, edge.second, GlobalColor::green, 1.0});
   }
 }
 

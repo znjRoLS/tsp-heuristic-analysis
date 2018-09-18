@@ -10,10 +10,15 @@ using std::max;
 using std::to_string;
 using std::numeric_limits;
 
-
 namespace TSP {
 
-AntColonyImprovementAlgorithm::AntColonyImprovementAlgorithm(int variant, int num_ants, double alfa, double beta, double ro, double q, double phi) :
+AntColonyImprovementAlgorithm::AntColonyImprovementAlgorithm(int variant,
+                                                             int num_ants,
+                                                             double alfa,
+                                                             double beta,
+                                                             double ro,
+                                                             double q,
+                                                             double phi) :
     variant_(variant), num_ants_(num_ants), alfa_(alfa), beta_(beta), ro_(ro), q_(q), phi_(phi) {
 
 }
@@ -22,12 +27,12 @@ void AntColonyImprovementAlgorithm::Reset() {
 
   int n = state_->world_->size;
 
-  ants_ = vector<Ant> (num_ants_);
+  ants_ = vector<Ant>(num_ants_);
 
   pheromones_ = make_shared<SquareMatrix<double>>(n);
 
-  for (int i = 0 ; i < n; i ++) {
-    for (int j = 0 ; j < n ; j ++) {
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
       (*pheromones_)[i][j] = phi_;
     }
   }
@@ -52,8 +57,7 @@ bool AntColonyImprovementAlgorithm::Iterate(int granularity) {
         UpdatePheromones();
 
         current_ant_ = 0;
-        ants_ = vector<Ant> (num_ants_);
-
+        ants_ = vector<Ant>(num_ants_);
 
       } else {
         double new_cost = State::PathCost(ants_[current_cost_ant_].current_path_, state_->world_->distances_);
@@ -66,9 +70,9 @@ bool AntColonyImprovementAlgorithm::Iterate(int granularity) {
 
         visualization_.clear();
 
-        auto& path = ants_[current_cost_ant_].current_path_;
+        auto &path = ants_[current_cost_ant_].current_path_;
         int last = path[0];
-        for (unsigned i = 0 ; i < path.size(); i ++) {
+        for (unsigned i = 0; i < path.size(); i++) {
           int next = path[i];
 
           visualization_.push_back({last, next, GlobalColor::green, 0.5});
@@ -78,7 +82,7 @@ bool AntColonyImprovementAlgorithm::Iterate(int granularity) {
 
         path = ants_[current_cost_ant_].current_path_;
         last = path[0];
-        for (unsigned i = 0 ; i < path.size(); i ++) {
+        for (unsigned i = 0; i < path.size(); i++) {
           int next = path[i];
 
           visualization_.push_back({last, next, GlobalColor::darkGreen, 0.5});
@@ -161,7 +165,7 @@ int AntColonyImprovementAlgorithm::AntChosePath(const Ant &ant,
   int current_node = *ant.current_path_.rbegin();
   for (auto &node : ant.unvisited_) {
     double tau = (*pheromones)[current_node][node];
-    double eta = 1.0/(*distances)[current_node][node];
+    double eta = 1.0 / (*distances)[current_node][node];
     weights[node] = pow(tau, alfa_) * pow(eta, beta_);
   }
 
@@ -171,34 +175,34 @@ int AntColonyImprovementAlgorithm::AntChosePath(const Ant &ant,
 void AntColonyImprovementAlgorithm::UpdatePheromones() {
   int n = pheromones_->Size().first;
 
-  for (int i = 0 ; i < n; i ++) {
-    for (int j = 0 ; j < n ; j ++) {
-      (*pheromones_)[i][j] *= 1-ro_;
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+      (*pheromones_)[i][j] *= 1 - ro_;
     }
   }
 
   if (variant_ == 0) {
-    auto& ant = ants_[current_best_ant_];
+    auto &ant = ants_[current_best_ant_];
 
     double ant_path_cost = State::PathCost(ant.current_path_, state_->world_->distances_);
 //  double increment = state_->CurrentPathCost() / ant_path_cost;
     double increment = q_ / ant_path_cost;
 
     int last = ant.current_path_[0];
-    for (unsigned i = 1 ; i < ant.current_path_.size(); i ++) {
+    for (unsigned i = 1; i < ant.current_path_.size(); i++) {
       int next = ant.current_path_[i];
       (*pheromones_)[last][next] += increment;
       (*pheromones_)[next][last] += increment;
       last = next;
     }
   } else if (variant_ == 1) {
-    for (auto& ant : ants_) {
+    for (auto &ant : ants_) {
       double ant_path_cost = State::PathCost(ant.current_path_, state_->world_->distances_);
 //  double increment = state_->CurrentPathCost() / ant_path_cost;
       double increment = q_ / ant_path_cost;
 
       int last = ant.current_path_[0];
-      for (unsigned i = 1 ; i < ant.current_path_.size(); i ++) {
+      for (unsigned i = 1; i < ant.current_path_.size(); i++) {
         int next = ant.current_path_[i];
         (*pheromones_)[last][next] += increment;
         (*pheromones_)[next][last] += increment;
@@ -210,16 +214,16 @@ void AntColonyImprovementAlgorithm::UpdatePheromones() {
   visualization_.clear();
 
   double max_pheromone = 0.0;
-  for (int i = 0 ; i < n; i ++) {
-    for (int j = 0 ; j < n ; j ++) {
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
       max_pheromone = max(max_pheromone, (*pheromones_)[i][j]);
     }
   }
 
-  for (int i = 0 ; i < n; i ++) {
-    for (int j = i+1; j < n; j++) {
+  for (int i = 0; i < n; i++) {
+    for (int j = i + 1; j < n; j++) {
 
-      visualization_.push_back({i, j, GlobalColor::darkGray, (*pheromones_)[i][j]/max_pheromone});
+      visualization_.push_back({i, j, GlobalColor::darkGray, (*pheromones_)[i][j] / max_pheromone});
 
     }
   }

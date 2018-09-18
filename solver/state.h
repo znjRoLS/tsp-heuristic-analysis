@@ -21,7 +21,7 @@ class State {
   const shared_ptr<World> world_;
   Path current_path_;
 
-  static double PathCost(const Path& path, const shared_ptr<SquareMatrix<double>>& distances);
+  static double PathCost(const Path &path, const shared_ptr<SquareMatrix<double>> &distances);
 
  private:
   void SetDefaultPath();

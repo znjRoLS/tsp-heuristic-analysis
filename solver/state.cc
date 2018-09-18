@@ -33,8 +33,8 @@ void State::UpdateOptimalPath(State state) {
   }
 }
 
-double State::PathCost(const Path& path, const shared_ptr<SquareMatrix<double>>& distances) {
-  if (static_cast<int>(path.size()-1) != distances->Size().first) return 0.0;
+double State::PathCost(const Path &path, const shared_ptr<SquareMatrix<double>> &distances) {
+  if (static_cast<int>(path.size() - 1) != distances->Size().first) return 0.0;
 
   double sum = 0;
   int curr_node = path[0];

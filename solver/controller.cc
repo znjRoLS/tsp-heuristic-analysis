@@ -26,6 +26,11 @@ void Controller::IterateConstructiveAlgorithm(int granularity) {
   state_->current_path_ = constructive_algorithm_->GetFinalPath();
 }
 
+void Controller::IterateOptimizedConstructiveAlgorithm() {
+//  constructive_algorithm_->IterateOptimized();
+//  state_->current_path_ = constructive_algorithm_->GetFinalPath();
+}
+
 void Controller::SetImprovementAlgorithm(shared_ptr<ImprovementAlgorithm> algorithm) {
   improvement_algorithm_ = algorithm;
   improvement_algorithm_->SetState(state_);
@@ -34,6 +39,10 @@ void Controller::SetImprovementAlgorithm(shared_ptr<ImprovementAlgorithm> algori
 
 void Controller::IterateImprovementAlgorithm(int granularity) {
   improvement_algorithm_->Iterate(granularity);
+}
+
+void Controller::IterateOptimizedImprovementAlgorithm() {
+//  improvement_algorithm_->IterateOptimized();
 }
 
 shared_ptr<State> Controller::GetCurrentState() {

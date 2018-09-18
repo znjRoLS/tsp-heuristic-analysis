@@ -17,7 +17,9 @@ class AntColonyImprovementAlgorithm : public ImprovementAlgorithm {
     Path current_path_;
   };
 
-  int AntChosePath(const Ant& ant, const shared_ptr<SquareMatrix<double>>& pheromones, const shared_ptr<SquareMatrix<double>>& distances);
+  int AntChosePath(const Ant &ant,
+                   const shared_ptr<SquareMatrix<double>> &pheromones,
+                   const shared_ptr<SquareMatrix<double>> &distances);
   void UpdatePheromones();
 
   shared_ptr<SquareMatrix<double>> pheromones_;
