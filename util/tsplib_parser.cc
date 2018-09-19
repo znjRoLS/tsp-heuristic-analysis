@@ -29,19 +29,31 @@ bool TSPLIBParser::IterateNextPoint() {
   // Usually only one iteration, but easier to program this way
   while (getline(input_file_, line)) {
     // Assumption is that all the lines not starting with a number are info.
-    if (!isdigit(line[0])) {
+
+    unsigned curr_i=0;
+    while(curr_i < line.size() && isspace(line[curr_i]) ) curr_i++;
+
+    if (curr_i >= line.size()) continue;
+
+    if (!isdigit(line[curr_i])) {
       info_ += "\n" + line;
       continue;
     }
     info_processed_ = true;
 
-    vector<string> tokens = split_str(line, ' ');
+    vector<string> tokens = split_str(line.substr(curr_i), ' ');
 
-    if (tokens.size() != 3) break;
+    vector<string> non_empty_tokens;
+
+    for (auto& item : tokens) {
+      if (!item.empty()) non_empty_tokens.push_back(item);
+    }
+
+    if (non_empty_tokens.size() != 3) break;
 
 //    double first = stod(tokens[0]);
-    double second = stod(tokens[1]);
-    double third = stod(tokens[2]);
+    double second = stod(non_empty_tokens[1]);
+    double third = stod(non_empty_tokens[2]);
 
     point_ = {second, third};
     return true;
