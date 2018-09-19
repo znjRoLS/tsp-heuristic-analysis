@@ -186,6 +186,9 @@ void Runner::RunSingleLowerBound() {
   output["world_size"] = to_string(current_state_.world_size);
   output["world_id"] = to_string(current_state_.world_random_identifier);
   output["run_iteration"] = to_string(current_state_.iter);
+  if (current_state_.inputs_from_file) {
+    output["input_file"] = current_state_.input_file;
+  }
 
   results_writer_->AddItem(output);
 }
@@ -214,6 +217,9 @@ void Runner::RunSingleConstructive() {
   output["world_size"] = to_string(current_state_.world_size);
   output["world_id"] = to_string(current_state_.world_random_identifier);
   output["run_iteration"] = to_string(current_state_.iter);
+  if (current_state_.inputs_from_file) {
+    output["input_file"] = current_state_.input_file;
+  }
 
   results_writer_->AddItem(output);
 }
@@ -264,6 +270,9 @@ void Runner::RunSingleImprovement() {
       output["world_id"] = to_string(current_state_.world_random_identifier);
       output["random_path_id"] = to_string(current_state_.path_random_identifier);
       output["run_iteration"] = to_string(current_state_.iter);
+      if (current_state_.inputs_from_file) {
+        output["input_file"] = current_state_.input_file;
+      }
 
       results_writer_->AddItem(output);
     }
