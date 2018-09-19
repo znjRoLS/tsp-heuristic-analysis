@@ -150,6 +150,8 @@ void ConfigReader::ParseImprovementAlgorithms() {
       improvement_algorithms_.push_back(make_shared<AntColonyImprovementAlgorithm>(0, 10, 1, 3, 0.5, 10, 10));
     } else if (item == "ant_colony_1") {
       improvement_algorithms_.push_back(make_shared<AntColonyImprovementAlgorithm>(1, 10, 1, 3, 0.5, 10, 10));
+    } else if (item == "ant_colony_2") {
+      improvement_algorithms_.push_back(make_shared<AntColonyImprovementAlgorithm>(0, 1, 1, 3, 0.5, 10, 10));
 //    } else if (item == "lin_kernighan") {
 //      improvement_algorithms_.push_back(make_shared<LinKernighanImprovementAlgorithm>());
     } else {

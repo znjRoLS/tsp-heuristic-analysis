@@ -7,7 +7,7 @@ int main() {
 
   Runner runner;
 
-  vector<string> input_files {"bench1.conf"};
+  vector<string> input_files {"bench3.conf"};
 
   runner.Run("../benchmark/configs/", input_files, "../benchmark/outputs/");
 

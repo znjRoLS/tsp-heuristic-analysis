@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "split_str.h"
+#include <cassert>
 
 using std::vector;
 using std::stod;
@@ -10,6 +11,7 @@ using std::stod;
 TSPLIBParser::TSPLIBParser(string file_path) :
     input_file_(file_path) {
 
+  assert(input_file_.is_open());
 }
 
 TSPLIBParser::~TSPLIBParser() {
