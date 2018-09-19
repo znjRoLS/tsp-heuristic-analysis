@@ -13,6 +13,10 @@
 #include "file_euclidean_world_generator.h"
 #include "random_constructive_algorithm.h"
 #include "random.h"
+#include <ctime>   // localtime
+#include <sstream> // stringstream
+#include <iomanip> // put_time
+#include <string>  // string
 
 using std::make_unique;
 using std::cout;
@@ -274,7 +278,12 @@ bool Runner::SingleImprovementEndCriteria() {
 }
 
 string Runner::LogInfo() {
-  return "pisi vreme ";
+  auto now = std::chrono::system_clock::now();
+  auto in_time_t = std::chrono::system_clock::to_time_t(now);
+
+  std::stringstream ss;
+  ss << std::put_time(std::localtime(&in_time_t), "%Y-%m-%d %X") << "| ";
+  return ss.str();
 }
 
 } // namespace TSP::Benchmark
