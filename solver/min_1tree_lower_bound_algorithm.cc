@@ -106,4 +106,8 @@ bool Min1treeLowerBoundAlgorithm::CheckFoundOptimalPath(unordered_set<pair<int, 
   return false;
 }
 
+void Min1treeLowerBoundAlgorithm::IterateOptimized() {
+  Iterate(0);
+}
+
 } // namespace TSP

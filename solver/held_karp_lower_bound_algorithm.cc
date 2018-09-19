@@ -175,6 +175,117 @@ bool HeldKarpLowerBoundAlgorithm::Iterate(int granularity) {
   return true;
 }
 
+void HeldKarpLowerBoundAlgorithm::IterateOptimized() {
+
+  int n = world_->size;
+
+  optimal_path_.clear();
+
+
+  if (variant_ == 2) {
+
+    shared_ptr<SquareMatrix<double>> distances = make_shared<SquareMatrix<double>>(world_->distances_->GetData());
+
+    vector<double> pi (n, 0);
+    bool initial_increase = true;
+
+    // set first step to minimum edge
+    double min_edge = numeric_limits<double>::max();
+    for (int i = 0; i < n; i++) {
+      for (int j = i+1; j < n; j++) {
+        min_edge = min(min_edge, (*distances)[i][j]);
+      }
+    }
+    double t = min_edge;
+    int current_period = n/2;
+    int current_iter = 0;
+
+    double last_total_weight = 0.0;
+
+    vector<int> last_v (n,0);
+
+    double largest_t = t;
+
+    while (!FoundOptimalSolution() && current_period > 0 && largest_t/t < step_data_.smallest_t_ratio) {
+
+      int current_node;
+
+      EdgeSet min1tree = MST::Min1TreeSetSpecialNode(distances, &current_node);
+
+      double total_weight = 0;
+      for (auto &edge : min1tree) {
+        total_weight += (*distances)[edge.first][edge.second];
+      }
+
+      for (double pi_elem : pi) {
+        total_weight -= pi_elem * 2;
+      }
+
+      bool w_increase = DOUBLE_GREATER(total_weight, value_);
+
+      if (w_increase) {
+        value_ = total_weight;
+      }
+
+      bool total_weight_increase = DOUBLE_GREATER(total_weight, last_total_weight);
+      last_total_weight = total_weight;
+
+      if (CheckFoundOptimalPath(min1tree)) {
+        break;
+      }
+
+      // updating pi
+
+      vector<int> v(n, -2);
+
+      for (auto &edge : min1tree) {
+        v[edge.first]++;
+        v[edge.second]++;
+      }
+
+      if (initial_increase && w_increase) {
+        t *= 2;
+        largest_t *= 2;
+      } else {
+        initial_increase = false;
+      }
+
+      if (!total_weight_increase) {
+        current_period = current_iter + (current_period - current_iter) /2;
+      }
+
+      // check if period is zero
+      if (current_period == current_iter) {
+        if (w_increase) {
+          current_period *= 2;
+        } else {
+          current_period /= 2;
+          t /= 2;
+
+          current_iter = 0;
+        }
+      }
+
+      for (int i = 0; i < n; i++) {
+        double
+            pi_change = t * (last_v[i] * step_data_.v_intertia_ + v[i] * (1 - step_data_.v_intertia_));
+        pi[i] += pi_change;
+        for (int j = 0; j < n; j++) {
+          if (i == j) continue;
+          (*distances)[i][j] += pi_change;
+          (*distances)[j][i] += pi_change;
+        }
+      }
+
+      last_v = v;
+
+      current_iter++;
+    }
+  }
+
+  return;
+}
+
 int HeldKarpLowerBoundAlgorithm::GetMaxGranularity() {
   return 2;
 }

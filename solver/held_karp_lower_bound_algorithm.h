@@ -15,6 +15,9 @@ class HeldKarpLowerBoundAlgorithm : public LowerBoundAlgorithm {
   HeldKarpLowerBoundAlgorithm(int variant);
   void Reset() override;
   bool Iterate(int granularity) override;
+
+  void IterateOptimized() override;
+
   int GetMaxGranularity() override;
  private:
 
@@ -76,6 +79,7 @@ class HeldKarpLowerBoundAlgorithm : public LowerBoundAlgorithm {
     bool initial_increase_;
 
     const double v_intertia_ = 0.3;
+    const double smallest_t_ratio = 100;
   } step_data_;
 
   double curr_max_1tree_;

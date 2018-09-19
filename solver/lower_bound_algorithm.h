@@ -10,6 +10,7 @@ class LowerBoundAlgorithm : public Algorithm {
   double GetFinalValue();
   bool FoundOptimalSolution();
   Path GetOptimalPath();
+  virtual void IterateOptimized() = 0;
 
  protected:
   double value_;

@@ -168,7 +168,7 @@ void Runner::RunSingleLowerBound() {
   current_state_.lower_bound_algorithm->Reset();
 
   auto start = std::chrono::high_resolution_clock::now();
-  current_state_.lower_bound_algorithm->Iterate(0);
+  current_state_.lower_bound_algorithm->IterateOptimized();
   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
       std::chrono::high_resolution_clock::now() - start).count();
   current_state_.lower_bound_value = max(current_state_.lower_bound_value, current_state_.lower_bound_algorithm->GetFinalValue());

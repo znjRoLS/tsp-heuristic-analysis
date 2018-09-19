@@ -15,6 +15,8 @@ class Min1treeLowerBoundAlgorithm : public LowerBoundAlgorithm {
   void Reset() override;
   bool Iterate(int granularity) override;
   int GetMaxGranularity() override;
+
+  void IterateOptimized() override;
  private:
 
   bool CheckFoundOptimalPath(unordered_set<pair<int, int>> edges);
