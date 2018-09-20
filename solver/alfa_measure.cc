@@ -91,7 +91,7 @@ shared_ptr<SquareMatrix<double>> AlfaMeasure(shared_ptr<SquareMatrix<double>> me
 }
 
 
-//shared_ptr<SquareMatrix<double>> ImprovedAlfaMeasure(shared_ptr<SquareMatrix<double>> measure_, int special_node) {
+//shared_ptr<SquareMatrix<double>> ImprovedAlfaMeasure(shared_ptr<SquareMatrix<double>> measure_) {
 //
 //}
 

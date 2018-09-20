@@ -37,7 +37,6 @@ void ConfigReader::LoadConfig(string file_path) {
   constructive_algorithms_strings_.clear();
   input_.clear();
   input_files_.clear();
-  measures_.clear();
   world_sizes_.clear();
 
   file_path_ = file_path;
@@ -56,7 +55,6 @@ void ConfigReader::LoadConfig(string file_path) {
   ParseWorldSizes();
 
   ParseTimeTrackResolution();
-  ParseMeasures();
 }
 
 
@@ -246,25 +244,6 @@ void ConfigReader::ParseTimeTrackResolution() {
 
   if (CONTAINS(input_, "TIME_TRACK_RESOLUTION")) {
     time_track_resolution_ = stoi(input_["TIME_TRACK_RESOLUTION"]);
-  }
-}
-
-void ConfigReader::ParseMeasures() {
-  measure_strings_.clear();
-  measures_.clear();
-
-  if (!CONTAINS(input_, "MEASURES")) return;
-
-  measure_strings_ = split_str(input_["MEASURES"], ' ');
-
-  for (string& item : measure_strings_) {
-    if (item == "classic") {
-      measures_.push_back(Measure::CLASSIC);
-    } else if (item == "alfa") {
-      measures_.push_back(Measure::ALFA);
-    } else if (item == "alfa_improved") {
-      measures_.push_back(Measure::ALFA_IMPROVED);
-    }
   }
 }
 

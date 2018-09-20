@@ -22,10 +22,7 @@ class Algorithm {
   vector<VisualEdge> GetVisualization();
   unordered_map<string, string> GetVisualParams();
 
-  void SetMeasureForOptimizing(shared_ptr<SquareMatrix<double>> measure);
-
  protected:
-  shared_ptr<SquareMatrix<double>> optimizing_measure_;
   vector<VisualEdge> visualization_;
   unordered_map<string, string> visual_params_;
 

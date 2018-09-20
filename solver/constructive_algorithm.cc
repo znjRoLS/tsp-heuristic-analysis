@@ -8,7 +8,6 @@ ConstructiveAlgorithm::~ConstructiveAlgorithm() {}
 
 void ConstructiveAlgorithm::SetWorld(shared_ptr<TSP::World> world) {
   world_ = world;
-  optimizing_measure_ = world_->distances_;
 }
 
 Path ConstructiveAlgorithm::GetFinalPath() {
