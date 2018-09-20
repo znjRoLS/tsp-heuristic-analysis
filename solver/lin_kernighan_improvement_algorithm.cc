@@ -81,7 +81,10 @@ bool LinKernighanImprovementAlgorithm::Iterate(int granularity) {
         });
       }
 
-      visualization_.clear();
+      if(enable_visuals_) {
+        visualization_.clear();
+      }
+
 
       double max_edge = 0;
       for (int i = 0 ; i < n; i ++) {
@@ -100,31 +103,35 @@ bool LinKernighanImprovementAlgorithm::Iterate(int granularity) {
 
       for (int i = 0 ; i < n; i ++) {
         for (int j = i + 1; j < n ; j ++) {
-          visualization_.push_back({i, j, GlobalColor::darkGray, 1/max(0.05, (*optimization_metric_)[i][j]/max_edge)/max_scale});
+          PushVisualEdge({i, j, GlobalColor::darkGray, 1/max(0.05, (*optimization_metric_)[i][j]/max_edge)/max_scale});
         }
       }
 
 
       for (int i = 0 ; i < n; i ++) {
         for (int j = i + 1; j < n; j++) {
-          if ((*optimization_metric_)[i][j] < 0.0001) visualization_.push_back({i, j, GlobalColor::darkGray, 1.0});
+          if ((*optimization_metric_)[i][j] < 0.0001) PushVisualEdge({i, j, GlobalColor::darkGray, 1.0});
         }
       }
 
       return true;
     }
 
-    while(!visualization_.empty() && visualization_.rbegin()->color != GlobalColor::darkGray && visualization_.rbegin()->color != GlobalColor::green) {
-      visualization_.pop_back();
-    }
-    if (!visualization_.empty() && visualization_.rbegin()->color == GlobalColor::green ) {
-      visualization_.rbegin()->color = GlobalColor ::darkGray;
+    if (enable_visuals_) {
+      while(!visualization_.empty() && visualization_.rbegin()->color != GlobalColor::darkGray && visualization_.rbegin()->color != GlobalColor::green) {
+        visualization_.pop_back();
+      }
+      if (!visualization_.empty() && visualization_.rbegin()->color == GlobalColor::green ) {
+        visualization_.rbegin()->color = GlobalColor ::darkGray;
+      }
     }
 
 
     if (current_t_.empty()) {
 
-      visualization_.clear();
+      if (enable_visuals_) {
+        visualization_.clear();
+      }
 
       // end!
       if (static_cast<unsigned>(current_check_edge) == check_order_.size()) {
@@ -138,7 +145,7 @@ bool LinKernighanImprovementAlgorithm::Iterate(int granularity) {
       int t2 = state_->current_path_[(par.first + par.second + n)%n]; // second is 1 or -1, meaning node before or after.
       current_t_.push_back(t1);
       current_t_.push_back(t2);
-      visualization_.push_back({t1, t2, GlobalColor::darkGray, 0.7});
+      PushVisualEdge({t1, t2, GlobalColor::darkGray, 0.7});
 
       curr_t3 = 0;
 
@@ -154,13 +161,13 @@ bool LinKernighanImprovementAlgorithm::Iterate(int granularity) {
       int potential_t3 = sorted_edges_[t2][curr_t3];
 
       if (AlreadyChosen(potential_t3)) {
-        visualization_.push_back({t2, potential_t3, GlobalColor::blue, 0.7});
+        PushVisualEdge({t2, potential_t3, GlobalColor::blue, 0.7});
       } else if (current_tour_edges_[t2].first == potential_t3 || current_tour_edges_[t2].second == potential_t3) {
-        visualization_.push_back({t2, potential_t3, GlobalColor::blue, 0.7});
+        PushVisualEdge({t2, potential_t3, GlobalColor::blue, 0.7});
       } else if ((*dist)[t2][potential_t3] > (*dist)[t1][t2]) {
-        visualization_.push_back({t2, potential_t3, GlobalColor::red, 0.7});
+        PushVisualEdge({t2, potential_t3, GlobalColor::red, 0.7});
       } else {
-        visualization_.push_back({t2, potential_t3, GlobalColor::green, 0.7});
+        PushVisualEdge({t2, potential_t3, GlobalColor::green, 0.7});
         current_t_.push_back(potential_t3);
         curr_t4 = 0;
       }
@@ -176,7 +183,9 @@ bool LinKernighanImprovementAlgorithm::Iterate(int granularity) {
 
       if (curr_t4 == 2) {
         current_t_.pop_back();
-        visualization_.pop_back();
+        if (enable_visuals_) {
+          visualization_.pop_back();
+        }
         return true;
       }
 
@@ -188,21 +197,21 @@ bool LinKernighanImprovementAlgorithm::Iterate(int granularity) {
       }
 
       if (AlreadyChosen(potential_t4)) {
-        visualization_.push_back({t3, potential_t4, GlobalColor::blue, 0.7});
+        PushVisualEdge({t3, potential_t4, GlobalColor::blue, 0.7});
       } else {
         current_t_.push_back(potential_t4);
         if (CheckValidTour()) {
           if (PositiveGain()) {
-            visualization_.push_back({t3, potential_t4, GlobalColor::darkGreen, 0.7});
+            PushVisualEdge({t3, potential_t4, GlobalColor::darkGreen, 0.7});
 
             UpdateTour();
 
           } else {
             curr_t5 = 0;
-            visualization_.push_back({t3, potential_t4, GlobalColor::green, 0.7});
+            PushVisualEdge({t3, potential_t4, GlobalColor::green, 0.7});
           }
         } else {
-          visualization_.push_back({t3, potential_t4, GlobalColor::red, 0.7});
+          PushVisualEdge({t3, potential_t4, GlobalColor::red, 0.7});
           current_t_.pop_back();
         }
       }
@@ -217,25 +226,27 @@ bool LinKernighanImprovementAlgorithm::Iterate(int granularity) {
       int t4 = current_t_[3];
       if (static_cast<unsigned>(curr_t5) == sorted_edges_[t4].size()) {
         current_t_.pop_back();
-        visualization_.pop_back();
+        if (enable_visuals_) {
+          visualization_.pop_back();
+        }
         return true;
       }
 
       int potential_t5 = sorted_edges_[t4][curr_t5];
 
       if (AlreadyChosen(potential_t5)) {
-        visualization_.push_back({t4, potential_t5, GlobalColor::blue, 0.7});
+        PushVisualEdge({t4, potential_t5, GlobalColor::blue, 0.7});
       } else if (current_tour_edges_[t4].first == potential_t5 || current_tour_edges_[t4].second == potential_t5) {
-        visualization_.push_back({t4, potential_t5, GlobalColor::blue, 0.7});
+        PushVisualEdge({t4, potential_t5, GlobalColor::blue, 0.7});
       } else {
 
         current_t_.push_back(potential_t5);
         if (CheckPositiveGain()) {
-          visualization_.push_back({t4, potential_t5, GlobalColor::green, 0.7});
+          PushVisualEdge({t4, potential_t5, GlobalColor::green, 0.7});
 
           curr_t[6] = 0;
         } else {
-          visualization_.push_back({t4, potential_t5, GlobalColor::red, 0.7});
+          PushVisualEdge({t4, potential_t5, GlobalColor::red, 0.7});
           current_t_.pop_back();
         }
 
@@ -248,7 +259,9 @@ bool LinKernighanImprovementAlgorithm::Iterate(int granularity) {
       int last_t = *current_t_.rbegin();
       if (curr_t[current_t_.size() + 1] == 2) {
         current_t_.pop_back();
-        visualization_.pop_back();
+        if (enable_visuals_) {
+          visualization_.pop_back();
+        }
         return true;
       }
 
@@ -262,22 +275,22 @@ bool LinKernighanImprovementAlgorithm::Iterate(int granularity) {
       curr_t[current_t_.size() + 1] ++;
 
       if (AlreadyChosen(potential_t)) {
-        visualization_.push_back({last_t, potential_t, GlobalColor::blue, 0.7});
+        PushVisualEdge({last_t, potential_t, GlobalColor::blue, 0.7});
       } else {
         current_t_.push_back(potential_t);
         if (CheckValidTour()) {
           if (PositiveGain()) {
-            visualization_.push_back({last_t, potential_t, GlobalColor::darkGreen, 0.7});
+            PushVisualEdge({last_t, potential_t, GlobalColor::darkGreen, 0.7});
 
             UpdateTour();
 
           } else {
             // its for the next one
             curr_t[current_t_.size() + 1] = 0;
-            visualization_.push_back({last_t, potential_t, GlobalColor::green, 0.7});
+            PushVisualEdge({last_t, potential_t, GlobalColor::green, 0.7});
           }
         } else {
-          visualization_.push_back({last_t, potential_t, GlobalColor::red, 0.7});
+          PushVisualEdge({last_t, potential_t, GlobalColor::red, 0.7});
           current_t_.pop_back();
         }
       }
@@ -289,7 +302,9 @@ bool LinKernighanImprovementAlgorithm::Iterate(int granularity) {
       int last_t = *current_t_.rbegin();
       if (curr_t[current_t_.size() + 1] == try_nearest_) {
         current_t_.pop_back();
-        visualization_.pop_back();
+        if (enable_visuals_) {
+          visualization_.pop_back();
+        }
         return true;
       }
 
@@ -298,19 +313,19 @@ bool LinKernighanImprovementAlgorithm::Iterate(int granularity) {
       curr_t[current_t_.size() + 1] ++;
 
       if (AlreadyChosen(potential_t)) {
-        visualization_.push_back({last_t, potential_t, GlobalColor::blue, 0.7});
+        PushVisualEdge({last_t, potential_t, GlobalColor::blue, 0.7});
       } else if (current_tour_edges_[last_t].first == potential_t || current_tour_edges_[last_t].second == potential_t) {
-        visualization_.push_back({last_t, potential_t, GlobalColor::blue, 0.7});
+        PushVisualEdge({last_t, potential_t, GlobalColor::blue, 0.7});
       } else {
 
         current_t_.push_back(potential_t);
         if (CheckPositiveGain()) {
-          visualization_.push_back({last_t, potential_t, GlobalColor::green, 0.7});
+          PushVisualEdge({last_t, potential_t, GlobalColor::green, 0.7});
 
           curr_t[current_t_.size() + 1] = 0;
 
         } else {
-          visualization_.push_back({last_t, potential_t, GlobalColor::red, 0.7});
+          PushVisualEdge({last_t, potential_t, GlobalColor::red, 0.7});
           current_t_.pop_back();
         }
 
@@ -427,19 +442,20 @@ bool LinKernighanImprovementAlgorithm::CheckPositiveGain() {
 void LinKernighanImprovementAlgorithm::UpdateTour() {
   int n = state_->world_->size;
 
-
-  visualization_.clear();
+  if (enable_visuals_) {
+    visualization_.clear();
+  }
   int vis_last_node = current_t_[0];
   for (unsigned i = 1; i < current_t_.size(); i ++) {
     int next_node = current_t_[i];
     if (i % 2 == 1) {
-      visualization_.push_back({vis_last_node, next_node, GlobalColor::red, 1.0});
+      PushVisualEdge({vis_last_node, next_node, GlobalColor::red, 1.0});
     } else {
-      visualization_.push_back({vis_last_node, next_node, GlobalColor::green, 1.0});
+      PushVisualEdge({vis_last_node, next_node, GlobalColor::green, 1.0});
     }
     vis_last_node = next_node;
   }
-  visualization_.push_back({vis_last_node, current_t_[0], GlobalColor::green, 1.0});
+  PushVisualEdge({vis_last_node, current_t_[0], GlobalColor::green, 1.0});
 
   unordered_map<int,int> xs;
   unordered_map<int,int> ys;

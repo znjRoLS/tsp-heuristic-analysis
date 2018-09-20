@@ -66,16 +66,17 @@ bool AntColonyImprovementAlgorithm::Iterate(int granularity) {
           current_best_ant_ = current_cost_ant_;
         }
 
-        visual_params_["current_ant_path_cost"] = to_string(new_cost);
-
-        visualization_.clear();
+        if (enable_visuals_) {
+          visual_params_["current_ant_path_cost"] = to_string(new_cost);
+          visualization_.clear();
+        }
 
         auto &path = ants_[current_cost_ant_].current_path_;
         int last = path[0];
         for (unsigned i = 0; i < path.size(); i++) {
           int next = path[i];
 
-          visualization_.push_back({last, next, GlobalColor::green, 0.5});
+          PushVisualEdge({last, next, GlobalColor::green, 0.5});
 
           last = next;
         }
@@ -85,7 +86,7 @@ bool AntColonyImprovementAlgorithm::Iterate(int granularity) {
         for (unsigned i = 0; i < path.size(); i++) {
           int next = path[i];
 
-          visualization_.push_back({last, next, GlobalColor::darkGreen, 0.5});
+          PushVisualEdge({last, next, GlobalColor::darkGreen, 0.5});
 
           last = next;
         }
@@ -98,7 +99,10 @@ bool AntColonyImprovementAlgorithm::Iterate(int granularity) {
     }
 
     if (ants_[current_ant_].current_path_.empty()) {
-      visualization_.clear();
+      if (enable_visuals_) {
+        visualization_.clear();
+      }
+
       for (int i = 1; i < state_->world_->size; i++) {
         ants_[current_ant_].unvisited_.insert(i);
       }
@@ -109,13 +113,13 @@ bool AntColonyImprovementAlgorithm::Iterate(int granularity) {
     ants_[current_ant_].unvisited_.erase(ant_next_node);
     ants_[current_ant_].current_path_.push_back(ant_next_node);
 
-    visualization_.push_back({(*(ants_[current_ant_].current_path_.rbegin() + 1)),
+    PushVisualEdge({(*(ants_[current_ant_].current_path_.rbegin() + 1)),
                               ((*ants_[current_ant_].current_path_.rbegin())), GlobalColor::green, 0.5});
 
     // end of iterate(1) or iterate(0);
     if (ants_[current_ant_].unvisited_.empty()) {
       ants_[current_ant_].current_path_.push_back(0);
-      visualization_.push_back({(*(ants_[current_ant_].current_path_.rbegin() + 1)),
+      PushVisualEdge({(*(ants_[current_ant_].current_path_.rbegin() + 1)),
                                 (*(ants_[current_ant_].current_path_.rbegin())), GlobalColor::green, 0.5});
 
       current_ant_++;
@@ -211,7 +215,9 @@ void AntColonyImprovementAlgorithm::UpdatePheromones() {
     }
   }
 
-  visualization_.clear();
+  if (enable_visuals_) {
+    visualization_.clear();
+  }
 
   double max_pheromone = 0.0;
   for (int i = 0; i < n; i++) {
@@ -223,7 +229,7 @@ void AntColonyImprovementAlgorithm::UpdatePheromones() {
   for (int i = 0; i < n; i++) {
     for (int j = i + 1; j < n; j++) {
 
-      visualization_.push_back({i, j, GlobalColor::darkGray, (*pheromones_)[i][j] / max_pheromone});
+      PushVisualEdge({i, j, GlobalColor::darkGray, (*pheromones_)[i][j] / max_pheromone});
 
     }
   }

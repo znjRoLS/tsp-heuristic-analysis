@@ -22,9 +22,16 @@ class Algorithm {
   vector<VisualEdge> GetVisualization();
   unordered_map<string, string> GetVisualParams();
 
+  void SetVisualsEnabled(bool enabled);
+
  protected:
+
+  void PushVisualEdge(VisualEdge edge);
+
   vector<VisualEdge> visualization_;
   unordered_map<string, string> visual_params_;
+
+  bool enable_visuals_ = true;
 
 };
 

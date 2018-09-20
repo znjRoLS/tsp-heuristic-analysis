@@ -33,7 +33,9 @@ bool BruteForceConstructiveAlgorithm::Iterate(int granularity) {
         current_path_ = current_brute_force_path_;
       }
 
-      SetVisuals();
+      if (enable_visuals_) {
+        SetVisuals();
+      }
 
       return true;
     }

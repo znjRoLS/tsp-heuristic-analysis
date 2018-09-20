@@ -172,6 +172,7 @@ void Runner::RunSingleWorld() {
 
 void Runner::RunSingleLowerBound() {
   current_state_.lower_bound_algorithm->SetWorld(current_state_.world);
+  current_state_.lower_bound_algorithm->SetVisualsEnabled(false);
   current_state_.lower_bound_algorithm->Reset();
 
   auto start = std::chrono::high_resolution_clock::now();
@@ -199,6 +200,7 @@ void Runner::RunSingleLowerBound() {
 void Runner::RunSingleConstructive() {
 
   current_state_.constructive_algorithm->SetWorld(current_state_.world);
+  current_state_.constructive_algorithm->SetVisualsEnabled(false);
   current_state_.constructive_algorithm->Reset();
 
   auto start = std::chrono::high_resolution_clock::now();
@@ -243,6 +245,7 @@ void Runner::RunSingleStartingPathImprovement() {
 void Runner::RunSingleImprovement() {
   current_state_.improvement_algorithm->SetState(current_state_.state_current);
   current_state_.improvement_algorithm->Reset();
+  current_state_.improvement_algorithm->SetVisualsEnabled(false);
 
   current_state_.improvement_start = std::chrono::high_resolution_clock::now();
 
@@ -250,7 +253,7 @@ void Runner::RunSingleImprovement() {
       std::chrono::high_resolution_clock::now() - current_state_.improvement_start).count();
 
   while (!SingleImprovementEndCriteria()) {
-    current_state_.improvement_algorithm->Iterate(0);
+    current_state_.improvement_algorithm->Iterate(current_state_.improvement_algorithm->GetMaxGranularity());
 
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
         std::chrono::high_resolution_clock::now() - current_state_.improvement_start).count();

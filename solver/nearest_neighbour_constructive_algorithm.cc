@@ -16,7 +16,10 @@ void NearestNeighbourConstructiveAlgorithm::Reset() {
   current_path_.push_back(0);
   current_last_ = 0;
 
-  visualization_.clear();
+  if (enable_visuals_) {
+    visualization_.clear(); 
+  }
+
 
   for (int i = 1; i < world_->size; i++) {
     unvisited_.insert(i);
@@ -30,34 +33,39 @@ void NearestNeighbourConstructiveAlgorithm::Reset() {
 bool NearestNeighbourConstructiveAlgorithm::Iterate(int granularity) {
   if (granularity == 2) {
 
-    if (!visualization_.empty() && visualization_.rbegin()->strength == CONSIDERING) {
-      visualization_.pop_back();
+    if (enable_visuals_) {
+      if (!visualization_.empty() && visualization_.rbegin()->strength == CONSIDERING) {
+        visualization_.pop_back();
+      }
     }
 
     if (current_processing_ != unvisited_.end()) {
 
       if ((*world_->distances_)[current_last_][*current_processing_] < current_closest_dist_) {
-
+      if (enable_visuals_) {
         if (!visualization_.empty() && visualization_.rbegin()->strength == BEST) {
           visualization_.pop_back();
         }
+      }
 
         current_closest_ = *current_processing_;
         current_closest_dist_ = (*world_->distances_)[current_last_][current_closest_];
 
-        visualization_.push_back({current_last_, current_closest_, GlobalColor::green, BEST});
+        PushVisualEdge({current_last_, current_closest_, GlobalColor::green, BEST});
       } else {
-        visualization_.push_back({current_last_, *current_processing_, GlobalColor::darkGreen, CONSIDERING});
+        PushVisualEdge({current_last_, *current_processing_, GlobalColor::darkGreen, CONSIDERING});
       }
 
       current_processing_++;
 
     } else {
 
-      TSP_ASSERT_EQ(visualization_.rbegin()->strength, BEST);
-
+      if (enable_visuals_) {
+        TSP_ASSERT_EQ(visualization_.rbegin()->strength, BEST);
+      
       visualization_.rbegin()->strength = CHOSEN;
       visualization_.rbegin()->color = GlobalColor::lightGray;
+      }
 
       current_path_.push_back(current_closest_);
       current_last_ = current_closest_;

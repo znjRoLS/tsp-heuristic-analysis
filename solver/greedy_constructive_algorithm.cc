@@ -32,12 +32,14 @@ bool GreedyConstructiveAlgorithm::Iterate(int granularity) {
 
   if (granularity == 2) {
 
-    if (!visualization_.empty() && visualization_.rbegin()->color == GlobalColor::green) {
-      visualization_.rbegin()->color = GlobalColor::lightGray;
-      visualization_.rbegin()->strength = 0.5;
-    }
-    if (!visualization_.empty() && visualization_.rbegin()->color == GlobalColor::red) {
-      visualization_.pop_back();
+    if (enable_visuals_) {
+      if (!visualization_.empty() && visualization_.rbegin()->color == GlobalColor::green) {
+        visualization_.rbegin()->color = GlobalColor::lightGray;
+        visualization_.rbegin()->strength = 0.5;
+      }
+      if (!visualization_.empty() && visualization_.rbegin()->color == GlobalColor::red) {
+        visualization_.pop_back();
+      }
     }
 
     // only the last edge left
@@ -54,7 +56,7 @@ bool GreedyConstructiveAlgorithm::Iterate(int granularity) {
 
       selected_edges_.insert({nodes_left[0], nodes_left[1]});
 
-      visualization_.push_back({nodes_left[0], nodes_left[1], GlobalColor::lightGray, 0.5});
+      PushVisualEdge({nodes_left[0], nodes_left[1], GlobalColor::lightGray, 0.5});
 
       TransformFinalPath();
 
@@ -73,11 +75,11 @@ bool GreedyConstructiveAlgorithm::Iterate(int granularity) {
       node_degrees_[edge.second]++;
       disjoint_set_->Merge(edge.first, edge.second);
 
-      visualization_.push_back({edge.first, edge.second, GlobalColor::green, 1.0});
+      PushVisualEdge({edge.first, edge.second, GlobalColor::green, 1.0});
 
     } else {
 
-      visualization_.push_back({edge.first, edge.second, GlobalColor::red, 0.5});
+      PushVisualEdge({edge.first, edge.second, GlobalColor::red, 0.5});
     }
 
     edges_.erase(edge_iter);

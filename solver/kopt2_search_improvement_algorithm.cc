@@ -24,7 +24,9 @@ bool Kopt2SearchImprovementAlgorithm::Iterate(int granularity) {
   if (granularity == 2) {
     reset_ = false;
 
-    visualization_.clear();
+    if (enable_visuals_) {
+      visualization_.clear();
+    }
 
     int node_a = state_->current_path_[current_search_first_edge_];
     int node_b = state_->current_path_[current_search_first_edge_ + 1];
@@ -41,18 +43,18 @@ bool Kopt2SearchImprovementAlgorithm::Iterate(int granularity) {
               state_->current_path_.begin() + current_search_second_edge_ + 1);
       Reset();
 
-      visualization_.push_back({node_a, node_b, GlobalColor::red, 0.5});
-      visualization_.push_back({node_c, node_d, GlobalColor::red, 0.5});
-      visualization_.push_back({node_a, node_c, GlobalColor::green, 1.0});
-      visualization_.push_back({node_b, node_d, GlobalColor::green, 1.0});
+      PushVisualEdge({node_a, node_b, GlobalColor::red, 0.5});
+      PushVisualEdge({node_c, node_d, GlobalColor::red, 0.5});
+      PushVisualEdge({node_a, node_c, GlobalColor::green, 1.0});
+      PushVisualEdge({node_b, node_d, GlobalColor::green, 1.0});
 
       return true;
     } else {
 
-      visualization_.push_back({node_a, node_b, GlobalColor::green, 1.0});
-      visualization_.push_back({node_c, node_d, GlobalColor::green, 1.0});
-      visualization_.push_back({node_a, node_c, GlobalColor::lightGray, 0.5});
-      visualization_.push_back({node_b, node_d, GlobalColor::lightGray, 0.5});
+      PushVisualEdge({node_a, node_b, GlobalColor::green, 1.0});
+      PushVisualEdge({node_c, node_d, GlobalColor::green, 1.0});
+      PushVisualEdge({node_a, node_c, GlobalColor::lightGray, 0.5});
+      PushVisualEdge({node_b, node_d, GlobalColor::lightGray, 0.5});
 
       current_search_second_edge_++;
       // if the first edge is 0, second edge first invalid value is n-1, but otherwise its n;

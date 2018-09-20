@@ -28,12 +28,14 @@ bool Min1treeLowerBoundAlgorithm::Iterate(int granularity) {
       value_ += (*world_->distances_)[edge.first][edge.second];
     }
 
-    visualization_.clear();
+    if (enable_visuals_) {
+      visualization_.clear();
+    }
     for (auto &edge : mst) {
       if (edge.first == current_node_ || edge.second == current_node_) {
-        visualization_.push_back({edge.first, edge.second, GlobalColor::green, 1.0});
+        PushVisualEdge({edge.first, edge.second, GlobalColor::green, 1.0});
       } else {
-        visualization_.push_back({edge.first, edge.second, GlobalColor::green, 0.5});
+        PushVisualEdge({edge.first, edge.second, GlobalColor::green, 0.5});
       }
     }
 
@@ -57,9 +59,9 @@ bool Min1treeLowerBoundAlgorithm::Iterate(int granularity) {
 //    visualization_.clear();
 //    for (auto &edge : mst) {
 //      if (edge.first == current_node_ || edge.second == current_node_) {
-//        visualization_.push_back({edge.first, edge.second, GlobalColor::green, 1.0});
+//        PushVisualEdge({edge.first, edge.second, GlobalColor::green, 1.0});
 //      } else {
-//        visualization_.push_back({edge.first, edge.second, GlobalColor::green, 0.5});
+//        PushVisualEdge({edge.first, edge.second, GlobalColor::green, 0.5});
 //      }
 //    }
 //
