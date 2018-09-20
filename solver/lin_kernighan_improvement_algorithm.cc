@@ -18,7 +18,6 @@ variant_(variant), metric_initialized_(false) {
 }
 
 void LinKernighanImprovementAlgorithm::Reset() {
-  optimization_metric_ = nullptr;
   metric_initialized_ = false;
   sorted_edges_.clear();
   current_check_edge = 0;
