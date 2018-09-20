@@ -16,7 +16,10 @@ class FileEuclideanWorldGenerator : public EuclideanWorldGenerator {
   /// This parameter doesn't do anything
   shared_ptr<Nodes2> GenerateNodes(int n) override;
 
+  shared_ptr<World> GenerateWorld(int n) override;
+
   void SetFile(string file_path);
+
  private:
   unique_ptr<TSPLIBParser> parser_;
 };

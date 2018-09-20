@@ -11,11 +11,14 @@ using std::queue;
 
 namespace TSP {
 
-shared_ptr<SquareMatrix<double>> AlfaMeasure(shared_ptr<SquareMatrix<double>> measure_, int special_node) {
+shared_ptr<World> AlfaMeasure::TransformMeasure(shared_ptr<TSP::World> world) {
 
-  int n = measure_->Size().first;
+  const shared_ptr<SquareMatrix<double>>& measure = world->distances_;
 
-  auto min1tree = MST::Min1Tree(measure_, special_node);
+  int n = measure->Size().first;
+  int special_node;
+
+  auto min1tree = MST::Min1TreeSetSpecialNode(measure, &special_node);
 
   // this is actually beta for now
   auto alfa = make_shared<SquareMatrix<double>>(n);
@@ -29,10 +32,10 @@ shared_ptr<SquareMatrix<double>> AlfaMeasure(shared_ptr<SquareMatrix<double>> me
   for (auto &edge : min1tree) {
     if (edge.first == special_node) {
       connected_special_nodes.push_back(edge.second);
-      longer_special_node_edge = max(longer_special_node_edge, (*measure_)[edge.first][edge.second]);
+      longer_special_node_edge = max(longer_special_node_edge, (*measure)[edge.first][edge.second]);
     } else if (edge.second == special_node) {
       connected_special_nodes.push_back(edge.first);
-      longer_special_node_edge = max(longer_special_node_edge, (*measure_)[edge.first][edge.second]);
+      longer_special_node_edge = max(longer_special_node_edge, (*measure)[edge.first][edge.second]);
     }
   }
 
@@ -41,7 +44,7 @@ shared_ptr<SquareMatrix<double>> AlfaMeasure(shared_ptr<SquareMatrix<double>> me
     if (j == connected_special_nodes[0] || j == connected_special_nodes[1]) {
       (*alfa)[special_node][j] = (*alfa)[j][special_node] = 0;
     } else {
-      (*alfa)[special_node][j] = (*alfa)[j][special_node] = (*measure_)[special_node][j] - longer_special_node_edge;
+      (*alfa)[special_node][j] = (*alfa)[j][special_node] = (*measure)[special_node][j] - longer_special_node_edge;
     }
   }
 
@@ -67,7 +70,7 @@ shared_ptr<SquareMatrix<double>> AlfaMeasure(shared_ptr<SquareMatrix<double>> me
     for (int first_level_node : edges[root_node]) {
       bfs.push(first_level_node);
       visited[first_level_node] = true;
-      beta[first_level_node] = (*measure_)[root_node][first_level_node];
+      beta[first_level_node] = (*measure)[root_node][first_level_node];
     }
 
     while (!bfs.empty()) {
@@ -80,13 +83,13 @@ shared_ptr<SquareMatrix<double>> AlfaMeasure(shared_ptr<SquareMatrix<double>> me
         bfs.push(child);
         visited[child] = true;
 
-        beta[child] = max(beta[curr_node], (*measure_)[child][curr_node]);
-        (*alfa)[root_node][child] = (*alfa)[child][root_node] = (*measure_)[root_node][child] - beta[child];
+        beta[child] = max(beta[curr_node], (*measure)[child][curr_node]);
+        (*alfa)[root_node][child] = (*alfa)[child][root_node] = (*measure)[root_node][child] - beta[child];
       }
     }
   }
 
-  return alfa;
+  return make_shared<World>(World{world->size, world->world_type_, alfa, world->nodes_});
 }
 
 

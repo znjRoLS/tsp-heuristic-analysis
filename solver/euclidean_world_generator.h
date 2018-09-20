@@ -18,6 +18,6 @@ class EuclideanWorldGenerator {
   virtual shared_ptr<Nodes2> GenerateNodes(int n) = 0;
 
 //  shared_ptr<World> GenerateWorld(int n) override;
-  shared_ptr<World> GenerateWorld(int n);
+  virtual shared_ptr<World> GenerateWorld(int n) = 0;
 };
 }

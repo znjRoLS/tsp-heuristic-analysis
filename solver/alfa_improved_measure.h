@@ -7,7 +7,7 @@ using std::shared_ptr;
 
 namespace TSP {
 
-class AlfaMeasure : public Measure {
+class AlfaImprovedMeasure : public Measure {
  public:
   shared_ptr<World> TransformMeasure(shared_ptr<World> world) override;
 
