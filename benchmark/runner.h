@@ -27,6 +27,7 @@ class Runner {
   void RunSingleConstructive();
   void RunSingleStartingPathImprovement();
   void RunSingleImprovement();
+  void RunSingleMeasure();
   bool SingleImprovementEndCriteria();
 
   struct CurrentState {
@@ -50,6 +51,8 @@ class Runner {
     std::chrono::time_point<std::chrono::high_resolution_clock> improvement_start;
     string input_file;
     bool inputs_from_file;
+    string measure_string;
+    ConfigReader::Measure measure;
   } current_state_;
 
 

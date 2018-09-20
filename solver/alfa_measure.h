@@ -1,16 +1,15 @@
 #pragma once
 
 #include <memory>
-#include "measure.h"
+#include "square_matrix.h"
 
 using std::shared_ptr;
 
 namespace TSP {
 
-class AlfaMeasure : public Measure {
- public:
-  shared_ptr<World> TransformMeasure(shared_ptr<World> world) override;
+shared_ptr<SquareMatrix<double>> AlfaMeasure(shared_ptr<SquareMatrix<double>> measure);
 
-};
+shared_ptr<SquareMatrix<double>> AlfaImprovedMeasure(shared_ptr<SquareMatrix<double>> measure);
+
 
 } // namespace TSP

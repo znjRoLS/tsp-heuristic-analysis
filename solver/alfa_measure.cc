@@ -11,9 +11,7 @@ using std::queue;
 
 namespace TSP {
 
-shared_ptr<World> AlfaMeasure::TransformMeasure(shared_ptr<TSP::World> world) {
-
-  const shared_ptr<SquareMatrix<double>>& measure = world->distances_;
+shared_ptr<SquareMatrix<double>> AlfaMeasure(shared_ptr<SquareMatrix<double>> measure) {
 
   int n = measure->Size().first;
   int special_node;
@@ -89,7 +87,7 @@ shared_ptr<World> AlfaMeasure::TransformMeasure(shared_ptr<TSP::World> world) {
     }
   }
 
-  return make_shared<World>(World{world->size, world->world_type_, alfa, world->nodes_});
+  return alfa;
 }
 
 

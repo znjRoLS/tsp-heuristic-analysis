@@ -25,6 +25,12 @@ class ConfigReader {
 //    LOWER_BOUND,
 //  };
 
+enum Measure {
+  CLASSIC,
+  ALFA,
+  ALFA_IMPROVED,
+};
+
   void LoadConfig(string file_path);
 
   string file_path_;
@@ -38,6 +44,8 @@ class ConfigReader {
   vector<string> improvement_algorithms_strings_;
   vector<shared_ptr<ImprovementAlgorithm>> improvement_algorithms_;
   vector<string> input_files_;
+  vector<Measure> measures_;
+  vector<string> measure_strings_;
   vector<int> world_sizes_;
   int num_repeat_;
   int num_random_constructive_repeat_;
@@ -66,6 +74,7 @@ class ConfigReader {
   void ParseNumRuns();
   void ParseWorldSizes();
   void ParseTimeTrackResolution();
+  void ParseMeasures();
 
 };
 

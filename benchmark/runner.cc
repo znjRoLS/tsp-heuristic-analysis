@@ -6,12 +6,14 @@
 #define LOG3 LOG2 << "  "
 #define LOG4 LOG3 << "  "
 #define LOG5 LOG4 << "  "
+#define LOG6 LOG5 << "  "
 
 #include <memory>
 #include <iostream>
 #include "controller.h"
 #include "file_euclidean_world_generator.h"
 #include "random_constructive_algorithm.h"
+#include "alfa_measure.h"
 #include "random.h"
 #include <ctime>   // localtime
 #include <sstream> // stringstream
@@ -119,6 +121,24 @@ void Runner::RunFileWorldGenerator() {
 }
 
 void Runner::RunSingleWorld() {
+
+  if (config_reader_->measures_.empty()) {
+    current_state_.measure_string = "undefined";
+    current_state_.measure = ConfigReader::Measure::CLASSIC;
+    RunSingleMeasure();
+  } else {
+    for (unsigned m_iter = 0; m_iter < config_reader_->measure_strings_.size(); m_iter ++) {
+
+      LOG4 << "Running measure: " << config_reader_->measure_strings_[m_iter] << endl;
+      current_state_.measure = config_reader_->measures_[m_iter];
+      current_state_.measure_string = config_reader_->measure_strings_[m_iter];
+      RunSingleMeasure();
+    }
+  }
+
+}
+
+void Runner::RunSingleMeasure() {
   current_state_.lower_bound_calculated = false;
   current_state_.lower_bound_value = 0.0;
 
@@ -126,7 +146,7 @@ void Runner::RunSingleWorld() {
 
   for (unsigned lb_iter = 0; lb_iter < config_reader_->lower_bound_algorithms_.size(); lb_iter++) {
 
-    LOG4 << "Running lower bound: " << config_reader_->lower_bound_algorithms_strings_[lb_iter] << endl;
+    LOG5 << "Running lower bound: " << config_reader_->lower_bound_algorithms_strings_[lb_iter] << endl;
 
     current_state_.lower_bound_calculated = true;
     current_state_.lower_bound_algorithm = config_reader_->lower_bound_algorithms_[lb_iter];
@@ -139,7 +159,7 @@ void Runner::RunSingleWorld() {
 
   for (unsigned ca_iter = 0; ca_iter < config_reader_->constructive_algorithms_.size(); ca_iter++) {
 
-    LOG4 << "Running constructive: " << config_reader_->constructive_algorithms_strings_[ca_iter] << endl;
+    LOG5 << "Running constructive: " << config_reader_->constructive_algorithms_strings_[ca_iter] << endl;
 
     current_state_.constructive_algorithm = config_reader_->constructive_algorithms_[ca_iter];
     current_state_.constructive_algorithm_string = config_reader_->constructive_algorithms_strings_[ca_iter];
@@ -151,7 +171,7 @@ void Runner::RunSingleWorld() {
 
   for (int rca_iter = 0; rca_iter < config_reader_->num_random_constructive_repeat_; rca_iter++ ) {
 
-    LOG4 << "Running random constructive for improvement, num: " << rca_iter << endl;
+    LOG5 << "Running random constructive for improvement, num: " << rca_iter << endl;
 
     shared_ptr<ConstructiveAlgorithm> random_constructive_algorithm = make_shared<RandomConstructiveAlgorithm>();
 
@@ -196,6 +216,16 @@ void Runner::RunSingleLowerBound() {
 void Runner::RunSingleConstructive() {
 
   current_state_.constructive_algorithm->SetWorld(current_state_.world);
+  switch (current_state_.measure) {
+    case ConfigReader::Measure::CLASSIC:
+      break;
+    case ConfigReader::Measure::ALFA:
+      current_state_.constructive_algorithm->SetMeasureForOptimizing(AlfaMeasure(current_state_.world->distances_));
+
+    case ConfigReader::Measure::ALFA_IMPROVED:
+//      current_state_.constructive_algorithm->SetMeasureForOptimizing(AlfaImprovedMeasure(current_state_.world->distances_));
+      break;
+  }
   current_state_.constructive_algorithm->Reset();
 
   auto start = std::chrono::high_resolution_clock::now();
@@ -220,6 +250,7 @@ void Runner::RunSingleConstructive() {
   if (current_state_.inputs_from_file) {
     output["input_file"] = current_state_.input_file;
   }
+  output["measure"] = current_state_.measure_string;
 
   results_writer_->AddItem(output);
 }
@@ -227,7 +258,7 @@ void Runner::RunSingleConstructive() {
 void Runner::RunSingleStartingPathImprovement() {
   for (unsigned ia_iter = 0; ia_iter < config_reader_->improvement_algorithms_.size(); ia_iter++) {
 
-    LOG5 << "Running improvement: " << config_reader_->improvement_algorithms_strings_[ia_iter] << endl;
+    LOG6 << "Running improvement: " << config_reader_->improvement_algorithms_strings_[ia_iter] << endl;
 
     current_state_.improvement_algorithm = config_reader_->improvement_algorithms_[ia_iter];
     current_state_.improvement_algorithm_string = config_reader_->improvement_algorithms_strings_[ia_iter];
@@ -239,6 +270,17 @@ void Runner::RunSingleStartingPathImprovement() {
 
 void Runner::RunSingleImprovement() {
   current_state_.improvement_algorithm->SetState(current_state_.state_current);
+
+  switch (current_state_.measure) {
+    case ConfigReader::Measure::CLASSIC:
+      break;
+    case ConfigReader::Measure::ALFA:
+      current_state_.improvement_algorithm->SetMeasureForOptimizing(AlfaMeasure(current_state_.world->distances_));
+
+    case ConfigReader::Measure::ALFA_IMPROVED:
+//      current_state_.improvement_algorithm->SetMeasureForOptimizing(AlfaImprovedMeasure(current_state_.world->distances_));
+      break;
+  }
   current_state_.improvement_algorithm->Reset();
 
   current_state_.improvement_start = std::chrono::high_resolution_clock::now();
@@ -273,6 +315,7 @@ void Runner::RunSingleImprovement() {
       if (current_state_.inputs_from_file) {
         output["input_file"] = current_state_.input_file;
       }
+      output["measure"] = current_state_.measure_string;
 
       results_writer_->AddItem(output);
     }
