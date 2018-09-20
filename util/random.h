@@ -20,6 +20,8 @@ double GetDouble(double min, double max);
 
 void Shuffle(std::vector<int>::iterator begin, std::vector<int>::iterator end);
 
+void Shuffle(std::vector<std::pair<int,int>>::iterator begin, std::vector<std::pair<int,int>>::iterator end);
+
 template<typename T>
 T GetChoice(vector<T> items) {
   if (items.empty()) return T();

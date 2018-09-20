@@ -11,5 +11,6 @@ shared_ptr<SquareMatrix<double>> AlfaMeasure(shared_ptr<SquareMatrix<double>> me
 
 shared_ptr<SquareMatrix<double>> AlfaImprovedMeasure(shared_ptr<SquareMatrix<double>> measure);
 
+void GetBetterMeasure(shared_ptr<SquareMatrix<double>> measure);
 
 } // namespace TSP

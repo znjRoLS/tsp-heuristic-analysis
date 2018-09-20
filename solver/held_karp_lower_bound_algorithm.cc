@@ -50,6 +50,7 @@ void HeldKarpLowerBoundAlgorithm::Reset() {
   step_data_.current_iter_ = 0;
   step_data_.current_period_ = world_->size / 2;
   step_data_.initial_increase_ = true;
+  step_data_.largest_t_ = 0;
 }
 
 bool HeldKarpLowerBoundAlgorithm::Iterate(int granularity) {
@@ -206,7 +207,7 @@ void HeldKarpLowerBoundAlgorithm::IterateOptimized() {
 
     double largest_t = t;
 
-    while (!FoundOptimalSolution() && current_period > 0 && largest_t/t < step_data_.smallest_t_ratio) {
+    while (!FoundOptimalSolution() && current_period > 0 && largest_t/t < step_data_.largest_t_ratio) {
 
       int current_node;
 
@@ -331,6 +332,12 @@ bool HeldKarpLowerBoundAlgorithm::IteratePi_0(unordered_set<pair<int, int>> min_
       }
     }
   }
+  
+  // check if t is too small
+  step_data_.largest_t_ = max(step_data_.largest_t_, step_data_.t_);
+  if (step_data_.largest_t_/ step_data_.t_ > step_data_.largest_t_ratio) { 
+    return false;
+  }
 
   for (int i = 0; i < n; i++) {
     double pi_change = step_data_.t_ * v[i];
@@ -388,6 +395,11 @@ bool HeldKarpLowerBoundAlgorithm::IteratePi_2(unordered_set<pair<int, int>> min_
         return false;
       }
     }
+  }
+  // check if t is too small
+  step_data_.largest_t_ = max(step_data_.largest_t_, step_data_.t_);
+  if (step_data_.largest_t_/ step_data_.t_ > step_data_.largest_t_ratio) {
+    return false;
   }
 
   for (int i = 0; i < n; i++) {

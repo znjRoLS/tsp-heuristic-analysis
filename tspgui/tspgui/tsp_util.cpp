@@ -10,6 +10,7 @@
 #include "ant_colony_improvement_algorithm.h"
 #include "held_karp_lower_bound_algorithm.h"
 #include "min_1tree_lower_bound_algorithm.h"
+#include "lin_kernighan_improvement_algorithm.h"
 
 namespace TSP {
 
@@ -38,6 +39,9 @@ unordered_map<string, shared_ptr<ImprovementAlgorithm>> improvement_algorithms =
     {"Ant Colony Optimisation 0", make_shared<AntColonyImprovementAlgorithm>(0, 10, 1, 3, 0.5, 10, 10)},
     {"Ant Colony Optimisation 1", make_shared<AntColonyImprovementAlgorithm>(1, 10, 1, 3, 0.5, 10, 10)},
     {"Ant Colony Optimisation 2", make_shared<AntColonyImprovementAlgorithm>(0, 1, 1, 3, 0.5, 10, 10)},
+    {"Lin Kernighan 0", make_shared<LinKernighanImprovementAlgorithm>(0)},
+    {"Lin Kernighan 1", make_shared<LinKernighanImprovementAlgorithm>(1)},
+    {"Lin Kernighan 2", make_shared<LinKernighanImprovementAlgorithm>(2)},
 };
 
 } // namespace TSP

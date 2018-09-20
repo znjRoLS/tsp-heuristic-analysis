@@ -26,9 +26,7 @@ TEST(AlfaMeasureTest, SimpleTest) {
       }
   );
 
-  AlfaMeasure alfa_measure;
-
-  auto alfa = alfa_measure.TransformMeasure(world);
+  auto alfa = AlfaMeasure(world->distances_);
 
   vector<vector<double>> expected = {
       {0, 0.5, 0, 0},
@@ -37,5 +35,5 @@ TEST(AlfaMeasureTest, SimpleTest) {
       {0, 0, 0.5, 0},
   };
 
-  ASSERT_EQ(alfa->distances_->GetData(), expected);
+  ASSERT_EQ(alfa->GetData(), expected);
 }

@@ -79,7 +79,8 @@ class HeldKarpLowerBoundAlgorithm : public LowerBoundAlgorithm {
     bool initial_increase_;
 
     const double v_intertia_ = 0.3;
-    const double smallest_t_ratio = 100;
+    const double largest_t_ratio = 100;
+    double largest_t_;
   } step_data_;
 
   double curr_max_1tree_;

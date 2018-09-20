@@ -45,6 +45,11 @@ void Shuffle(std::vector<int>::iterator begin, std::vector<int>::iterator end) {
   shuffle(begin, end, mt);
 }
 
+
+void Shuffle(std::vector<std::pair<int,int>>::iterator begin, std::vector<std::pair<int,int>>::iterator end) {
+  shuffle(begin, end, mt);
+}
+
 int GetWeightedInt(vector<double> weights) {
   if (weights.empty()) return -1;
 
