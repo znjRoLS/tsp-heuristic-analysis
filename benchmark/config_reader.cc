@@ -164,6 +164,12 @@ void ConfigReader::ParseImprovementAlgorithms() {
       improvement_algorithms_.push_back(make_shared<AntColonyImprovementAlgorithm>(1, 10, 1, 3, 0.5, 10, 10));
     } else if (item == "ant_colony_2") {
       improvement_algorithms_.push_back(make_shared<AntColonyImprovementAlgorithm>(0, 1, 1, 3, 0.5, 10, 10));
+    } else if (item == "lin_kernighan_0") {
+      improvement_algorithms_.push_back(make_shared<LinKernighanImprovementAlgorithm>(0));
+    } else if (item == "lin_kernighan_1") {
+      improvement_algorithms_.push_back(make_shared<LinKernighanImprovementAlgorithm>(1));
+    } else if (item == "lin_kernighan_2") {
+      improvement_algorithms_.push_back(make_shared<LinKernighanImprovementAlgorithm>(2));
 //    } else if (item == "lin_kernighan") {
 //      improvement_algorithms_.push_back(make_shared<LinKernighanImprovementAlgorithm>());
     } else {
@@ -214,6 +220,14 @@ void ConfigReader::ParseEndCriterion() {
   }
   if (input_.find("END_LOWER_BOUND") != input_.end()) {
     end_lower_bound_ = stod(input_["END_LOWER_BOUND"]);
+  }
+
+  end_times_.clear();
+  if (CONTAINS(input_, "END_TIMES")) {
+    vector<string> items = split_str(input_["END_TIMES"], ' ');
+    for (string &item : items) {
+      end_times_.push_back(stoi(item));
+    }
   }
 
 }

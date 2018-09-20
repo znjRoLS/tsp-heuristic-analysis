@@ -88,7 +88,9 @@ void Runner::RunSingleWorldGenerator() {
   for (unsigned ws_iter = 0; ws_iter < config_reader_->world_sizes_.size(); ws_iter++) {
 
     LOG3 << "Running size: " << config_reader_->world_sizes_[ws_iter] << endl;
+    LOG3 << "Running with end time: " << config_reader_->end_times_[ws_iter] << endl;
     current_state_.world_size = config_reader_->world_sizes_[ws_iter];
+    current_state_.end_time = config_reader_->end_times_[ws_iter];
 
     current_state_.world = current_state_.world_generator->GenerateWorld(current_state_.world_size);
     current_state_.world_random_identifier = Random::GetInt();
@@ -260,7 +262,7 @@ void Runner::RunSingleImprovement() {
 
     double improvement_value = current_state_.improvement_algorithm->GetCurrentPathCost();
 
-    if (duration - last_duration > config_reader_->time_track_resolution_) {
+    if (duration - last_duration > current_state_.end_time / config_reader_->time_track_resolution_) {
       last_duration = duration;
 
       unordered_map<string, string> output;
@@ -289,7 +291,7 @@ bool Runner::SingleImprovementEndCriteria() {
   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
       std::chrono::high_resolution_clock::now() - current_state_.improvement_start).count();
 
-  return duration > config_reader_->end_time_;
+  return duration > current_state_.end_time;
 }
 
 string Runner::LogInfo() {

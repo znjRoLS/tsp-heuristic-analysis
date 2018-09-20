@@ -50,6 +50,7 @@ class Runner {
     std::chrono::time_point<std::chrono::high_resolution_clock> improvement_start;
     string input_file;
     bool inputs_from_file;
+    int end_time;
   } current_state_;
 
 

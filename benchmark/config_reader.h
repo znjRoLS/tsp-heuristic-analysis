@@ -39,6 +39,7 @@ class ConfigReader {
   vector<shared_ptr<ImprovementAlgorithm>> improvement_algorithms_;
   vector<string> input_files_;
   vector<int> world_sizes_;
+  vector<int> end_times_;
   int num_repeat_;
   int num_random_constructive_repeat_;
   // closeness in percetages
