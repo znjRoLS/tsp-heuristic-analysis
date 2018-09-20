@@ -75,7 +75,7 @@ void MainWindow::SetButtonStatus(QPushButton* widget, ButtonState status) {
         break;
     }
     case (ButtonState::DONE): {
-        pal.setColor(widget->foregroundRole(), Qt::green);
+        pal.setColor(widget->foregroundRole(), Qt::darkGreen);
         widget->setText("DONE");
         break;
     }
@@ -316,4 +316,5 @@ void MainWindow::ImprovementAlgorithmResetAction() {
     improvement_algorithm_->Reset();
 
     UpdateUserControls();
+    tspview_->UpdateContents(state_);
 }

@@ -35,9 +35,9 @@ unordered_map<string, shared_ptr<ConstructiveAlgorithm>> constructive_algorithms
 unordered_map<string, shared_ptr<ImprovementAlgorithm>> improvement_algorithms = {
     {"K-Opt 2", make_shared<Kopt2ImprovementAlgorithm>()},
     {"K-Opt 2 Search", make_shared<Kopt2SearchImprovementAlgorithm>()},
-    {"Ant Colony Optimisation 0", make_shared<AntColonyImprovementAlgorithm>(0, 100, 1, 3, 0.5, 10, 100)},
-    {"Ant Colony Optimisation 1", make_shared<AntColonyImprovementAlgorithm>(1, 100, 1, 3, 0.5, 10, 100)},
-    {"Ant Colony Optimisation 2", make_shared<AntColonyImprovementAlgorithm>(0, 1, 1, 3, 0.5, 10, 100)},
+    {"Ant Colony Optimisation 0", make_shared<AntColonyImprovementAlgorithm>(0, 10, 1, 3, 0.5, 10, 10)},
+    {"Ant Colony Optimisation 1", make_shared<AntColonyImprovementAlgorithm>(1, 10, 1, 3, 0.5, 10, 10)},
+    {"Ant Colony Optimisation 2", make_shared<AntColonyImprovementAlgorithm>(0, 1, 1, 3, 0.5, 10, 10)},
 };
 
 } // namespace TSP
