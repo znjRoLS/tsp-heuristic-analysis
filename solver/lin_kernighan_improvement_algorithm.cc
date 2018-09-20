@@ -43,7 +43,7 @@ void LinKernighanImprovementAlgorithm::Reset() {
     last_node = next_node;
   }
 
-  curr_t = vector<int>(state_->world_->size, 0);
+  curr_t = vector<int>(state_->world_->size + 10, 0);
 
   current_t_.clear();
 }
