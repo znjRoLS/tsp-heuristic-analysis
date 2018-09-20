@@ -18,6 +18,8 @@
 #include "lin_kernighan_improvement_algorithm.h"
 #include "min_1tree_lower_bound_algorithm.h"
 #include "alfa_measure.h"
+#include "kopt3_improvement_algorithm.h"
+#include "kopt3_search_improvement_algorithm.h"
 
 using std::ifstream;
 using std::make_shared;
@@ -156,8 +158,12 @@ void ConfigReader::ParseImprovementAlgorithms() {
   for (string& item : items) {
     if (item == "kopt2") {
       improvement_algorithms_.push_back(make_shared<Kopt2ImprovementAlgorithm>());
+    } else if (item == "kopt3") {
+      improvement_algorithms_.push_back(make_shared<Kopt3ImprovementAlgorithm>());
     } else if (item == "kopt2_search") {
       improvement_algorithms_.push_back(make_shared<Kopt2SearchImprovementAlgorithm>());
+    } else if (item == "kopt3_search") {
+      improvement_algorithms_.push_back(make_shared<Kopt3SearchImprovementAlgorithm>());
     } else if (item == "ant_colony_0") {
       improvement_algorithms_.push_back(make_shared<AntColonyImprovementAlgorithm>(0, 10, 1, 3, 0.5, 10, 10));
     } else if (item == "ant_colony_1") {
