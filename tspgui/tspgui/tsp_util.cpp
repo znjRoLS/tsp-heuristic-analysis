@@ -10,6 +10,8 @@
 #include "ant_colony_improvement_algorithm.h"
 #include "held_karp_lower_bound_algorithm.h"
 #include "min_1tree_lower_bound_algorithm.h"
+#include "kopt3_improvement_algorithm.h"
+#include "kopt3_search_improvement_algorithm.h"
 #include "lin_kernighan_improvement_algorithm.h"
 
 namespace TSP {
@@ -36,6 +38,8 @@ unordered_map<string, shared_ptr<ConstructiveAlgorithm>> constructive_algorithms
 unordered_map<string, shared_ptr<ImprovementAlgorithm>> improvement_algorithms = {
     {"K-Opt 2", make_shared<Kopt2ImprovementAlgorithm>()},
     {"K-Opt 2 Search", make_shared<Kopt2SearchImprovementAlgorithm>()},
+    {"K-Opt 3", make_shared<Kopt3ImprovementAlgorithm>()},
+    {"K-Opt 3 Search", make_shared<Kopt3SearchImprovementAlgorithm>()},
     {"Ant Colony Optimisation 0", make_shared<AntColonyImprovementAlgorithm>(0, 10, 1, 3, 0.5, 10, 10)},
     {"Ant Colony Optimisation 1", make_shared<AntColonyImprovementAlgorithm>(1, 10, 1, 3, 0.5, 10, 10)},
     {"Ant Colony Optimisation 2", make_shared<AntColonyImprovementAlgorithm>(0, 1, 1, 3, 0.5, 10, 10)},
