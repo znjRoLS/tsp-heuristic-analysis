@@ -6,6 +6,8 @@ using std::make_shared;
 
 namespace TSP {
 
+EuclideanWorldGenerator::~EuclideanWorldGenerator() {}
+
 shared_ptr<World> EuclideanWorldGenerator::GenerateWorld(int n) {
   shared_ptr<Nodes2> nodes = GenerateNodes(n);
   n = nodes->size(); // because file generator actually ignores the "n" parameter

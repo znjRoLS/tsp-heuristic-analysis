@@ -14,6 +14,7 @@ namespace TSP {
 //class EuclideanWorldGenerator : public WorldGenerator {
 class EuclideanWorldGenerator {
  public:
+  virtual ~EuclideanWorldGenerator() = 0;
   virtual shared_ptr<Nodes2> GenerateNodes(int n) = 0;
 
 //  shared_ptr<World> GenerateWorld(int n) override;

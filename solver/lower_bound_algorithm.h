@@ -6,6 +6,7 @@ namespace TSP {
 
 class LowerBoundAlgorithm : public Algorithm {
  public:
+  virtual ~LowerBoundAlgorithm() = 0;
   void SetWorld(shared_ptr<World> world);
   double GetFinalValue();
   bool FoundOptimalSolution();

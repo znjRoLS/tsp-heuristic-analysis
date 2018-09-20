@@ -4,6 +4,8 @@
 
 namespace TSP {
 
+ConstructiveAlgorithm::~ConstructiveAlgorithm() {}
+
 void ConstructiveAlgorithm::SetWorld(shared_ptr<TSP::World> world) {
   world_ = world;
 }

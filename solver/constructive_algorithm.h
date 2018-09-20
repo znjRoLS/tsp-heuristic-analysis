@@ -7,6 +7,7 @@ namespace TSP {
 
 class ConstructiveAlgorithm : public Algorithm {
  public:
+  virtual ~ConstructiveAlgorithm() = 0;
 
   void SetWorld(shared_ptr<World> world);
 

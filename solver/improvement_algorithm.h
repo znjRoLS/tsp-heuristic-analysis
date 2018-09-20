@@ -11,6 +11,7 @@ namespace TSP {
 
 class ImprovementAlgorithm : public Algorithm {
  public:
+  virtual ~ImprovementAlgorithm() = 0;
   void SetState(shared_ptr<State> state);
 
   double GetCurrentPathCost();

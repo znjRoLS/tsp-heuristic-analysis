@@ -2,6 +2,8 @@
 
 namespace TSP {
 
+LowerBoundAlgorithm::~LowerBoundAlgorithm() {}
+
 void LowerBoundAlgorithm::SetWorld(shared_ptr<TSP::World> world) {
   world_ = world;
 }

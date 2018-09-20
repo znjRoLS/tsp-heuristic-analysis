@@ -2,6 +2,8 @@
 
 namespace TSP {
 
+Algorithm::~Algorithm() {}
+
 vector<VisualEdge> Algorithm::GetVisualization() {
   return visualization_;
 }

@@ -1,5 +1,8 @@
 # CMake
 cmake-build-debug/
+*.cmake
+CMakeCache.txt
+Makefile
 
 # Added by rols
 lib/

@@ -2,6 +2,8 @@
 
 namespace TSP {
 
+ImprovementAlgorithm::~ImprovementAlgorithm() {}
+
 void ImprovementAlgorithm::SetState(shared_ptr<State> state) {
   state_ = state;
 }

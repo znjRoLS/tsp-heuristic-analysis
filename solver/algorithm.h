@@ -3,6 +3,7 @@
 #include "world.h"
 #include "util.h"
 #include <unordered_map>
+#include <string>
 
 using std::pair;
 using std::vector;
@@ -13,6 +14,7 @@ namespace TSP {
 
 class Algorithm {
  public:
+  virtual ~Algorithm() = 0;
   virtual void Reset() = 0;
   virtual bool Iterate(int granularity) = 0;
   virtual int GetMaxGranularity() = 0;
