@@ -13,6 +13,7 @@
 #include "kopt3_improvement_algorithm.h"
 #include "kopt3_search_improvement_algorithm.h"
 #include "lin_kernighan_improvement_algorithm.h"
+#include "nearest_neighbour_double_ended_constructive_algorithm.h"
 
 namespace TSP {
 
@@ -31,6 +32,7 @@ unordered_map<string, shared_ptr<LowerBoundAlgorithm>> lower_bound_algorithms = 
 unordered_map<string, shared_ptr<ConstructiveAlgorithm>> constructive_algorithms = {
     {"Random", make_shared<RandomConstructiveAlgorithm>()},
     {"Nearest Neighbour", make_shared<NearestNeighbourConstructiveAlgorithm>()},
+    {"Nearest Neighbour Double Ended", make_shared<NearestNeighbourDoubleEndedConstructiveAlgorithm>()},
     {"Greedy", make_shared<GreedyConstructiveAlgorithm>()},
     {"Brute Force", make_shared<BruteForceConstructiveAlgorithm>()},
 };
