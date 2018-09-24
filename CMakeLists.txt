@@ -6,7 +6,7 @@ project (tsp_heuristics_analysis)
 set(tsp_heuristics_analysis_VERSION_MAJOR 0)
 set(tsp_heuristics_analysis_VERSION_MINOR 1)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -Wall")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -Wall")# -fsanitize=address")
 
 set(CMAKE_BINARY_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
