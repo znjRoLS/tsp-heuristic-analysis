@@ -53,7 +53,7 @@ bool NearestNeighbourConstructiveAlgorithm::Iterate(int granularity) {
 
         PushVisualEdge({current_last_, current_closest_, GlobalColor::green, BEST});
       } else {
-        PushVisualEdge({current_last_, *current_processing_, GlobalColor::darkGreen, CONSIDERING});
+        PushVisualEdge({current_last_, *current_processing_, GlobalColor::blue, CONSIDERING});
       }
 
       current_processing_++;

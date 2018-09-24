@@ -26,7 +26,7 @@ HeldKarpLowerBoundAlgorithm::HeldKarpLowerBoundAlgorithm(int variant) :
 void HeldKarpLowerBoundAlgorithm::Reset() {
   optimal_path_.clear();
 
-  distances_ = make_shared<SquareMatrix<double>>(*(world_->distances_));
+  distances_ = make_shared<SquareMatrix<double>>(world_->distances_->GetData());
 
   curr_max_1tree_ = 0;
   current_node_ = 0;
