@@ -10,32 +10,77 @@ using std::multimap;
 namespace MST {
 
 // Note: if excluded_node == -1, no node is excluded
+//EdgeSet Calculate(const shared_ptr<SquareMatrix<double>> &distances, int excluded_node = -1) {
+//  int n = distances->Size().first;
+//  DisjointSet disjoint_set(n);
+//
+//  multimap<double, pair<int, int>> edges;
+//
+//  for (int i = 0; i < n; i++) {
+//    if (i == excluded_node) continue;
+//    for (int j = i + 1; j < n; j++) {
+//      if (j == excluded_node) continue;
+//      edges.insert({(*distances)[i][j], {i, j}});
+//    }
+//  }
+//
+//  EdgeSet chosen_edges;
+//
+//  while (static_cast<int>(chosen_edges.size()) != (excluded_node == -1 ? n - 1 : n - 2)) {
+//    auto &edge = edges.begin()->second;
+//
+//    if (!disjoint_set.SameSet(edge.first, edge.second)) {
+//      disjoint_set.Merge(edge.first, edge.second);
+//
+//      chosen_edges.insert(edge);
+//    }
+//
+//    edges.erase(edges.begin());
+//  }
+//
+//  return chosen_edges;
+//}
+
 EdgeSet Calculate(const shared_ptr<SquareMatrix<double>> &distances, int excluded_node = -1) {
-  int n = distances->Size().first;
-  DisjointSet disjoint_set(n);
-
-  multimap<double, pair<int, int>> edges;
-
-  for (int i = 0; i < n; i++) {
-    if (i == excluded_node) continue;
-    for (int j = i + 1; j < n; j++) {
-      if (j == excluded_node) continue;
-      edges.insert({(*distances)[i][j], {i, j}});
-    }
-  }
-
+  unsigned n = distances->Size().first;
   EdgeSet chosen_edges;
 
-  while (static_cast<int>(chosen_edges.size()) != (excluded_node == -1 ? n - 1 : n - 2)) {
-    auto &edge = edges.begin()->second;
+  int curr_node = (excluded_node + 1) % n;
+  vector<int> current_short_edges(n);
+  vector<double> current_closest(n);
+  vector<bool> visited(n, false);
+  visited[curr_node] = true;
+  if (excluded_node != -1) {
+    visited[excluded_node] = true;
+  }
 
-    if (!disjoint_set.SameSet(edge.first, edge.second)) {
-      disjoint_set.Merge(edge.first, edge.second);
+  for (unsigned i = 0; i < n ; i ++) {
+    if (visited[i]) continue;
+    current_short_edges[i] = curr_node;
+    current_closest[i] = (*distances)[curr_node][i];
+  }
 
-      chosen_edges.insert(edge);
+  unsigned max_num = n-1;
+  if (excluded_node != -1) max_num --;
+  while (chosen_edges.size() != max_num) {
+    int curr_min = -1;
+    for (unsigned i = 0; i < n; i ++) {
+      if (visited[i]) continue;
+      if (curr_min == -1 || current_closest[i] < current_closest[curr_min]) {
+        curr_min = i;
+      }
     }
 
-    edges.erase(edges.begin());
+    chosen_edges.insert({current_short_edges[curr_min], curr_min});
+    visited[curr_min] = true;
+
+    for (unsigned i = 0 ; i < n; i ++) {
+      if (visited[i]) continue;
+      if ((*distances)[curr_min][i] < current_closest[i]) {
+        current_closest[i] = (*distances)[curr_min][i];
+        current_short_edges[i] = curr_min;
+      }
+    }
   }
 
   return chosen_edges;
