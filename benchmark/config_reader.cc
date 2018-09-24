@@ -20,6 +20,7 @@
 #include "alfa_measure.h"
 #include "kopt3_improvement_algorithm.h"
 #include "kopt3_search_improvement_algorithm.h"
+#include "nearest_neighbour_double_ended_constructive_algorithm.h"
 
 using std::ifstream;
 using std::make_shared;
@@ -134,6 +135,8 @@ void ConfigReader::ParseConstructiveAlgorithms() {
       constructive_algorithms_.push_back(make_shared<RandomConstructiveAlgorithm>());
     } else if (item == "nearest_neighbour") {
       constructive_algorithms_.push_back(make_shared<NearestNeighbourConstructiveAlgorithm>());
+    } else if (item == "nearest_neighbour_double") {
+      constructive_algorithms_.push_back(make_shared<NearestNeighbourDoubleEndedConstructiveAlgorithm>());
     } else if (item == "brute_force") {
       constructive_algorithms_.push_back(make_shared<BruteForceConstructiveAlgorithm>());
     } else if (item == "greedy") {
@@ -170,6 +173,14 @@ void ConfigReader::ParseImprovementAlgorithms() {
       improvement_algorithms_.push_back(make_shared<AntColonyImprovementAlgorithm>(1, 10, 1, 3, 0.5, 10, 10));
     } else if (item == "ant_colony_2") {
       improvement_algorithms_.push_back(make_shared<AntColonyImprovementAlgorithm>(0, 1, 1, 3, 0.5, 10, 10));
+    } else if (item == "ant_colony_3") {
+      improvement_algorithms_.push_back(make_shared<AntColonyImprovementAlgorithm>(0, 100, 1, 3, 0.5, 10, 10));
+    } else if (item == "ant_colony_4") {
+      improvement_algorithms_.push_back(make_shared<AntColonyImprovementAlgorithm>(1, 100, 1, 3, 0.5, 10, 10));
+    } else if (item == "ant_colony_5") {
+      improvement_algorithms_.push_back(make_shared<AntColonyImprovementAlgorithm>(0, 1000, 1, 3, 0.5, 10, 10));
+    } else if (item == "ant_colony_6") {
+      improvement_algorithms_.push_back(make_shared<AntColonyImprovementAlgorithm>(1, 1000, 1, 3, 0.5, 10, 10));
     } else if (item == "lin_kernighan_0") {
       improvement_algorithms_.push_back(make_shared<LinKernighanImprovementAlgorithm>(0));
     } else if (item == "lin_kernighan_1") {
