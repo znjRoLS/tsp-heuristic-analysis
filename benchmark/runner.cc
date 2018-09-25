@@ -179,7 +179,7 @@ void Runner::RunSingleLowerBound() {
 
   auto start = std::chrono::high_resolution_clock::now();
   current_state_.lower_bound_algorithm->IterateOptimized();
-  auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
+  auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
       std::chrono::high_resolution_clock::now() - start).count();
   current_state_.lower_bound_value = max(current_state_.lower_bound_value, current_state_.lower_bound_algorithm->GetFinalValue());
 
@@ -207,7 +207,7 @@ void Runner::RunSingleConstructive() {
 
   auto start = std::chrono::high_resolution_clock::now();
   current_state_.constructive_algorithm->Iterate(0);
-  auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
+  auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
       std::chrono::high_resolution_clock::now() - start).count();
 
   double constructive_value = current_state_.constructive_algorithm->GetFinalPathCost();
@@ -253,7 +253,7 @@ void Runner::RunSingleImprovement() {
 
     current_state_.improvement_start = std::chrono::high_resolution_clock::now();
 
-    auto last_duration = std::chrono::duration_cast<std::chrono::microseconds>(
+    auto last_duration = std::chrono::duration_cast<std::chrono::milliseconds>(
         std::chrono::high_resolution_clock::now() - current_state_.improvement_start).count();
 
     int nums_written = 0;
@@ -262,7 +262,7 @@ void Runner::RunSingleImprovement() {
     while (nums_written < config_reader_->time_track_resolution_) {
       current_state_.improvement_algorithm->Iterate(current_state_.improvement_algorithm->GetMaxGranularity());
 
-      auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
+      auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
           std::chrono::high_resolution_clock::now() - current_state_.improvement_start).count();
 
       double improvement_value = current_state_.improvement_algorithm->GetCurrentPathCost();
@@ -292,7 +292,7 @@ void Runner::RunSingleImprovement() {
       }
     }
   } else {
-    auto last_duration = std::chrono::duration_cast<std::chrono::microseconds>(
+    auto last_duration = std::chrono::duration_cast<std::chrono::milliseconds>(
         std::chrono::high_resolution_clock::now() - current_state_.improvement_start).count();
 
     unsigned time_point_ind = 0;
@@ -300,7 +300,7 @@ void Runner::RunSingleImprovement() {
     while (time_point_ind < config_reader_->time_track_points_.size()) {
       current_state_.improvement_algorithm->Iterate(current_state_.improvement_algorithm->GetMaxGranularity());
 
-      auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
+      auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
           std::chrono::high_resolution_clock::now() - current_state_.improvement_start).count();
 
       double improvement_value = current_state_.improvement_algorithm->GetCurrentPathCost();
@@ -335,7 +335,7 @@ void Runner::RunSingleImprovement() {
 }
 
 bool Runner::SingleImprovementEndCriteria() {
-  auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
+  auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
       std::chrono::high_resolution_clock::now() - current_state_.improvement_start).count();
 
   return duration > current_state_.end_time;
