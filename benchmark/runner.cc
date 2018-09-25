@@ -257,7 +257,7 @@ void Runner::RunSingleImprovement() {
   int nums_written = 0;
   int one_resolution_width =  current_state_.end_time / config_reader_->time_track_resolution_;
 
-  while (nums_written < one_resolution_width) {
+  while (nums_written < config_reader_->time_track_resolution_) {
     current_state_.improvement_algorithm->Iterate(current_state_.improvement_algorithm->GetMaxGranularity());
 
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
