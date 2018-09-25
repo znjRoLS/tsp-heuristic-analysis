@@ -254,7 +254,10 @@ void Runner::RunSingleImprovement() {
   auto last_duration = std::chrono::duration_cast<std::chrono::microseconds>(
       std::chrono::high_resolution_clock::now() - current_state_.improvement_start).count();
 
-  while (!SingleImprovementEndCriteria()) {
+  int nums_written = 0;
+  int one_resolution_width =  current_state_.end_time / config_reader_->time_track_resolution_;
+
+  while (nums_written < one_resolution_width) {
     current_state_.improvement_algorithm->Iterate(current_state_.improvement_algorithm->GetMaxGranularity());
 
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
@@ -262,8 +265,9 @@ void Runner::RunSingleImprovement() {
 
     double improvement_value = current_state_.improvement_algorithm->GetCurrentPathCost();
 
-    if (duration - last_duration > current_state_.end_time / config_reader_->time_track_resolution_) {
+    if (duration - last_duration > one_resolution_width) {
       last_duration = duration;
+      nums_written ++;
 
       unordered_map<string, string> output;
       output["dur"] = to_string(duration);
