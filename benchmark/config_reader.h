@@ -40,6 +40,7 @@ class ConfigReader {
   vector<string> input_files_;
   vector<int> world_sizes_;
   vector<int> end_times_;
+  vector<int> time_track_points_;
   int num_repeat_;
   int num_random_constructive_repeat_;
   // closeness in percetages

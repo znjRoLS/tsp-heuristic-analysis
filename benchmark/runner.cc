@@ -249,46 +249,89 @@ void Runner::RunSingleImprovement() {
   current_state_.improvement_algorithm->Reset();
   current_state_.improvement_algorithm->SetVisualsEnabled(false);
 
-  current_state_.improvement_start = std::chrono::high_resolution_clock::now();
+  if (config_reader_->time_track_points_.empty()) {
 
-  auto last_duration = std::chrono::duration_cast<std::chrono::microseconds>(
-      std::chrono::high_resolution_clock::now() - current_state_.improvement_start).count();
+    current_state_.improvement_start = std::chrono::high_resolution_clock::now();
 
-  int nums_written = 0;
-  int one_resolution_width =  current_state_.end_time / config_reader_->time_track_resolution_;
-
-  while (nums_written < config_reader_->time_track_resolution_) {
-    current_state_.improvement_algorithm->Iterate(current_state_.improvement_algorithm->GetMaxGranularity());
-
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
+    auto last_duration = std::chrono::duration_cast<std::chrono::microseconds>(
         std::chrono::high_resolution_clock::now() - current_state_.improvement_start).count();
 
-    double improvement_value = current_state_.improvement_algorithm->GetCurrentPathCost();
+    int nums_written = 0;
+    int one_resolution_width =  current_state_.end_time / config_reader_->time_track_resolution_;
 
-    if (duration - last_duration > one_resolution_width) {
-      last_duration = duration;
-      nums_written ++;
+    while (nums_written < config_reader_->time_track_resolution_) {
+      current_state_.improvement_algorithm->Iterate(current_state_.improvement_algorithm->GetMaxGranularity());
 
-      unordered_map<string, string> output;
-      output["dur"] = to_string(duration);
-      output["improvement_name"] = current_state_.improvement_algorithm_string;
-      output["improvement_value"] = to_string(improvement_value);
-      if (current_state_.lower_bound_calculated) {
-        output["improvement_closeness"] =
-            to_string((improvement_value - current_state_.lower_bound_value) / current_state_.lower_bound_value);
+      auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
+          std::chrono::high_resolution_clock::now() - current_state_.improvement_start).count();
+
+      double improvement_value = current_state_.improvement_algorithm->GetCurrentPathCost();
+
+      if (duration - last_duration > one_resolution_width) {
+        last_duration = duration;
+        nums_written ++;
+
+        unordered_map<string, string> output;
+        output["dur"] = to_string(duration);
+        output["improvement_name"] = current_state_.improvement_algorithm_string;
+        output["improvement_value"] = to_string(improvement_value);
+        if (current_state_.lower_bound_calculated) {
+          output["improvement_closeness"] =
+              to_string((improvement_value - current_state_.lower_bound_value) / current_state_.lower_bound_value);
+        }
+        output["world_generator_name"] = current_state_.world_generator_string;
+        output["world_size"] = to_string(current_state_.world_size);
+        output["world_id"] = to_string(current_state_.world_random_identifier);
+        output["random_path_id"] = to_string(current_state_.path_random_identifier);
+        output["run_iteration"] = to_string(current_state_.iter);
+        if (current_state_.inputs_from_file) {
+          output["input_file"] = current_state_.input_file;
+        }
+
+        results_writer_->AddItem(output);
       }
-      output["world_generator_name"] = current_state_.world_generator_string;
-      output["world_size"] = to_string(current_state_.world_size);
-      output["world_id"] = to_string(current_state_.world_random_identifier);
-      output["random_path_id"] = to_string(current_state_.path_random_identifier);
-      output["run_iteration"] = to_string(current_state_.iter);
-      if (current_state_.inputs_from_file) {
-        output["input_file"] = current_state_.input_file;
-      }
+    }
+  } else {
+    auto last_duration = std::chrono::duration_cast<std::chrono::microseconds>(
+        std::chrono::high_resolution_clock::now() - current_state_.improvement_start).count();
 
-      results_writer_->AddItem(output);
+    unsigned time_point_ind = 0;
+
+    while (time_point_ind < config_reader_->time_track_points_.size()) {
+      current_state_.improvement_algorithm->Iterate(current_state_.improvement_algorithm->GetMaxGranularity());
+
+      auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
+          std::chrono::high_resolution_clock::now() - current_state_.improvement_start).count();
+
+      double improvement_value = current_state_.improvement_algorithm->GetCurrentPathCost();
+
+      if (duration - last_duration > config_reader_->time_track_points_[time_point_ind]) {
+        //last_duration = duration;
+        time_point_ind ++;
+
+        unordered_map<string, string> output;
+        output["dur"] = to_string(duration);
+        output["improvement_name"] = current_state_.improvement_algorithm_string;
+        output["improvement_value"] = to_string(improvement_value);
+        if (current_state_.lower_bound_calculated) {
+          output["improvement_closeness"] =
+              to_string((improvement_value - current_state_.lower_bound_value) / current_state_.lower_bound_value);
+        }
+        output["world_generator_name"] = current_state_.world_generator_string;
+        output["world_size"] = to_string(current_state_.world_size);
+        output["world_id"] = to_string(current_state_.world_random_identifier);
+        output["random_path_id"] = to_string(current_state_.path_random_identifier);
+        output["run_iteration"] = to_string(current_state_.iter);
+        output["time_point"] = to_string(config_reader_->time_track_points_[time_point_ind-1]);
+        if (current_state_.inputs_from_file) {
+          output["input_file"] = current_state_.input_file;
+        }
+
+        results_writer_->AddItem(output);
+      }
     }
   }
+
 }
 
 bool Runner::SingleImprovementEndCriteria() {

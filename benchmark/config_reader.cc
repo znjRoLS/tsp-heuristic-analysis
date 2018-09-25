@@ -41,6 +41,7 @@ void ConfigReader::LoadConfig(string file_path) {
   input_.clear();
   input_files_.clear();
   world_sizes_.clear();
+  time_track_points_.clear();
 
   file_path_ = file_path;
   LoadFile();
@@ -276,6 +277,15 @@ void ConfigReader::ParseTimeTrackResolution() {
   if (CONTAINS(input_, "TIME_TRACK_RESOLUTION")) {
     time_track_resolution_ = stoi(input_["TIME_TRACK_RESOLUTION"]);
   }
+
+  if (CONTAINS(input_, "TIME_TRACK_POINTS")) {
+    vector<string> items = split_str(input_["TIME_TRACK_POINTS"], ' ');
+
+    for (string& item : items) {
+      time_track_points_.push_back(stoi(item));
+    }
+  }
+
 }
 
 } // TSP::Benchmark
